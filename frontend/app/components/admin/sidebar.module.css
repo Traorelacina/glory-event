@@ -1,0 +1,153 @@
+/* Sidebar Container */
+.admin-sidebar {
+  background: #091F31;
+  color: white;
+  width: 16rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 40;
+  border-right: 1px solid #1A2B3C;
+}
+
+/* Sidebar Header */
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #1A2B3C;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.brand-logo {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #C9A227;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon {
+  font-size: 1.125rem;
+}
+
+.brand-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  font-family: var(--font-playfair), serif;
+}
+
+.brand-subtitle {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+/* Navigation */
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem;
+}
+
+.nav-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.nav-item {
+  list-style: none;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  color: #D1D5DB;
+}
+
+.nav-link:hover {
+  background: #1A2B3C;
+  color: white;
+}
+
+.nav-link-active {
+  background: #C9A227;
+  color: #091F31;
+  font-weight: 500;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.nav-text {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Sidebar Footer */
+.sidebar-footer {
+  padding: 1rem;
+  border-top: 1px solid #1A2B3C;
+}
+
+.footer-content {
+  text-align: center;
+}
+
+.footer-text {
+  font-size: 0.75rem;
+  color: #6B7280;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-sidebar {
+    width: 100%;
+    height: auto;
+    min-height: auto;
+    position: relative;
+  }
+  
+  .nav-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .nav-item {
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .nav-link {
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .nav-text {
+    font-size: 0.75rem;
+  }
+}

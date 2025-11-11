@@ -21,5 +21,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+
+        // Appeler le seeder admin
+        $this->call([
+            AdminSeeder::class, // Assurez-vous que c'est AdminSeeder et non UsersTableSeeder
+            // Ajoutez ici vos autres seeders...
+        ]);
     }
 }

@@ -1,13 +1,48 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
-import Button from '../../components/ui/Button';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Décoration - Glory Event | Design d\'Intérieur Événementiel Premium',
-  description: 'Services de décoration événementielle haut de gamme. Créations uniques et personnalisées pour mariages, événements corporate et célébrations. Élégance et raffinement.',
-};
+import { useEffect, useRef } from 'react';
+import Link from 'next/link';
+import Button from '../../components/ui/Button';
+import styles from './page.module.css';
 
 export default function DecorationPage() {
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    // Intersection Observer pour les animations au scroll
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(styles.visible);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px',
+      }
+    );
+
+    // Observer tous les éléments avec animation
+    const elements = document.querySelectorAll(
+      `.${styles.styleCard}, .${styles.serviceCard}, .${styles.processCard}, .${styles.packageCard}, .${styles.whyChooseCard}`
+    );
+
+    elements.forEach((el) => {
+      if (observerRef.current) {
+        observerRef.current.observe(el);
+      }
+    });
+
+    // Cleanup
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
   const decorationStyles = [
     {
       title: 'Élégance Classique',
@@ -20,7 +55,6 @@ export default function DecorationPage() {
         'Cristallerie d\'exception',
       ],
       image: '/images/services/deco-classique.jpg',
-      color: 'from-secondary/20',
     },
     {
       title: 'Moderne & Minimaliste',
@@ -33,7 +67,6 @@ export default function DecorationPage() {
         'Mobilier design',
       ],
       image: '/images/services/deco-moderne.jpg',
-      color: 'from-accent/20',
     },
     {
       title: 'Romantique & Floral',
@@ -46,7 +79,6 @@ export default function DecorationPage() {
         'Parfums subtils',
       ],
       image: '/images/services/deco-romantique.jpg',
-      color: 'from-pink-500/20',
     },
     {
       title: 'Africain Contemporain',
@@ -59,7 +91,6 @@ export default function DecorationPage() {
         'Couleurs vibrantes',
       ],
       image: '/images/services/deco-africaine.jpg',
-      color: 'from-orange-500/20',
     },
     {
       title: 'Luxe & Glamour',
@@ -72,7 +103,6 @@ export default function DecorationPage() {
         'Candélabres majestueux',
       ],
       image: '/images/services/deco-luxe.jpg',
-      color: 'from-yellow-500/20',
     },
     {
       title: 'Champêtre & Bohème',
@@ -85,7 +115,6 @@ export default function DecorationPage() {
         'Ambiance cosy',
       ],
       image: '/images/services/deco-champetre.jpg',
-      color: 'from-green-500/20',
     },
   ];
 
@@ -195,30 +224,30 @@ export default function DecorationPage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-32 bg-gradient-to-br from-dark via-primary to-dark overflow-hidden">
-        <div className="absolute inset-0 opacity-30">
+      <section className={styles.heroSection}>
+        <div className={styles.heroBackground}>
           <div
-            className="absolute inset-0 bg-cover bg-center"
+            className={styles.heroImage}
             style={{
               backgroundImage: 'url(/images/services/decoration-hero.jpg)',
             }}
           />
         </div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/95 via-primary/85 to-transparent" />
-        
-        <div className="container-custom relative z-10">
-          <div className="max-w-3xl">
-            <div className="inline-block px-4 py-2 bg-secondary/20 rounded-full mb-6">
-              <span className="text-secondary font-semibold">🎨 Décoration</span>
+        <div className={styles.heroOverlay} />
+
+        <div className={styles.containerCustom}>
+          <div className={styles.heroContent}>
+            <div className={styles.heroBadge}>
+              <span>🎨 Décoration</span>
             </div>
-            <h1 className="text-5xl md:text-6xl font-bold text-secondary mb-6">
+            <h1 className={styles.heroTitle}>
               Transformons Vos Espaces en Œuvres d'Art
             </h1>
-            <p className="text-xl md:text-2xl text-accent leading-relaxed mb-8">
-              De l'élégance classique au design contemporain, nous créons des décors 
+            <p className={styles.heroDescription}>
+              De l'élégance classique au design contemporain, nous créons des décors
               exceptionnels qui subliment vos événements et marquent les esprits.
             </p>
-            <div className="flex flex-wrap gap-4">
+            <div className={styles.heroButtons}>
               <Link href="/contact">
                 <Button variant="primary" size="lg">
                   Demander un devis déco
@@ -235,51 +264,38 @@ export default function DecorationPage() {
       </section>
 
       {/* Decoration Styles Section */}
-      <section className="py-20 bg-primary">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="section-title">Nos Styles de Décoration</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
+      <section className={styles.stylesSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Nos Styles de Décoration</h2>
+            <p className={styles.sectionSubtitle}>
               Une palette variée pour correspondre à tous les goûts et toutes les ambiances
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={styles.stylesGrid}>
             {decorationStyles.map((style, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-2xl bg-dark border border-secondary/20 
-                           hover:border-secondary/50 transition-all duration-500 card-hover"
-              >
-                {/* Image Background */}
-                <div className="relative h-64 overflow-hidden">
+              <div key={index} className={styles.styleCard}>
+                <div className={styles.styleImageWrapper}>
                   <div
-                    className="absolute inset-0 bg-cover bg-center transform group-hover:scale-110 
-                               transition-transform duration-700"
+                    className={styles.styleImage}
                     style={{
                       backgroundImage: `url(${style.image})`,
                     }}
                   />
-                  <div className={`absolute inset-0 bg-gradient-to-t ${style.color} to-transparent`} />
-                  <div className="absolute top-4 right-4 w-16 h-16 rounded-full bg-dark/80 backdrop-blur-sm 
-                                flex items-center justify-center text-4xl">
-                    {style.icon}
-                  </div>
+                  <div className={styles.styleGradient} />
+                  <div className={styles.styleIcon}>{style.icon}</div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-secondary mb-3 group-hover:text-accent 
-                                transition-colors">
-                    {style.title}
-                  </h3>
-                  <p className="text-accent leading-relaxed mb-4">{style.description}</p>
-                  
-                  <ul className="space-y-2">
+                <div className={styles.styleContent}>
+                  <h3 className={styles.styleTitle}>{style.title}</h3>
+                  <p className={styles.styleDescription}>{style.description}</p>
+
+                  <ul className={styles.styleFeatures}>
                     {style.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2 text-accent text-sm">
+                      <li key={idx} className={styles.styleFeature}>
                         <svg
-                          className="w-4 h-4 text-secondary flex-shrink-0"
+                          className={styles.checkIcon}
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -303,25 +319,21 @@ export default function DecorationPage() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 bg-dark">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="section-title">Nos Services de Décoration</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
+      <section className={styles.servicesSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Nos Services de Décoration</h2>
+            <p className={styles.sectionSubtitle}>
               Une gamme complète pour sublimer chaque détail de votre événement
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={styles.servicesGrid}>
             {services.map((service, index) => (
-              <div
-                key={index}
-                className="bg-primary border border-secondary/20 rounded-xl p-8 text-center
-                          hover:border-secondary/50 transition-all duration-500 card-hover"
-              >
-                <div className="text-6xl mb-4">{service.icon}</div>
-                <h3 className="text-xl font-bold text-secondary mb-3">{service.title}</h3>
-                <p className="text-accent leading-relaxed">{service.description}</p>
+              <div key={index} className={styles.serviceCard}>
+                <div className={styles.serviceIcon}>{service.icon}</div>
+                <h3 className={styles.serviceTitle}>{service.title}</h3>
+                <p className={styles.serviceDescription}>{service.description}</p>
               </div>
             ))}
           </div>
@@ -329,34 +341,26 @@ export default function DecorationPage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-20 bg-primary">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="section-title">Notre Processus Créatif</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
+      <section className={styles.processSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Notre Processus Créatif</h2>
+            <p className={styles.sectionSubtitle}>
               De l'idée à la réalisation, un accompagnement sur-mesure
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className={styles.processGrid}>
             {process.map((item, index) => (
-              <div key={index} className="relative">
-                <div className="bg-dark border border-secondary/20 rounded-xl p-8 
-                              hover:border-secondary/50 transition-all duration-500 h-full flex flex-col">
-                  <div className="text-6xl mb-6 text-center">{item.icon}</div>
-                  <div className="w-14 h-14 rounded-full bg-secondary text-primary font-bold text-xl 
-                                flex items-center justify-center mb-4 mx-auto">
-                    {item.step}
-                  </div>
-                  <h3 className="text-xl font-bold text-secondary mb-3 text-center">
-                    {item.title}
-                  </h3>
-                  <p className="text-accent text-center leading-relaxed flex-1">
-                    {item.description}
-                  </p>
+              <div key={index} className={styles.processItem}>
+                <div className={styles.processCard}>
+                  <div className={styles.processEmoji}>{item.icon}</div>
+                  <div className={styles.processStep}>{item.step}</div>
+                  <h3 className={styles.processTitle}>{item.title}</h3>
+                  <p className={styles.processDescription}>{item.description}</p>
                 </div>
                 {index < process.length - 1 && (
-                  <div className="hidden lg:block absolute top-1/2 -right-4 w-8 h-0.5 bg-secondary/30" />
+                  <div className={styles.processConnector} />
                 )}
               </div>
             ))}
@@ -365,43 +369,37 @@ export default function DecorationPage() {
       </section>
 
       {/* Packages Section */}
-      <section className="py-20 bg-dark">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="section-title">Nos Formules Décoration</h2>
-            <p className="section-subtitle max-w-2xl mx-auto">
+      <section className={styles.packagesSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Nos Formules Décoration</h2>
+            <p className={styles.sectionSubtitle}>
               Des forfaits adaptés à tous les budgets et toutes les envies
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className={styles.packagesGrid}>
             {packages.map((pkg, index) => (
               <div
                 key={index}
-                className={`relative bg-primary border-2 rounded-2xl p-8 transition-all duration-500 
-                           ${pkg.popular 
-                             ? 'border-secondary shadow-2xl shadow-secondary/20 scale-105' 
-                             : 'border-secondary/20 hover:border-secondary/50'}`}
+                className={`${styles.packageCard} ${
+                  pkg.popular ? styles.popular : ''
+                }`}
               >
                 {pkg.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-secondary text-primary px-6 py-2 rounded-full 
-                                   font-bold text-sm shadow-lg">
-                      ⭐ POPULAIRE
-                    </span>
-                  </div>
+                  <div className={styles.popularBadge}>⭐ POPULAIRE</div>
                 )}
-                
-                <div className="text-center mb-8">
-                  <h3 className="text-3xl font-bold text-secondary mb-4">{pkg.name}</h3>
-                  <p className="text-2xl font-bold text-accent">{pkg.price}</p>
+
+                <div className={styles.packageHeader}>
+                  <h3 className={styles.packageName}>{pkg.name}</h3>
+                  <p className={styles.packagePrice}>{pkg.price}</p>
                 </div>
 
-                <ul className="space-y-4 mb-8">
+                <ul className={styles.packageFeatures}>
                   {pkg.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
+                    <li key={idx} className={styles.packageFeature}>
                       <svg
-                        className="w-6 h-6 text-secondary flex-shrink-0 mt-0.5"
+                        className={styles.featureIcon}
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
@@ -413,7 +411,7 @@ export default function DecorationPage() {
                           d="M5 13l4 4L19 7"
                         />
                       </svg>
-                      <span className="text-accent">{feature}</span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -434,13 +432,13 @@ export default function DecorationPage() {
       </section>
 
       {/* Why Choose Us */}
-      <section className="py-20 bg-primary">
-        <div className="container-custom">
-          <div className="text-center mb-16">
-            <h2 className="section-title">Pourquoi Choisir Notre Service Déco ?</h2>
+      <section className={styles.whyChooseSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.sectionHeader}>
+            <h2 className={styles.sectionTitle}>Pourquoi Choisir Notre Service Déco ?</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className={styles.whyChooseGrid}>
             {[
               {
                 icon: '🎨',
@@ -463,14 +461,10 @@ export default function DecorationPage() {
                 description: 'Mise en place soignée et dans les délais',
               },
             ].map((item, index) => (
-              <div
-                key={index}
-                className="text-center bg-dark border border-secondary/20 rounded-xl p-8
-                          hover:border-secondary/50 transition-all duration-500 card-hover"
-              >
-                <div className="text-6xl mb-4">{item.icon}</div>
-                <h3 className="text-xl font-bold text-secondary mb-3">{item.title}</h3>
-                <p className="text-accent leading-relaxed">{item.description}</p>
+              <div key={index} className={styles.whyChooseCard}>
+                <div className={styles.whyChooseIcon}>{item.icon}</div>
+                <h3 className={styles.whyChooseTitle}>{item.title}</h3>
+                <p className={styles.whyChooseDescription}>{item.description}</p>
               </div>
             ))}
           </div>
@@ -478,18 +472,17 @@ export default function DecorationPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-dark">
-        <div className="container-custom">
-          <div className="bg-gradient-to-r from-secondary/20 via-secondary/10 to-secondary/20 
-                         rounded-3xl p-12 text-center border border-secondary/30">
-            <h2 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+      <section className={styles.ctaSection}>
+        <div className={styles.containerCustom}>
+          <div className={styles.ctaBox}>
+            <h2 className={styles.ctaTitle}>
               Créons Ensemble Votre Décor de Rêve
             </h2>
-            <p className="text-xl text-accent mb-10 max-w-2xl mx-auto">
-              Partagez-nous votre vision et laissez notre équipe créative 
+            <p className={styles.ctaDescription}>
+              Partagez-nous votre vision et laissez notre équipe créative
               transformer votre espace en un lieu magique et inoubliable.
             </p>
-            <div className="flex flex-wrap gap-4 justify-center">
+            <div className={styles.ctaButtons}>
               <Link href="/contact">
                 <Button variant="primary" size="lg">
                   Demander un devis décoration

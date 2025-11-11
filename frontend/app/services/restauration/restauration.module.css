@@ -1,0 +1,738 @@
+/* Restauration Page Styles */
+
+.heroSection {
+  position: relative;
+  padding: 8rem 0;
+  background: linear-gradient(135deg, #091F31 0%, #0a2642 50%, #091F31 100%);
+  overflow: hidden;
+}
+
+.heroBackground {
+  position: absolute;
+  inset: 0;
+  opacity: 0.2;
+  background-size: cover;
+  background-position: center;
+  animation: slowZoom 25s ease-in-out infinite alternate;
+}
+
+@keyframes slowZoom {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+  100% {
+    transform: scale(1.15) rotate(2deg);
+  }
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(9, 31, 49, 0.95),
+    rgba(9, 31, 49, 0.85),
+    transparent
+  );
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  max-width: 48rem;
+  animation: slideInLeft 1s ease-out;
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.heroBadge {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  background: rgba(201, 162, 39, 0.2);
+  border-radius: 9999px;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 1s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.heroTitle {
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  animation: slideInLeft 1s ease-out 0.3s both;
+}
+
+.heroDescription {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: #DDE1E7;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  animation: slideInLeft 1s ease-out 0.4s both;
+}
+
+.heroButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  animation: slideInLeft 1s ease-out 0.5s both;
+}
+
+/* Cuisines Section */
+.cuisinesSection {
+  padding: 5rem 0;
+  background: #091F31;
+}
+
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #DDE1E7;
+  max-width: 42rem;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+.cuisinesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.cuisineRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.cuisineRow.visible {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 1024px) {
+  .cuisineRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.cuisineImageWrapper {
+  position: relative;
+  height: 24rem;
+  border-radius: 1rem;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.cuisineImageWrapper:hover .cuisineImage {
+  transform: scale(1.1) rotate(2deg);
+}
+
+.cuisineImage {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cuisineGradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(9, 31, 49, 0.8), transparent);
+}
+
+.cuisineIcon {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  font-size: 4.5rem;
+  animation: bounceIn 1s ease-out;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.cuisineContent {
+  background: #0a2642;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: all 0.5s ease;
+}
+
+.cuisineContent:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  box-shadow: 0 20px 40px rgba(201, 162, 39, 0.1);
+  transform: translateY(-5px);
+}
+
+.cuisineType {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 1rem;
+}
+
+.cuisineDescription {
+  color: #DDE1E7;
+  font-size: 1.125rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.specialtiesTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 1rem;
+}
+
+.specialtiesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.specialtyItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #DDE1E7;
+  font-size: 0.875rem;
+  padding: 0.25rem 0;
+  transition: transform 0.3s ease;
+}
+
+.specialtyItem:hover {
+  transform: translateX(5px);
+}
+
+.specialtyIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #C9A227;
+  flex-shrink: 0;
+}
+
+.featuresDivider {
+  border-top: 1px solid rgba(201, 162, 39, 0.2);
+  padding-top: 1.5rem;
+}
+
+.featuresGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.featureIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #C9A227;
+  flex-shrink: 0;
+}
+
+.featureText {
+  color: #DDE1E7;
+  font-size: 0.875rem;
+}
+
+/* Alternating Layout */
+.cuisineRow:nth-child(even) .cuisineImageWrapper {
+  order: 2;
+}
+
+.cuisineRow:nth-child(even) .cuisineContent {
+  order: 1;
+}
+
+@media (max-width: 1023px) {
+  .cuisineRow:nth-child(even) .cuisineImageWrapper,
+  .cuisineRow:nth-child(even) .cuisineContent {
+    order: 0;
+  }
+}
+
+/* Services Section */
+.servicesSection {
+  padding: 5rem 0;
+  background: #0a2642;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.serviceCard {
+  background: #091F31;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.serviceCard.visible {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.serviceCard:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(201, 162, 39, 0.15);
+}
+
+.serviceIcon {
+  font-size: 3.75rem;
+  margin-bottom: 1rem;
+  display: inline-block;
+  animation: swing 3s ease-in-out infinite;
+}
+
+@keyframes swing {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+}
+
+.serviceCard:hover .serviceIcon {
+  animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+.serviceTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 0.75rem;
+}
+
+.serviceDescription {
+  color: #DDE1E7;
+  line-height: 1.6;
+}
+
+/* Menu Formats Section */
+.formatsSection {
+  padding: 5rem 0;
+  background: #091F31;
+}
+
+.formatsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.formatCard {
+  background: #0a2642;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: scale(0.95);
+  position: relative;
+  overflow: hidden;
+}
+
+.formatCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(201, 162, 39, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.formatCard:hover::before {
+  left: 100%;
+}
+
+.formatCard.visible {
+  animation: scaleIn 0.6s ease-out forwards;
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.formatCard:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(201, 162, 39, 0.2);
+}
+
+.formatTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 0.75rem;
+}
+
+.formatDescription {
+  color: #DDE1E7;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.formatDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.formatDetail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formatLabel {
+  color: #C9A227;
+  font-weight: 600;
+}
+
+.formatValue {
+  color: #DDE1E7;
+}
+
+/* Process Section */
+.processSection {
+  padding: 5rem 0;
+  background: #0a2642;
+}
+
+.processGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.processCard {
+  background: #091F31;
+  border: 1px solid rgba(201, 162, 39, 0.2);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.5s ease;
+  opacity: 0;
+  transform: translateY(30px);
+  position: relative;
+}
+
+.processCard.visible {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.processCard:hover {
+  border-color: rgba(201, 162, 39, 0.5);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(201, 162, 39, 0.15);
+}
+
+.processStep {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C9A227, #e0b944);
+  color: #091F31;
+  font-weight: 700;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  box-shadow: 0 4px 12px rgba(201, 162, 39, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.processCard:hover .processStep {
+  transform: rotate(360deg) scale(1.1);
+}
+
+.processTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 0.5rem;
+}
+
+.processDescription {
+  color: #DDE1E7;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.ctaSection {
+  padding: 5rem 0;
+  background: #091F31;
+}
+
+.ctaBox {
+  background: linear-gradient(
+    135deg,
+    rgba(201, 162, 39, 0.2) 0%,
+    rgba(201, 162, 39, 0.05) 50%,
+    rgba(201, 162, 39, 0.2) 100%
+  );
+  background-size: 200% 200%;
+  border-radius: 1.5rem;
+  padding: 3rem;
+  text-align: center;
+  border: 1px solid rgba(201, 162, 39, 0.3);
+  animation: gradientShift 4s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.ctaTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  color: #C9A227;
+  margin-bottom: 1.5rem;
+  animation: pulse 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+.ctaDescription {
+  font-size: 1.25rem;
+  color: #DDE1E7;
+  margin-bottom: 2.5rem;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+.ctaButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Utility Classes */
+.containerCustom {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+@media (min-width: 640px) {
+  .containerCustom {
+    padding: 0 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .containerCustom {
+    padding: 0 2rem;
+  }
+}
+
+/* Stagger Animation Delays */
+.cuisineRow:nth-child(1) { animation-delay: 0.1s; }
+.cuisineRow:nth-child(2) { animation-delay: 0.3s; }
+.cuisineRow:nth-child(3) { animation-delay: 0.5s; }
+
+.serviceCard:nth-child(1) { animation-delay: 0.1s; }
+.serviceCard:nth-child(2) { animation-delay: 0.2s; }
+.serviceCard:nth-child(3) { animation-delay: 0.3s; }
+.serviceCard:nth-child(4) { animation-delay: 0.4s; }
+.serviceCard:nth-child(5) { animation-delay: 0.5s; }
+.serviceCard:nth-child(6) { animation-delay: 0.6s; }
+
+.formatCard:nth-child(1) { animation-delay: 0.1s; }
+.formatCard:nth-child(2) { animation-delay: 0.2s; }
+.formatCard:nth-child(3) { animation-delay: 0.3s; }
+.formatCard:nth-child(4) { animation-delay: 0.4s; }
+
+.processCard:nth-child(1) { animation-delay: 0.1s; }
+.processCard:nth-child(2) { animation-delay: 0.2s; }
+.processCard:nth-child(3) { animation-delay: 0.3s; }
+.processCard:nth-child(4) { animation-delay: 0.4s; }
+.processCard:nth-child(5) { animation-delay: 0.5s; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroSection {
+    padding: 5rem 0;
+  }
+
+  .cuisinesWrapper {
+    gap: 3rem;
+  }
+
+  .cuisineImageWrapper {
+    height: 18rem;
+  }
+
+  .specialtiesGrid,
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .servicesGrid,
+  .formatsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .processGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroTitle {
+    font-size: 2rem;
+  }
+
+  .heroDescription {
+    font-size: 1.125rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.875rem;
+  }
+
+  .ctaTitle {
+    font-size: 1.75rem;
+  }
+
+  .ctaDescription {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 4rem 0;
+  }
+
+  .heroButtons,
+  .ctaButtons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .heroButtons > *,
+  .ctaButtons > * {
+    width: 100%;
+  }
+
+  .cuisineImageWrapper {
+    height: 15rem;
+  }
+
+  .ctaBox {
+    padding: 2rem 1.5rem;
+  }
+
+  .cuisineIcon {
+    font-size: 3rem;
+  }
+}
