@@ -274,7 +274,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
           </div>
 
           <h1 
-            className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold mb-6"
+            className="font-serif text-2xl md:text-5xl lg:text-5xl font-bold mb-6"
             style={{ animation: 'fadeInUp 1s ease-out 0.2s both' }}
           >
             L'Art de

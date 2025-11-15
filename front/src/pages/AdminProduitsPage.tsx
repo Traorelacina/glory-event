@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useAuthStore } from '../../store/authStore';
-import { Plus, Search, Trash2, Edit, Loader, AlertCircle, Package, Upload, X } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, Loader, AlertCircle, Package, Upload, X, Sparkles, Star, ArrowRight } from 'lucide-react';
 
 interface Produit {
   id: number;
@@ -25,7 +25,9 @@ export default function AdminProduitsPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -41,6 +43,41 @@ export default function AdminProduitsPage() {
   useEffect(() => {
     fetchProduits();
   }, [token]);
+
+  // Configuration de l'Intersection Observer
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    // Observer les éléments existants
+    document.querySelectorAll('[data-animate]').forEach((el) => {
+      if (observerRef.current) observerRef.current.observe(el);
+    });
+
+    return () => observerRef.current?.disconnect();
+  }, []);
+
+  // Observer les nouveaux éléments quand showForm change
+  useEffect(() => {
+    if (showForm && observerRef.current) {
+      // Réobserver tous les éléments après un court délai pour que le DOM soit mis à jour
+      setTimeout(() => {
+        document.querySelectorAll('[data-animate]').forEach((el) => {
+          if (observerRef.current) {
+            observerRef.current.observe(el);
+          }
+        });
+      }, 100);
+    }
+  }, [showForm, produits]);
 
   const fetchProduits = async () => {
     if (!token) return;
@@ -225,295 +262,445 @@ export default function AdminProduitsPage() {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-orange-500 to-yellow-500 rounded-2xl shadow-xl p-6 text-white">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold flex items-center gap-3">
-                <Package size={36} />
-                Gestion Produits
-              </h1>
-              <p className="text-orange-100 mt-1 text-lg">{produits.length} produits</p>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 font-sans text-gray-900 overflow-x-hidden">
+        <div className="space-y-6 p-6">
+          {/* Hero Header Section */}
+          <section className="relative mb-8 overflow-hidden rounded-3xl">
+            {/* Background animé avec dégradé */}
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700">
+              <div className="absolute inset-0 opacity-30">
+                <div 
+                  className="absolute top-10 left-10 w-72 h-72 bg-pink-500/50 rounded-full blur-3xl"
+                  style={{ animation: 'float 8s ease-in-out infinite' }}
+                ></div>
+                <div 
+                  className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/50 rounded-full blur-3xl"
+                  style={{ animation: 'float 10s ease-in-out infinite', animationDelay: '2s' }}
+                ></div>
+              </div>
             </div>
-            <button
-              onClick={() => {
-                setShowForm(!showForm);
-                if (showForm) resetForm();
-              }}
-              className="flex items-center gap-2 px-6 py-3 bg-white text-orange-600 hover:bg-orange-50 rounded-xl transition shadow-lg font-bold hover:scale-105 duration-300"
-            >
-              <Plus size={20} />
-              {showForm ? 'Annuler' : 'Ajouter produit'}
-            </button>
-          </div>
-        </div>
 
-        {error && (
-          <div className="p-4 bg-red-100 border-2 border-red-400 rounded-lg flex gap-3">
-            <AlertCircle className="text-red-600 flex-shrink-0 mt-0.5" size={20} />
-            <div className="flex-1">
-              <p className="text-red-800 font-medium mb-1">Erreur</p>
-              <p className="text-red-700 text-sm">{error}</p>
-            </div>
-            <button 
-              onClick={() => setError(null)}
-              className="text-red-600 hover:text-red-800"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        )}
-
-        {showForm && (
-          <form onSubmit={handleCreate} className="bg-white border-2 border-orange-300 rounded-lg p-6 shadow-lg">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Ajouter un produit</h2>
-            
-            {/* Upload d'image */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Image du produit <span className="text-red-500">*</span>
-              </label>
-              <div className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-400 transition-colors">
-                {imagePreview ? (
-                  <div className="relative">
-                    <img 
-                      src={imagePreview} 
-                      alt="Aperçu" 
-                      className="max-h-48 rounded-lg shadow-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={removeImage}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
-                    >
-                      <X size={16} />
-                    </button>
+            {/* Contenu du header */}
+            <div className="relative z-10 p-8 text-white">
+              <div className="flex items-center justify-between flex-wrap gap-4">
+                <div>
+                  <div 
+                    className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/20 mb-4"
+                    style={{ animation: 'slideDown 0.8s ease-out' }}
+                  >
+                    <Star className="w-4 h-4 text-yellow-400 animate-pulse" />
+                    <span className="text-sm font-semibold uppercase tracking-wider">Gestion Boutique</span>
                   </div>
-                ) : (
-                  <div className="text-center">
-                    <Upload className="mx-auto text-gray-400 mb-2" size={32} />
-                    <p className="text-gray-600 mb-2">Cliquez pour sélectionner une image</p>
-                    <p className="text-sm text-gray-500">JPEG, PNG, GIF, WebP - Max 2MB</p>
-                  </div>
-                )}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
-                  onChange={handleImageSelect}
-                  className="hidden"
-                />
-                <button
-                  type="button"
-                  onClick={() => fileInputRef.current?.click()}
-                  className="mt-4 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition font-medium"
-                >
-                  {imagePreview ? 'Changer l\'image' : 'Sélectionner une image'}
-                </button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Nom du produit <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="Nom du produit"
-                  value={formData.name} 
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border-2 border-gray-300 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 focus:outline-none" 
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Prix (FCFA) <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="number" 
-                  placeholder="Prix"
-                  value={formData.price} 
-                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border-2 border-gray-300 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 focus:outline-none" 
-                  min="0"
-                  step="1"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Catégorie <span className="text-red-500">*</span>
-                </label>
-                <input 
-                  type="text" 
-                  placeholder="Catégorie"
-                  value={formData.category} 
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border-2 border-gray-300 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 focus:outline-none" 
-                  required
-                />
-              </div>
-
-              <div className="flex items-center gap-4 pt-7">
-                <label className="flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
-                    checked={formData.in_stock}
-                    onChange={(e) => setFormData({ ...formData, in_stock: e.target.checked })}
-                    className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                  />
-                  <span className="text-sm text-gray-700">En stock</span>
-                </label>
+                  
+                  <h1 
+                    className="text-4xl md:text-5xl font-bold mb-3 flex items-center gap-3"
+                    style={{ animation: 'fadeInUp 1s ease-out 0.2s both' }}
+                  >
+                    <Package size={40} />
+                    Gestion Produits
+                  </h1>
+                  <p 
+                    className="text-purple-100 text-lg md:text-xl"
+                    style={{ animation: 'fadeInUp 1s ease-out 0.4s both' }}
+                  >
+                    {produits.length} produit{produits.length > 1 ? 's' : ''} dans votre catalogue
+                  </p>
+                </div>
                 
-                <label className="flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
-                    checked={formData.featured}
-                    onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
-                    className="rounded border-gray-300 text-orange-500 focus:ring-orange-500"
-                  />
-                  <span className="text-sm text-gray-700">En vedette</span>
-                </label>
-              </div>
-
-              <div className="col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Description <span className="text-red-500">*</span>
-                </label>
-                <textarea 
-                  placeholder="Description du produit"
-                  value={formData.description} 
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3 py-2 bg-white border-2 border-gray-300 rounded-lg text-gray-800 focus:border-orange-500 focus:ring-2 focus:ring-orange-200 focus:outline-none" 
-                  rows={3} 
-                  required
-                />
-              </div>
-
-              <div className="col-span-2 flex gap-3">
                 <button
-                  type="submit"
-                  disabled={!selectedImage || submitting}
-                  className="flex-1 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 disabled:from-gray-400 disabled:to-gray-500 text-white py-3 rounded-lg transition shadow-md font-medium disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader className="animate-spin" size={20} />
-                      Création en cours...
-                    </>
-                  ) : (
-                    <>
-                      <Plus size={20} />
-                      Créer le produit
-                    </>
-                  )}
-                </button>
-                <button
-                  type="button"
                   onClick={() => {
-                    setShowForm(false);
-                    resetForm();
-                    setError(null);
+                    setShowForm(!showForm);
+                    if (showForm) resetForm();
                   }}
-                  className="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition font-medium"
+                  className="group relative bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-xl hover:bg-white/30 transition-all duration-300 border border-white/30 flex items-center gap-3 overflow-hidden font-semibold hover:scale-105"
+                  style={{ animation: 'fadeInUp 1s ease-out 0.6s both' }}
                 >
-                  Annuler
+                  <span className="absolute inset-0 bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                  <Plus className="relative z-10 w-5 h-5 group-hover:rotate-90 transition-transform duration-300" size={20} />
+                  <span className="relative z-10">{showForm ? 'Annuler' : 'Ajouter produit'}</span>
                 </button>
               </div>
             </div>
-          </form>
-        )}
+          </section>
 
-        {/* Recherche */}
-        <div className="relative">
-          <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-          <input
-            type="text"
-            placeholder="Rechercher un produit..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 bg-white border-2 border-gray-300 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-200"
-          />
-        </div>
+          {/* Error Message */}
+          {error && (
+            <div 
+              className="p-6 bg-gradient-to-r from-red-50 to-pink-50 border-l-4 border-red-500 rounded-2xl shadow-xl flex gap-4"
+              style={{ animation: 'slideInLeft 0.6s ease-out' }}
+            >
+              <AlertCircle className="text-red-600 flex-shrink-0 mt-1" size={24} />
+              <div className="flex-1">
+                <p className="text-red-900 font-bold text-lg mb-1">Erreur</p>
+                <p className="text-red-700">{error}</p>
+              </div>
+              <button 
+                onClick={() => setError(null)}
+                className="text-red-600 hover:text-red-800 hover:scale-110 transition-transform"
+              >
+                <X size={20} />
+              </button>
+            </div>
+          )}
 
-        {/* Liste des produits */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-12 bg-white rounded-xl shadow-lg">
-            <Loader className="animate-spin text-orange-500 mb-4" size={50} />
-            <p className="text-gray-600 font-medium">Chargement des produits...</p>
-          </div>
-        ) : filteredProduits.length > 0 ? (
-          <div className="overflow-x-auto border-2 border-orange-300 rounded-lg shadow-lg">
-            <table className="w-full">
-              <thead className="bg-gradient-to-r from-orange-100 to-yellow-100 border-b-2 border-orange-300">
-                <tr>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Image</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Nom</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Prix</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Catégorie</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Stock</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Créé</th>
-                  <th className="px-6 py-3 text-left text-sm font-semibold text-gray-800">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white">
-                {filteredProduits.map((produit) => (
-                  <tr key={produit.id} className="border-b border-orange-200 hover:bg-orange-50 transition">
-                    <td className="px-6 py-4">
-                      <img 
-                        src={`http://127.0.0.1:8000/storage/${produit.image}`} 
-                        alt={produit.name}
-                        className="w-16 h-16 object-cover rounded-lg shadow"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.onerror = null;
-                          target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage%3C/text%3E%3C/svg%3E';
-                        }}
+          {/* Formulaire d'ajout - SIMPLIFIÉ SANS ANIMATION COMPLEXE */}
+          {showForm && (
+            <div 
+              className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-purple-200 relative overflow-hidden animate-in fade-in duration-500"
+            >
+              {/* Background décoratif subtil */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-50 to-pink-50 rounded-full blur-3xl opacity-60 -mr-32 -mt-32"></div>
+              
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <Sparkles className="text-white" size={24} />
+                  </div>
+                  <h2 className="text-3xl font-bold text-gray-900">Ajouter un nouveau produit</h2>
+                </div>
+
+                <form onSubmit={handleCreate} className="space-y-6">
+                  {/* Upload d'image */}
+                  <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
+                      Image du produit <span className="text-red-500">*</span>
+                    </label>
+                    <div className="group relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-2xl p-8 hover:border-purple-400 hover:bg-purple-50/50 transition-all duration-300 bg-white">
+                      {imagePreview ? (
+                        <div className="relative">
+                          <img 
+                            src={imagePreview} 
+                            alt="Aperçu" 
+                            className="max-h-64 rounded-2xl shadow-2xl"
+                          />
+                          <button
+                            type="button"
+                            onClick={removeImage}
+                            className="absolute -top-3 -right-3 bg-gradient-to-r from-red-500 to-pink-500 text-white rounded-full p-2 hover:scale-110 transition-transform shadow-lg"
+                          >
+                            <X size={20} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="text-center">
+                          <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                            <Upload className="text-purple-600" size={40} />
+                          </div>
+                          <p className="text-gray-700 font-semibold mb-2">Cliquez pour sélectionner une image</p>
+                          <p className="text-sm text-gray-500">JPEG, PNG, GIF, WebP - Max 2MB</p>
+                        </div>
+                      )}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/jpg,image/gif,image/webp"
+                        onChange={handleImageSelect}
+                        className="hidden"
                       />
-                    </td>
-                    <td className="px-6 py-4 text-gray-800 font-medium">{produit.name}</td>
-                    <td className="px-6 py-4 text-orange-600 font-semibold">{Number(produit.price).toFixed(0)} FCFA</td>
-                    <td className="px-6 py-4 text-gray-800">{produit.category}</td>
-                    <td className="px-6 py-4">
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        produit.in_stock 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {produit.in_stock ? 'En stock' : 'Rupture'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-gray-600 text-sm">{new Date(produit.created_at).toLocaleDateString()}</td>
-                    <td className="px-6 py-4 flex gap-2">
-                      <button className="p-2 hover:bg-orange-100 rounded-lg transition text-orange-600">
-                        <Edit size={18} />
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="mt-6 px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl hover:from-purple-700 hover:to-pink-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                      >
+                        {imagePreview ? 'Changer l\'image' : 'Sélectionner une image'}
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        Nom du produit <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        placeholder="Nom du produit"
+                        value={formData.name} 
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" 
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        Prix (FCFA) <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="number" 
+                        placeholder="Prix"
+                        value={formData.price} 
+                        onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" 
+                        min="0"
+                        step="1"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        Catégorie <span className="text-red-500">*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        placeholder="Catégorie"
+                        value={formData.category} 
+                        onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all" 
+                        required
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-6 pt-8">
+                      <label className="flex items-center gap-2 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={formData.in_stock}
+                          onChange={(e) => setFormData({ ...formData, in_stock: e.target.checked })}
+                          className="w-5 h-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500 cursor-pointer"
+                        />
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">En stock</span>
+                      </label>
+                      
+                      <label className="flex items-center gap-2 cursor-pointer group">
+                        <input 
+                          type="checkbox" 
+                          checked={formData.featured}
+                          onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
+                          className="w-5 h-5 rounded border-gray-300 text-purple-500 focus:ring-purple-500 cursor-pointer"
+                        />
+                        <span className="text-sm font-semibold text-gray-700 group-hover:text-purple-600 transition-colors">En vedette</span>
+                      </label>
+                    </div>
+
+                    <div className="col-span-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
+                        Description <span className="text-red-500">*</span>
+                      </label>
+                      <textarea 
+                        placeholder="Description du produit"
+                        value={formData.description} 
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all resize-none" 
+                        rows={4} 
+                        required
+                      />
+                    </div>
+
+                    <div className="col-span-2 flex gap-4">
+                      <button
+                        type="submit"
+                        disabled={!selectedImage || submitting}
+                        className="group relative flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-semibold disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden hover:-translate-y-0.5"
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
+                        {submitting ? (
+                          <>
+                            <Loader className="relative z-10 animate-spin" size={20} />
+                            <span className="relative z-10">Création en cours...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Plus className="relative z-10" size={20} />
+                            <span className="relative z-10">Créer le produit</span>
+                          </>
+                        )}
                       </button>
                       <button
-                        onClick={() => handleDelete(produit.id)}
-                        className="p-2 hover:bg-red-100 rounded-lg transition text-red-600"
+                        type="button"
+                        onClick={() => {
+                          setShowForm(false);
+                          resetForm();
+                          setError(null);
+                        }}
+                        className="px-8 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                       >
-                        <Trash2 size={18} />
+                        Annuler
                       </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Recherche */}
+          <div 
+            id="search-section"
+            data-animate
+            className="relative"
+          >
+            <Search className="absolute left-4 top-4 text-gray-400 pointer-events-none" size={20} />
+            <input
+              type="text"
+              placeholder="Rechercher un produit par nom ou description..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-4 bg-white border-2 border-gray-300 rounded-2xl text-gray-800 placeholder-gray-400 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-200 transition-all shadow-lg"
+            />
           </div>
-        ) : (
-          <div className="text-center py-12 bg-white rounded-xl shadow-lg border-2 border-orange-200">
-            <Package className="mx-auto text-gray-400 mb-4" size={48} />
-            <p className="text-gray-600 font-medium text-lg">Aucun produit trouvé</p>
-            {searchTerm && (
-              <p className="text-gray-500 text-sm mt-2">Essayez avec un autre terme de recherche</p>
-            )}
-          </div>
-        )}
+
+          {/* Liste des produits */}
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl shadow-2xl border-2 border-purple-100">
+              <Loader className="animate-spin text-purple-600 mb-4" size={60} />
+              <p className="text-gray-700 font-semibold text-lg">Chargement des produits...</p>
+              <p className="text-gray-500 text-sm mt-2">Veuillez patienter</p>
+            </div>
+          ) : filteredProduits.length > 0 ? (
+            <div 
+              id="products-table"
+              data-animate
+              className="bg-white rounded-3xl shadow-2xl border-2 border-purple-100 overflow-hidden"
+            >
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gradient-to-r from-purple-50 to-pink-50 border-b-2 border-purple-200">
+                    <tr>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Image</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Nom</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Prix</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Catégorie</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Stock</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Créé</th>
+                      <th className="px-6 py-4 text-left text-sm font-bold text-gray-800">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredProduits.map((produit, index) => (
+                      <tr 
+                        key={produit.id} 
+                        className="hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all duration-300"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="relative group">
+                            <img 
+                              src={`http://127.0.0.1:8000/storage/${produit.image}`} 
+                              alt={produit.name}
+                              className="w-20 h-20 object-cover rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.onerror = null;
+                                target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3EImage%3C/text%3E%3C/svg%3E';
+                              }}
+                            />
+                            {produit.featured && (
+                              <div className="absolute -top-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-400 rounded-full p-1.5 shadow-lg">
+                                <Star className="w-3 h-3 text-white fill-white" />
+                              </div>
+                            )}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="text-gray-900 font-bold">{produit.name}</p>
+                          <p className="text-gray-500 text-sm line-clamp-1">{produit.description}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 text-lg font-bold">
+                            {Number(produit.price).toFixed(0)} FCFA
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="inline-block px-3 py-1 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700 rounded-full text-sm font-semibold">
+                            {produit.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold ${
+                            produit.in_stock 
+                              ? 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-700' 
+                              : 'bg-gradient-to-r from-red-100 to-pink-100 text-red-700'
+                          }`}>
+                            {produit.in_stock ? 'En stock' : 'Rupture'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 text-gray-600 text-sm font-medium">
+                          {new Date(produit.created_at).toLocaleDateString('fr-FR')}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <button className="group p-2.5 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-300 text-blue-600 hover:scale-110 hover:shadow-md">
+                              <Edit size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(produit.id)}
+                              className="group p-2.5 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 rounded-xl transition-all duration-300 text-red-600 hover:scale-110 hover:shadow-md"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : (
+            <div className="text-center py-20 bg-white rounded-3xl shadow-2xl border-2 border-purple-100">
+              <div className="w-24 h-24 bg-gradient-to-br from-purple-100 to-pink-100 rounded-3xl flex items-center justify-center mx-auto mb-6">
+                <Package className="text-purple-400" size={48} />
+              </div>
+              <p className="text-gray-700 font-bold text-xl mb-2">Aucun produit trouvé</p>
+              {searchTerm ? (
+                <p className="text-gray-500">Essayez avec un autre terme de recherche</p>
+              ) : (
+                <p className="text-gray-500">Commencez par ajouter votre premier produit</p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Animations CSS */}
+        <style jsx>{`
+          @keyframes float {
+            0%, 100% { 
+              transform: translateY(0) translateX(0); 
+            }
+            25% { 
+              transform: translateY(-20px) translateX(10px); 
+            }
+            50% { 
+              transform: translateY(-10px) translateX(-10px); 
+            }
+            75% { 
+              transform: translateY(-15px) translateX(5px); 
+          }
+          
+          @keyframes slideDown {
+            from {
+              opacity: 0;
+              transform: translateY(-20px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          
+          @keyframes slideInLeft {
+            from {
+              opacity: 0;
+              transform: translateX(-50px);
+            }
+            to {
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+        `}</style>
       </div>
     </AdminLayout>
   );
