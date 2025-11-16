@@ -207,13 +207,13 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         .icon-box {
-          background: linear-gradient(135deg, #8B5CF6 0%, #EC4899 100%);
+          background: linear-gradient(135deg, #ad5945 0%, #d38074 100%);
           transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .service-card:hover .icon-box {
           transform: rotate(12deg) scale(1.1);
-          box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+          box-shadow: 0 20px 40px rgba(173, 89, 69, 0.3);
         }
 
         .gallery-expand {
@@ -245,7 +245,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         .service-card:hover .image-overlay {
-          background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+          background: linear-gradient(135deg, rgba(173, 89, 69, 0.2) 0%, rgba(211, 128, 116, 0.2) 100%);
         }
 
         .blur-in {
@@ -295,7 +295,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         .text-gradient {
-          background: linear-gradient(135deg, #1F2937 0%, #374151 100%);
+          background: linear-gradient(135deg, #ad5945 0%, #d38074 100%);
           background-clip: text;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -322,9 +322,9 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               className="stagger-item mt-8 flex justify-center gap-2"
               style={{ animationDelay: '0.4s' }}
             >
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]"></div>
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]" style={{ animation: 'pulse 1.5s ease-in-out 0.3s infinite' }}></div>
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899]" style={{ animation: 'pulse 1.5s ease-in-out 0.6s infinite' }}></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]"></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]" style={{ animation: 'pulse 1.5s ease-in-out 0.3s infinite' }}></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]" style={{ animation: 'pulse 1.5s ease-in-out 0.6s infinite' }}></div>
             </div>
           </div>
 
@@ -377,7 +377,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                           </button>
                           <button
                             onClick={() => onNavigate('contact', service.id)}
-                            className="button-hover relative px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] hover:shadow-2xl hover:shadow-[#8B5CF6]/30 transition-all duration-300 flex items-center gap-2 group"
+                            className="button-hover relative px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#ad5945] to-[#d38074] hover:shadow-2xl hover:shadow-[#ad5945]/30 transition-all duration-300 flex items-center gap-2 group"
                           >
                             Demander un devis
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -421,7 +421,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                   <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
-                                    <Sparkles className="w-6 h-6 text-[#8B5CF6]" />
+                                    <Sparkles className="w-6 h-6 text-[#ad5945]" />
                                   </div>
                                 </div>
                               </div>
@@ -430,11 +430,11 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                         </Swiper>
 
                         <div className="flex justify-center gap-4 mt-6">
-                          <button className={`swiper-button-prev-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#8B5CF6] hover:to-[#EC4899] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
+                          <button className={`swiper-button-prev-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
                             <ArrowRight className="w-5 h-5 rotate-180" />
                           </button>
                           <div className={`swiper-pagination-${service.id} flex justify-center gap-2`}></div>
-                          <button className={`swiper-button-next-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#8B5CF6] hover:to-[#EC4899] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
+                          <button className={`swiper-button-next-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
                             <ArrowRight className="w-5 h-5" />
                           </button>
                         </div>
@@ -451,4 +451,4 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       <Footer onNavigate={onNavigate} />
     </div>
   );
-} 
+}

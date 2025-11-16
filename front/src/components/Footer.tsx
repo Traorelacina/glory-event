@@ -38,7 +38,7 @@ export default function Footer({ onNavigate }: FooterProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <h3 className="font-serif text-2xl font-bold mb-4 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] bg-clip-text text-transparent">
+            <h3 className="font-serif text-2xl font-bold mb-4 bg-gradient-to-r from-[#ad5945] to-[#d38074] bg-clip-text text-transparent">
               Événements Prestige
             </h3>
             <p className="text-gray-300 mb-6 leading-relaxed">
@@ -49,10 +49,10 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <a
                   key={social.name}
                   href={social.url}
-                  className="bg-gray-800 hover:bg-gradient-to-r hover:from-[#8B5CF6] hover:to-[#EC4899] p-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1"
+                  className="bg-gray-800 hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] p-3 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg group"
                   aria-label={social.name}
                 >
-                  <social.icon className="w-5 h-5" />
+                  <social.icon className="w-5 h-5 group-hover:text-white transition-colors" />
                 </a>
               ))}
             </div>
@@ -66,9 +66,9 @@ export default function Footer({ onNavigate }: FooterProps) {
                 <li key={link.name}>
                   <button
                     onClick={() => onNavigate?.(link.path)}
-                    className="text-gray-300 hover:text-white transition-colors duration-200 hover:translate-x-1 transform flex items-center"
+                    className="text-gray-300 hover:text-white transition-all duration-200 hover:translate-x-2 transform flex items-center group w-full text-left"
                   >
-                    <span className="w-1 h-1 bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity"></span>
+                    <span className="w-2 h-2 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     {link.name}
                   </button>
                 </li>
@@ -81,8 +81,9 @@ export default function Footer({ onNavigate }: FooterProps) {
             <h4 className="font-serif text-lg font-semibold mb-6 text-white">Nos Services</h4>
             <ul className="space-y-3">
               {services.map((service) => (
-                <li key={service}>
-                  <span className="text-gray-300 hover:text-white transition-colors duration-200 cursor-default">
+                <li key={service} className="group">
+                  <span className="text-gray-300 hover:text-white transition-all duration-200 cursor-default flex items-center">
+                    <span className="w-1 h-1 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full mr-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                     {service}
                   </span>
                 </li>
@@ -94,23 +95,36 @@ export default function Footer({ onNavigate }: FooterProps) {
           <div>
             <h4 className="font-serif text-lg font-semibold mb-6 text-white">Contact</h4>
             <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-[#8B5CF6] mt-1 flex-shrink-0" />
-                <span className="text-gray-300">
+              <div className="flex items-start space-x-3 group">
+                <div className="w-8 h-8 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <MapPin className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-200">
                   123 Avenue Prestige<br />
                   75008 Paris, France
                 </span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
-                <span className="text-gray-300">+33 1 23 45 67 89</span>
+              <div className="flex items-center space-x-3 group">
+                <div className="w-8 h-8 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <Phone className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-200">+33 1 23 45 67 89</span>
               </div>
-              <div className="flex items-center space-x-3">
-                <Mail className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
-                <span className="text-gray-300">contact@evenements-prestige.fr</span>
+              <div className="flex items-center space-x-3 group">
+                <div className="w-8 h-8 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-lg flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                  <Mail className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-gray-300 group-hover:text-white transition-colors duration-200">contact@evenements-prestige.fr</span>
               </div>
             </div>
-           
+
+            {/* Call to Action */}
+            <button
+              onClick={() => onNavigate?.('contact')}
+              className="mt-6 w-full bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white py-3 rounded-xl font-medium hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 shadow-lg hover:shadow-[#ad5945]/30"
+            >
+              Demander un devis
+            </button>
           </div>
         </div>
       </div>
@@ -123,19 +137,23 @@ export default function Footer({ onNavigate }: FooterProps) {
               © {currentYear} Événements Prestige. Tous droits réservés.
             </div>
             <div className="flex space-x-6 text-sm text-gray-400">
-              <button className="hover:text-white transition-colors">
+              <button className="hover:text-white transition-colors duration-200 hover:scale-105 transform">
                 Mentions légales
               </button>
-              <button className="hover:text-white transition-colors">
+              <button className="hover:text-white transition-colors duration-200 hover:scale-105 transform">
                 Politique de confidentialité
               </button>
-              <button className="hover:text-white transition-colors">
+              <button className="hover:text-white transition-colors duration-200 hover:scale-105 transform">
                 Conditions générales
               </button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Points décoratifs */}
+      <div className="absolute bottom-4 left-4 w-2 h-2 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full opacity-30 animate-pulse"></div>
+      <div className="absolute bottom-8 right-8 w-1 h-1 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
     </footer>
   );
 }
