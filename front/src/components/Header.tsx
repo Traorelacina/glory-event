@@ -61,7 +61,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                 />
               </div>
               <span className="font-serif text-xl font-bold text-[#111827]">
-                Events Prestige
+               Glory Events 
               </span>
             </button>
 
@@ -122,7 +122,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
               <nav className="bg-white/95 backdrop-blur-md rounded-lg shadow-2xl border border-gray-200 py-2">
                 {navItems.map((item) => (
                   <button
-                    key={item.page}
+                    key={item.page} 
                     onClick={() => {
                       onNavigate(item.page);
                       setIsMobileMenuOpen(false);

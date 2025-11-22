@@ -245,140 +245,157 @@ export default function CartPage({ onNavigate }: CartPageProps) {
       </div>
 
       {/* MODAL FORMULAIRE DE COMMANDE */}
-      {isOrderFormOpen && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 overflow-y-auto">
-          <div className="bg-white rounded-3xl p-8 max-w-2xl w-full my-8 shadow-2xl border border-slate-100">
-            {isSubmitted ? (
-              <div className="text-center py-12">
-                <div className="w-20 h-20 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
-                  <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                </div>
-                <h3 className="font-serif text-3xl font-bold text-gray-900 mb-4">
-                  Commande confirmée !
-                </h3>
-                <p className="text-gray-600 text-lg">
-                  Nous vous contacterons très bientôt. Merci pour votre confiance !
-                </p>
-                <div className="mt-6 flex justify-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse"></div>
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse" style={{ animationDelay: '0.2s' }}></div>
-                  <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse" style={{ animationDelay: '0.4s' }}></div>
-                </div>
+{isOrderFormOpen && (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 z-50 overflow-y-auto py-8">
+    <div className="bg-white rounded-2xl p-6 max-w-md w-full shadow-2xl border border-slate-100 my-auto">
+      {isSubmitted ? (
+        <div className="text-center py-8">
+          <div className="w-16 h-16 bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+          <h3 className="font-serif text-xl font-bold text-gray-900 mb-3">
+            Commande confirmée !
+          </h3>
+          <p className="text-gray-600 text-sm">
+            Nous vous contacterons très bientôt. Merci pour votre confiance !
+          </p>
+          <div className="mt-4 flex justify-center gap-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse"></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse" style={{ animationDelay: '0.2s' }}></div>
+            <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] animate-pulse" style={{ animationDelay: '0.4s' }}></div>
+          </div>
+        </div>
+      ) : (
+        <div className="max-h-[80vh] overflow-y-auto pr-2">
+          {/* Scroll personnalisé */}
+          <style jsx>{`
+            .max-h-\[80vh\]::-webkit-scrollbar {
+              width: 4px;
+            }
+            .max-h-\[80vh\]::-webkit-scrollbar-track {
+              background: #f1f1f1;
+              border-radius: 10px;
+            }
+            .max-h-\[80vh\]::-webkit-scrollbar-thumb {
+              background: linear-gradient(to bottom, #ad5945, #d38074);
+              border-radius: 10px;
+            }
+          `}</style>
+
+          <h2 className="font-serif text-xl font-bold text-gray-900 mb-4 sticky top-0 bg-white pb-2">
+            Finaliser votre commande
+          </h2>
+
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border-2 border-red-200 rounded-lg flex items-center gap-2">
+              <AlertCircle className="text-red-600 flex-shrink-0" size={16} />
+              <p className="text-red-800 text-xs flex-1">{error}</p>
+              <button 
+                onClick={() => setError(null)}
+                className="text-red-600 hover:text-red-800 transition-colors"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Nom complet <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={formData.client_name}
+                onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                placeholder="Jean Dupont"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Email <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="email"
+                required
+                value={formData.client_email}
+                onChange={(e) => setFormData({ ...formData, client_email: e.target.value })}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                placeholder="jean.dupont@example.com"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-medium text-gray-700 mb-1">
+                Téléphone <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                required
+                value={formData.client_phone}
+                onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
+                className="w-full px-3 py-2 text-sm rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                placeholder="+225 07 XX XX XX XX"
+              />
+            </div>
+
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <h3 className="font-bold text-gray-900 mb-3 text-sm">Votre commande</h3>
+              <div className="space-y-2 max-h-32 overflow-y-auto pr-1">
+                {items.map((item) => (
+                  <div key={item.id} className="flex justify-between text-xs text-gray-600">
+                    <span className="flex-1 truncate mr-2">{item.name} x{item.quantity}</span>
+                    <span className="font-semibold whitespace-nowrap bg-gradient-to-r from-[#ad5945] to-[#d38074] bg-clip-text text-transparent">
+                      {(item.price * item.quantity).toLocaleString('fr-FR')} FCFA
+                    </span>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <>
-                <h2 className="font-serif text-3xl font-bold text-gray-900 mb-6">
-                  Finaliser votre commande
-                </h2>
+              <div className="border-t border-gray-300 mt-3 pt-3 flex justify-between font-bold text-gray-900 text-base">
+                <span>Total</span>
+                <span className="bg-gradient-to-r from-[#ad5945] to-[#d38074] bg-clip-text text-transparent">
+                  {getTotalPrice().toLocaleString('fr-FR')} FCFA
+                </span>
+              </div>
+            </div>
 
-                {error && (
-                  <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg flex items-center gap-3">
-                    <AlertCircle className="text-red-600 flex-shrink-0" size={20} />
-                    <p className="text-red-800 text-sm flex-1">{error}</p>
-                    <button 
-                      onClick={() => setError(null)}
-                      className="text-red-600 hover:text-red-800 transition-colors"
-                    >
-                      <X size={20} />
-                    </button>
-                  </div>
+            <div className="flex gap-3 pt-2 sticky bottom-0 bg-white pb-2">
+              <button
+                onClick={() => {
+                  setIsOrderFormOpen(false);
+                  setError(null);
+                }}
+                disabled={isSubmitting}
+                className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-full font-medium hover:bg-gray-300 transition-all duration-300 disabled:opacity-50 text-sm"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={handleSubmitOrder}
+                disabled={isSubmitting}
+                className="flex-1 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white py-3 rounded-full font-medium hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 shadow-md text-sm"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader className="animate-spin" size={16} />
+                    Envoi...
+                  </>
+                ) : (
+                  'Confirmer'
                 )}
-
-                <div className="space-y-6">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nom complet <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.client_name}
-                      onChange={(e) => setFormData({ ...formData, client_name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
-                      placeholder="Jean Dupont"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      value={formData.client_email}
-                      onChange={(e) => setFormData({ ...formData, client_email: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
-                      placeholder="jean.dupont@example.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Téléphone <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      value={formData.client_phone}
-                      onChange={(e) => setFormData({ ...formData, client_phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
-                      placeholder="+225 07 XX XX XX XX"
-                    />
-                  </div>
-
-                  <div className="bg-gray-50 rounded-xl p-6 border border-gray-200">
-                    <h3 className="font-bold text-gray-900 mb-4 text-lg">Votre commande</h3>
-                    {items.map((item) => (
-                      <div key={item.id} className="flex justify-between text-sm text-gray-600 mb-3">
-                        <span className="flex-1 truncate mr-2">{item.name} x{item.quantity}</span>
-                        <span className="font-semibold whitespace-nowrap bg-gradient-to-r from-[#ad5945] to-[#d38074] bg-clip-text text-transparent">
-                          {(item.price * item.quantity).toLocaleString('fr-FR')} FCFA
-                        </span>
-                      </div>
-                    ))}
-                    <div className="border-t border-gray-300 mt-4 pt-4 flex justify-between font-bold text-gray-900 text-lg">
-                      <span>Total</span>
-                      <span className="bg-gradient-to-r from-[#ad5945] to-[#d38074] bg-clip-text text-transparent">
-                        {getTotalPrice().toLocaleString('fr-FR')} FCFA
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4 mt-6">
-                    <button
-                      onClick={() => {
-                        setIsOrderFormOpen(false);
-                        setError(null);
-                      }}
-                      disabled={isSubmitting}
-                      className="flex-1 bg-gray-200 text-gray-800 py-4 rounded-full font-medium hover:bg-gray-300 transition-all duration-300 disabled:opacity-50"
-                    >
-                      Annuler
-                    </button>
-                    <button
-                      onClick={handleSubmitOrder}
-                      disabled={isSubmitting}
-                      className="flex-1 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white py-4 rounded-full font-medium hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg"
-                    >
-                      {isSubmitting ? (
-                        <>
-                          <Loader className="animate-spin" size={20} />
-                          Envoi en cours...
-                        </>
-                      ) : (
-                        'Confirmer la commande'
-                      )}
-                    </button>
-                  </div>
-                </div>
-              </>
-            )}
+              </button>
+            </div>
           </div>
         </div>
       )}
+    </div>
+  </div>
+)}
 
       <style jsx>{`
         @keyframes pulse {

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Calendar, Users, Award, Sparkles, Utensils, ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -15,7 +15,7 @@ interface ServicesPageProps {
 export default function ServicesPage({ onNavigate }: ServicesPageProps) {
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [scrollY, setScrollY] = useState(0);
-  const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
 
@@ -28,11 +28,12 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       image:
         'https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=1920',
       gallery: [
-        'https://scontent.fabj5-2.fna.fbcdn.net/v/t39.30808-6/558455144_792108313615912_2798952595938159567_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEbj8oFgGOihZjy6ekWUxbGRAQhTiXs1TtEBCFOJezVO_XZbiEp0cqORgrCI-OE7UrLQAH4wazyFLT3wy3QC_lO&_nc_ohc=Z_Fy0zEt4hIQ7kNvwExVvoa&_nc_oc=AdlnnakOfeIGf13bBTsjWH1UarbU1GFrpwxi6CnRQ42-S4XEtUqFxmZzgFdnMsMxuT8&_nc_zt=23&_nc_ht=scontent.fabj5-2.fna&_nc_gid=zb49MJbgYbpW1GTwKxxu9w&oh=00_AfhS-Y5ctawbwd2CHypSMCGM7KVpmi6L_vGCcKoOrJXFNQ&oe=691D29E8',
+        'https://scontent.fabj5-2.fna.fbcdn.net/v/t39.30808-6/558455144_792108313615912_2798952595938159567_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEbj8oFgGOihZjy6ekWUxbGRAQhTiXs1TtEBCFOJezVO_XZbiEp0cqORgrCI-OE7UrLQAH4wazyFLT3wy3QC_lO&_nc_ohc=KbNKsWH1yWUQ7kNvwEzthiM&_nc_oc=AdmVGo1D7ea42Y_Pp31Y_f4ubQcSAJR2HH5l00MM0JQzkg2joV0tjfooRYUYIqfiodY&_nc_zt=23&_nc_ht=scontent.fabj5-2.fna&_nc_gid=F4hu4LqHkKWTZ2CDMdKL7Q&oh=00_AfgeHu5iErGY3ohtcjdfnNAprrYj1d5qAo2qdhY6wCXu5A&oe=69277DA8',
         'https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=800',
         'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=800',
         'https://images.pexels.com/photos/1729797/pexels-photo-1729797.jpeg?auto=compress&cs=tinysrgb&w=800',
       ],
+      icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
     },
     {
       id: 'corporate',
@@ -47,6 +48,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         'https://images.pexels.com/photos/1181622/pexels-photo-1181622.jpeg?auto=compress&cs=tinysrgb&w=800',
         'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',
       ],
+      icon: 'https://cdn-icons-png.flaticon.com/512/1067/1067566.png',
     },
     {
       id: 'receptions',
@@ -61,6 +63,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         'https://images.pexels.com/photos/3184339/pexels-photo-3184339.jpeg?auto=compress&cs=tinysrgb&w=800',
         'https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg?auto=compress&cs=tinysrgb&w=800',
       ],
+      icon: 'https://cdn-icons-png.flaticon.com/512/3290/3290425.png',
     },
     {
       id: 'restauration',
@@ -70,11 +73,12 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       image:
         'https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1920',
       gallery: [
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474700308_591402277019851_1044336786120214148_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGGvr4Aqe3p-kx9PqYBGuwIC5kFvK_EemoLmQW8r8R6aqA_Gqhqc-FKrZ6zVAh8Ha2uGbTYkdXKCgnFOjRtTOI0&_nc_ohc=ILiTpx-6M44Q7kNvwGIqFNM&_nc_oc=AdkkcW7O1HaAfsHOEdJFdSp2z1hBX8ekFSF15Iz9_VAZjAEWWD8gPUZ-XKiRvmbvJUg&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=w4xXWWeP4RIEPqQ61Nlk3Q&oh=00_AfjomZnrz3Xcmt5YIoJA6-K5Qy311Ta7_Zdof2Zuw&oe=691D2C10',
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474662104_591402373686508_7233185737982302691_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFn2lHgMka55V2VkEJqupT_yBdKITuZ0_fIF0ohO5nT90k2a66y5LLWh8na-S27mNNLEx9VTMHw5ZT4y8YRYFcY&_nc_ohc=3UktVKNNxdYQ7kNvwFJXmd2&_nc_oc=AdnrRSX-olwaC9EFFW_5LwH8C_F2zho-ybBId96eMIoc_816TdfcmlUCqhp--9_Atf8&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=b-Jradn5In5YuMDGOL_vnA&oh=00_AfgSfUFK7WvXMSqDdOc2Kw_U6J7EzJPn45EW9elfEZYosA&oe=691D2A40',
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474720015_591402087019870_8831783553154247261_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeG_Z4MzetQ_XG6antf3x8Ajac2fsNUTxqxpzZ-w1RPGrGqUO80f9naCCeeP4yaKO46nuUu0K-Xm8QEvUkn5Afd-&_nc_ohc=jpxOYXDexOkQ7kNvwG78bxZ&_nc_oc=Adkk6pZhZ6ZVN3AXWB9uWjnzKRkUIthB8WWEe3QGKeXbF9AknvmNgFvgl_eT9QS2430&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=t1753w9WGOg8GScwbE8AWQ&oh=00_AfgRA94aHVIm5hMtqTO7yIoJA6-K5Qy311Ta7_Zdof2Zuw&oe=691D430E',
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/473619720_588177324009013_5269678523535177740_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFxoeSxMGf5Wyhe8TTwaKlOEUNuTGzDZTkRQ25MbMNlOTrSCN5YEhp2PY-ejRlmcqEJ45dlfxSEyajCtorIeNXK&_nc_ohc=I7Na-_8jJXgQ7kNvwHRavqs&_nc_oc=AdnHgC4XPpdCWOg6bX5aRM6XZGOYscsVct-VKwsrSyfoLO6Tc_i_CcQTjQY9mFCA0yY&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=-ZB6p_4bm12M8jBk-IlHow&oh=00_AfiuyGd1syxerR__o_nbPIN52kKl14Pcb54R0lPL0LP6xA&oe=691D35F0',
+        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474460810_591402047019874_5302692506335260921_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHjUScCOWc-49kvUS4YFTugaz_HfWGNDFBrP8d9YY0MUBWTi9DzSUguUFL5RYCxP9j6VrRDncdeQbx-fZXPbzHq&_nc_ohc=ROHekJBwXAkQ7kNvwETIGAw&_nc_oc=AdmAoC5ngph4vQlYOX-PJddYZu1hxS4_5FrXZ5Y-GOFycj958n9ZU36FhWb1KLer7Fw&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=qknFJdk8c_vTX6EXeDEDdg&oh=00_AfjicdhciVBfKrJL6oS5agAyvaY-99POGa-IH_FkOz3EZA&oe=69275D30',
+        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474700308_591402277019851_1044336786120214148_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGGvr4Aqe3p-kx9PqYBGuwIC5kFvK_EemoLmQW8r8R6aqA_Gqhqc-FKrZ6zVAh8Ha2uGbTYkdXKCgnFOjRtTOI0&_nc_ohc=sEXBHGZXUcEQ7kNvwGFWNGm&_nc_oc=AdlThcvQXYPS4uyHaHKcEXaA3f9ng6MrkZgC-89SLfP_yGv5vEsUjU-cjnLsNuQTnRA&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=iKeXmEWTokcnikAnjoHJNA&oh=00_AfjeGkPMvaS5HyY_QTpS9B_2fofXuIna6hEDKMdMYd201g&oe=69277FD0',
+        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474662104_591402373686508_7233185737982302691_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFn2lHgMka55V2VkEJqupT_yBdKITuZ0_fIF0ohO5nT90k2a66y5LLWh8na-S27mNNLEx9VTMHw5ZT4y8YRYFcY&_nc_ohc=F_gz9pi7-RwQ7kNvwHaRE8T&_nc_oc=AdmPIwuqqwFcIjg4Ah7EOPfDkB-9YDGATP0BL_inbYp_B6O88Rw8kBpIVxaO393F7R8&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=nTEwLIgbW4K8j2330I3QWg&oh=00_Afh40eSo5UW3YHVNuQvZBCeKdyJJr0lFz3CHmfyqJv6S8g&oe=69277E00',
+        'https://scontent.fabj5-2.fna.fbcdn.net/v/t39.30808-6/474640101_591402350353177_1889578150718329059_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeESxdi2q7ufYOSuKLcaUdsxOTaRw00UMJ05NpHDTRQwnaqBBrnrjln5swIZ4kr4bK8B1WfqMZ09J0Xa_oqN8yEL&_nc_ohc=ZtOHetO3DNgQ7kNvwEK6o20&_nc_oc=AdnHnzFQMHb5GUTYpcBc6cFM6rUW9ZySMUyyupWEPH74HVymBjNWpdZVglrOoc7oTJg&_nc_zt=23&_nc_ht=scontent.fabj5-2.fna&_nc_gid=0KvTibFgpSiKYIMherggjA&oh=00_AfjpNuPpT-KZugehulPqZ26geRPGGZmVMDvW5-Qn7HjitQ&oe=692759D2',
       ],
+      icon: 'https://cdn-icons-png.flaticon.com/512/2738/2738730.png',
     },
     {
       id: 'decoration',
@@ -82,41 +86,79 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       description:
         'L\'art de créer des ambiances qui racontent votre histoire. Notre équipe de décorateurs talentueux conçoit des univers visuels époustouflants, du concept initial jusqu\'à la réalisation finale.',
       image:
-        'https://scontent.fabj5-2.fna.fbcdn.net/v/t51.82787-15/561846531_17984930459906860_3449748711829899152_n.jpg?stp=dst-jpegr_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE-97ASt1R-tFyGboBYyqlhyjwfjU_pK1bKPB-NT-krVp5qtP4UMyKfIREn082A8ERfuTeW_dRomWFJnLgjZTbg&_nc_ohc=Z-lqF8E5lhUQ7kNvwFBAR6T&_nc_oc=AdkB23WdhQOW5MGSxL5_4uKpCPwcQk3LETrbi_xl9CTh0uZe1knyZhBw04OicdgGmR8&_nc_zt=23&se=-1&_nc_ht=scontent.fabj5-2.fna&_nc_gid=Ty4fuSzn5IErOcPanImtdw&oh=00_AfhwzHgIUCI7JFcF5CJobh5-PkDc9QIae-PNsB3cffUa8g&oe=691D2000',
+        'https://scontent.fabj5-2.fna.fbcdn.net/v/t51.82787-15/561846531_17984930459906860_3449748711829899152_n.jpg?stp=dst-jpegr_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE-97ASt1R-tFyGboBYyqlhyjwfjU_pK1bKPB-NT-krVp5qtP4UMyKfIREn082A8ERfuTeW_dRomWFJnLgjZTbg&_nc_ohc=ROK8SXoyv38Q7kNvwFyQDBH&_nc_oc=AdlWggG2iid5xhJ82zFWXhcuxSfKLShSmbRKMW1a6WxZ4Nl_5NUKpX0-swCzx4KkPNY&_nc_zt=23&se=-1&_nc_ht=scontent.fabj5-2.fna&_nc_gid=IL9NZczTjXZ78SY9I-D4WA&oh=00_Afjlm7Bt_GSumAERoroCO9KPyWrHIOGBFThIiFy2kx_bVQ&oe=692773C0',
       gallery: [
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565690055_802299149263495_5241726712948988641_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHqmn6Mg1k5KHHjQA3xnpryVCwmStiPL3lULCZK2I8veVW_UcozuXcd_j2_KJ_1_z_33kZc4KKGvI5t6CyYmHQX&_nc_ohc=O4GigUzmJAMQ7kNvwHduM0T&_nc_oc=Adl38_QGpUNm2m2Mb7rCOhCRfkye_iExayKDz77M4NSzp15Nvo0G44F8yWFudDYpqMc&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=a5OAA6jR5ZWTzBbCPu1CxQ&oh=00_AfiHACLVmZcLTsu-uutj86fTsBs-05LvN8R3HRFlqouLSg&oe=691D1F72',
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565285021_802303479263062_6137982315505036741_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeGV-zPsgd99GV0TBQ5DQibIzVS2pJ0_cr_NVLaknT9yv-2GHqNH2eRf4VkdZXQ8fh0is6IyP6sAtyQfWJQ3some&_nc_ohc=6to8fId3D3QQ7kNvwHinux7&_nc_oc=Adn78Eof7W1KrNXzTtp3Ojv2pjo8YIobqWqYLud3eqErdumlHdoYpnTB0mIH_HLyasA&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=wbb9YDz_doqlKr9kiNLNeQ&oh=00_AfjFueKa8eny4Ddx_OpXk4vqoHC59dULkFPwtkMJu2cp5w&oe=691D340E',
+        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565690055_802299149263495_5241726712948988641_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHqmn6Mg1k5KHHjQA3xnpryVCwmStiPL3lULCZK2I8veVW_UcozuXcd_j2_KJ_1_z_33kZc4KKGvI5t6CyYmHQX&_nc_ohc=dmYopNbPV0MQ7kNvwHt2Pai&_nc_oc=AdmEGr5BTojp671ASzZQUqvqOB45regpAP5vWGwHHFgxFGvDLw5t31shp72bIiF3hZ8&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=-FQu5vq5kSGjfhsXBn0w0g&oh=00_AfiYmYBe75WP0TvYDyVPzVQI5AudFtqhNoxq-00r20U-rg&oe=69277332',
+        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/473570381_586580980835314_5699410999367893011_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEjZmKOT3Upn1xVzeiBs4mjz6uQ9o2-FkDPq5D2jb4WQGa0IVuvL3nzZEUylTQC-aey7udEcgW_A3oy1Fjh5Ji4&_nc_ohc=vhTwHd2Gx88Q7kNvwG3_agQ&_nc_oc=AdkShAoSR1MPPHJ6EYUlC4YTUa3Vx7vK99pcl8aPV56Oq349vlM3yCF3wVcJATWOU5g&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=VWVgF6SPGPnuBquHCcmX0w&oh=00_Afgig4tc1o3hWXcMFssaQve1kd6Ti1GVTdEO51dVQ5tKBg&oe=69276631',
         'https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565652070_802304075929669_8307697976189990695_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_eui2=AeEwTH7sVnE7JVywizNqFqkBiLPl-3e7kWeIs-X7d7uRZ7ep5o4YGTQZZGsSBOL_C8IfFEC5qbFav91QLwpEkzNv&_nc_ohc=cgIrBnSqc8YQ7kNvwG_fTTj&_nc_oc=Adm0MY4F6V90onyEPttHk9ejT4-Ph2Xry55Gf5i0bOD3RWoOTo3ocvNUmhmaOqgddEU&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=1IEB4VEBvAsjvKN8IGR0jw&oh=00_AfgEcPvzqKkLl14Pcb54R0lPL0LP6xA&oe=691D33C8',
+        'https://scontent.fabj5-2.fna.fbcdn.net/v/t51.82787-15/561846531_17984930459906860_3449748711829899152_n.jpg?stp=dst-jpegr_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE-97ASt1R-tFyGboBYyqlhyjwfjU_pK1bKPB-NT-krVp5qtP4UMyKfIREn082A8ERfuTeW_dRomWFJnLgjZTbg&_nc_ohc=ROK8SXoyv38Q7kNvwFyQDBH&_nc_oc=AdlWggG2iid5xhJ82zFWXhcuxSfKLShSmbRKMW1a6WxZ4Nl_5NUKpX0-swCzx4KkPNY&_nc_zt=23&se=-1&_nc_ht=scontent.fabj5-2.fna&_nc_gid=IL9NZczTjXZ78SY9I-D4WA&oh=00_Afjlm7Bt_GSumAERoroCO9KPyWrHIOGBFThIiFy2kx_bVQ&oe=692773C0',
       ],
+      icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
     },
   ];
-
-  const icons = {
-    mariages: Calendar,
-    corporate: Users,
-    receptions: Award,
-    restauration: Utensils,
-    decoration: Sparkles,
-  };
 
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
-      setIsHeaderVisible(window.scrollY < 100);
+    };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 2,
+        y: (e.clientY / window.innerHeight - 0.5) * 2,
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, []);
+
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.15,
+      rootMargin: '0px 0px -10% 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, observerOptions);
+
+    const elements = document.querySelectorAll('.reveal-on-scroll');
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white font-playfair overflow-hidden">
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+        .font-playfair {
+          font-family: 'Playfair Display', serif;
+        }
+
+        .font-inter {
+          font-family: 'Inter', sans-serif;
+        }
+
+        .font-cormorant {
+          font-family: 'Cormorant Garamond', serif;
+        }
+
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(40px);
           }
           to {
             opacity: 1;
@@ -127,7 +169,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         @keyframes slideInLeft {
           from {
             opacity: 0;
-            transform: translateX(-50px);
+            transform: translateX(-60px);
           }
           to {
             opacity: 1;
@@ -138,7 +180,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         @keyframes slideInRight {
           from {
             opacity: 0;
-            transform: translateX(50px);
+            transform: translateX(60px);
           }
           to {
             opacity: 1;
@@ -149,7 +191,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         @keyframes scaleIn {
           from {
             opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.9);
           }
           to {
             opacity: 1;
@@ -158,14 +200,11 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         @keyframes floatUp {
-          0% {
+          0%, 100% {
             transform: translateY(0px);
           }
           50% {
-            transform: translateY(-10px);
-          }
-          100% {
-            transform: translateY(0px);
+            transform: translateY(-15px);
           }
         }
 
@@ -175,6 +214,24 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           }
           100% {
             background-position: 1000px 0;
+          }
+        }
+
+        @keyframes glowPulse {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(173, 89, 69, 0.3);
+          }
+          50% {
+            box-shadow: 0 0 40px rgba(173, 89, 69, 0.6);
+          }
+        }
+
+        @keyframes morphBlob {
+          0%, 100% {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+          }
+          50% {
+            border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%;
           }
         }
 
@@ -195,29 +252,75 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         .animate-float {
-          animation: floatUp 3s ease-in-out infinite;
+          animation: floatUp 4s ease-in-out infinite;
+        }
+
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(50px) scale(0.95);
+          transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .reveal-on-scroll.in-view {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
 
         .service-card {
-          transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          position: relative;
+        }
+
+        .service-card::before {
+          content: '';
+          position: absolute;
+          inset: -2px;
+          background: linear-gradient(135deg, #ad5945, #d38074, #ad5945);
+          border-radius: 24px;
+          opacity: 0;
+          z-index: -1;
+          transition: opacity 0.6s ease;
+          animation: shimmer 3s linear infinite;
+          background-size: 200% 100%;
+        }
+
+        .service-card:hover::before {
+          opacity: 0.1;
         }
 
         .service-card:hover {
-          transform: translateY(-8px);
+          transform: translateY(-12px);
         }
 
         .icon-box {
-          background: linear-gradient(135deg, #ad5945 0%, #d38074 100%);
+          background: white;
           transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+          position: relative;
+        }
+
+        .icon-box::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: inherit;
+          background: linear-gradient(135deg, rgba(173, 89, 69, 0.1), rgba(211, 128, 116, 0.1));
+          opacity: 0;
+          transition: opacity 0.4s ease;
         }
 
         .service-card:hover .icon-box {
-          transform: rotate(12deg) scale(1.1);
-          box-shadow: 0 20px 40px rgba(173, 89, 69, 0.3);
+          transform: rotate(12deg) scale(1.15);
+          box-shadow: 0 20px 50px rgba(173, 89, 69, 0.25);
+          animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        .service-card:hover .icon-box::after {
+          opacity: 1;
         }
 
         .gallery-expand {
-          animation: fadeInUp 0.6s ease-out;
+          animation: fadeInUp 0.5s ease-out;
         }
 
         .button-hover {
@@ -228,38 +331,27 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         .button-hover::before {
           content: '';
           position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: rgba(255, 255, 255, 0.2);
-          transition: left 0.5s ease;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.25);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s ease, height 0.6s ease;
         }
 
         .button-hover:hover::before {
-          left: 100%;
+          width: 300px;
+          height: 300px;
         }
 
         .image-overlay {
-          transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .service-card:hover .image-overlay {
-          background: linear-gradient(135deg, rgba(173, 89, 69, 0.2) 0%, rgba(211, 128, 116, 0.2) 100%);
-        }
-
-        .blur-in {
-          backdrop-filter: blur(0px);
-          transition: backdrop-filter 0.3s ease;
-        }
-
-        .blur-in.blurred {
-          backdrop-filter: blur(4px);
-        }
-
-        .stagger-item {
-          opacity: 0;
-          animation: fadeInUp 0.8s ease-out forwards;
+          background: linear-gradient(135deg, rgba(173, 89, 69, 0.3) 0%, rgba(211, 128, 116, 0.3) 100%);
         }
 
         .service-image {
@@ -267,22 +359,30 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           overflow: hidden;
         }
 
-        .service-image::before {
+        .service-image img {
+          transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .service-card:hover .service-image img {
+          transform: scale(1.08) rotate(1deg);
+        }
+
+        .service-image::after {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, transparent 0%, rgba(0,0,0,0.1) 100%);
+          background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.2) 100%);
           opacity: 0;
-          transition: opacity 0.6s ease;
-          z-index: 2;
+          transition: opacity 0.7s ease;
+          pointer-events: none;
         }
 
-        .service-card:hover .service-image::before {
+        .service-card:hover .service-image::after {
           opacity: 1;
         }
 
         .chevron-rotate {
-          transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+          transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .chevron-rotate.rotated {
@@ -290,31 +390,130 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
         }
 
         .header-parallax {
-          transform: translateY(${scrollY * 0.5}px);
-          opacity: ${Math.max(0, 1 - scrollY / 300)};
+          transform: translateY(${scrollY * 0.3}px);
+          opacity: ${Math.max(0, 1 - scrollY / 400)};
         }
 
         .text-gradient {
-          background: linear-gradient(135deg, #ad5945 0%, #d38074 100%);
+          background: linear-gradient(135deg, #ad5945 0%, #d38074 50%, #ad5945 100%);
+          background-size: 200% auto;
           background-clip: text;
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
+          animation: shimmer 4s linear infinite;
+        }
+
+        .floating-shapes {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          overflow: hidden;
+          z-index: 0;
+        }
+
+        .shape {
+          position: absolute;
+          background: linear-gradient(135deg, rgba(173, 89, 69, 0.05), rgba(211, 128, 116, 0.05));
+          animation: morphBlob 8s ease-in-out infinite, floatUp 6s ease-in-out infinite;
+        }
+
+        .shape-1 {
+          width: 300px;
+          height: 300px;
+          top: 10%;
+          left: 5%;
+          animation-delay: 0s;
+        }
+
+        .shape-2 {
+          width: 200px;
+          height: 200px;
+          top: 60%;
+          right: 10%;
+          animation-delay: 2s;
+        }
+
+        .shape-3 {
+          width: 150px;
+          height: 150px;
+          bottom: 10%;
+          left: 50%;
+          animation-delay: 4s;
+        }
+
+        .magnetic-button {
+          transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .gallery-image-wrapper {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .gallery-image-wrapper::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+          transform: translateX(-100%);
+          transition: transform 0.6s ease;
+        }
+
+        .gallery-image-wrapper:hover::before {
+          transform: translateX(100%);
+        }
+
+        @keyframes dotPulse {
+          0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% {
+            transform: scale(1.3);
+            opacity: 0.5;
+          }
+        }
+
+        .dot-pulse {
+          animation: dotPulse 1.5s ease-in-out infinite;
+        }
+
+        .stagger-item {
+          opacity: 0;
+          animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
 
-      <div className="pt-32 pb-20 overflow-hidden" ref={containerRef}>
+      <div className="floating-shapes">
+        <div className="shape shape-1"></div>
+        <div className="shape shape-2"></div>
+        <div className="shape shape-3"></div>
+      </div>
+
+      <div className="pt-32 pb-20 relative" ref={containerRef}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
             ref={headerRef}
-            className="header-parallax text-center mb-20"
+            className="header-parallax text-center mb-20 relative z-10"
+            style={{
+              transform: `translate(${mousePosition.x * 5}px, ${mousePosition.y * 5}px)`
+            }}
           >
             <div className="stagger-item" style={{ animationDelay: '0s' }}>
-              <h1 className="font-serif text-5xl md:text-7xl font-bold text-gradient mb-8 leading-tight">
+              <h1 className="font-cormorant text-5xl md:text-7xl font-light text-gradient mb-8 leading-tight tracking-tight">
                 Nos Services
               </h1>
             </div>
             <div className="stagger-item" style={{ animationDelay: '0.2s' }}>
-              <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              <p className="font-inter text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-light">
                 Des prestations d'excellence pour transformer vos événements en expériences mémorables
               </p>
             </div>
@@ -322,51 +521,54 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
               className="stagger-item mt-8 flex justify-center gap-2"
               style={{ animationDelay: '0.4s' }}
             >
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]"></div>
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]" style={{ animation: 'pulse 1.5s ease-in-out 0.3s infinite' }}></div>
-              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074]" style={{ animation: 'pulse 1.5s ease-in-out 0.6s infinite' }}></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] dot-pulse"></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] dot-pulse" style={{ animationDelay: '0.3s' }}></div>
+              <div className="w-2 h-2 rounded-full bg-gradient-to-r from-[#ad5945] to-[#d38074] dot-pulse" style={{ animationDelay: '0.6s' }}></div>
             </div>
           </div>
 
-          <div className="space-y-24">
+          <div className="space-y-24 relative z-10">
             {services.map((service, index) => {
-              const Icon = icons[service.id as keyof typeof icons];
               const isExpanded = selectedService === service.id;
 
               return (
                 <div
                   key={service.id}
-                  className="stagger-item service-card"
-                  style={{ animationDelay: `${0.1 * index}s` }}
+                  className="reveal-on-scroll service-card"
+                  style={{ transitionDelay: `${0.1 * index}s` }}
                 >
-                  <div className="bg-white rounded-3xl overflow-hidden shadow-md hover:shadow-3xl transition-shadow duration-500 border border-slate-100">
+                  <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-slate-100">
                     <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? 'md:grid-flow-dense' : ''}`}>
                       <div className={`relative h-96 md:h-auto service-image ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
                         <img
                           src={service.image}
                           alt={service.title}
-                          className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                          className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 image-overlay bg-gradient-to-t from-black/40 to-transparent"></div>
                       </div>
 
                       <div className="p-8 md:p-12 flex flex-col justify-center">
-                        <div className="w-16 h-16 icon-box rounded-2xl flex items-center justify-center mb-8 shadow-lg">
-                          <Icon className="w-8 h-8 text-white" />
+                        <div className="w-16 h-16 icon-box rounded-2xl flex items-center justify-center mb-8 border border-slate-200">
+                          <img 
+                            src={service.icon} 
+                            alt={service.title}
+                            className="w-10 h-10"
+                          />
                         </div>
 
-                        <h2 className="font-serif text-3xl md:text-4xl font-bold text-slate-900 mb-5 leading-tight">
+                        <h2 className="font-cormorant text-3xl md:text-4xl font-semibold text-slate-900 mb-5 leading-tight tracking-tight">
                           {service.title}
                         </h2>
 
-                        <p className="text-slate-600 text-lg leading-relaxed mb-8 line-clamp-3">
+                        <p className="font-inter text-slate-600 text-lg leading-relaxed mb-8 font-light">
                           {service.description}
                         </p>
 
                         <div className="flex flex-wrap gap-4 pt-4">
                           <button
                             onClick={() => setSelectedService(isExpanded ? null : service.id)}
-                            className={`button-hover relative px-8 py-3 rounded-full font-semibold transition-all duration-300 border border-slate-200 flex items-center gap-2 ${
+                            className={`button-hover magnetic-button font-inter relative px-8 py-3 rounded-full font-semibold transition-all duration-300 border border-slate-200 flex items-center gap-2 ${
                               isExpanded
                                 ? 'bg-slate-100 text-slate-900 border-slate-300'
                                 : 'bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400'
@@ -377,7 +579,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                           </button>
                           <button
                             onClick={() => onNavigate('contact', service.id)}
-                            className="button-hover relative px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#ad5945] to-[#d38074] hover:shadow-2xl hover:shadow-[#ad5945]/30 transition-all duration-300 flex items-center gap-2 group"
+                            className="button-hover magnetic-button font-inter relative px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-[#ad5945] to-[#d38074] hover:shadow-2xl hover:shadow-[#ad5945]/30 transition-all duration-300 flex items-center gap-2 group"
                           >
                             Demander un devis
                             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -388,7 +590,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
 
                     {isExpanded && (
                       <div className="gallery-expand p-8 bg-gradient-to-b from-slate-50 to-white border-t border-slate-200">
-                        <h3 className="font-serif text-2xl font-bold text-slate-900 mb-8">
+                        <h3 className="font-cormorant text-2xl font-semibold text-slate-900 mb-8">
                           Galerie
                         </h3>
                         <Swiper
@@ -412,15 +614,15 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                         >
                           {service.gallery.map((image, idx) => (
                             <SwiperSlide key={idx}>
-                              <div className="relative aspect-square rounded-xl overflow-hidden group cursor-pointer">
+                              <div className="gallery-image-wrapper relative aspect-square rounded-xl overflow-hidden group cursor-pointer">
                                 <img
                                   src={image}
                                   alt={`${service.title} ${idx + 1}`}
-                                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                  <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-500">
                                     <Sparkles className="w-6 h-6 text-[#ad5945]" />
                                   </div>
                                 </div>
@@ -430,11 +632,11 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
                         </Swiper>
 
                         <div className="flex justify-center gap-4 mt-6">
-                          <button className={`swiper-button-prev-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
+                          <button className={`swiper-button-prev-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110`}>
                             <ArrowRight className="w-5 h-5 rotate-180" />
                           </button>
                           <div className={`swiper-pagination-${service.id} flex justify-center gap-2`}></div>
-                          <button className={`swiper-button-next-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all shadow-md hover:shadow-lg`}>
+                          <button className={`swiper-button-next-${service.id} w-10 h-10 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110`}>
                             <ArrowRight className="w-5 h-5" />
                           </button>
                         </div>

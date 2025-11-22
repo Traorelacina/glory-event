@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
 import { useAuthStore } from '../../store/authStore';
-import { Plus, Search, Trash2, Edit, Loader, AlertCircle, Package, Upload, X, Sparkles, Star, ArrowRight } from 'lucide-react';
+import { Plus, Search, Trash2, Edit, Loader, AlertCircle, Package, Upload, X, Sparkles, Star, ArrowRight, Save } from 'lucide-react';
 
 interface Produit {
   id: number;
@@ -26,6 +26,7 @@ export default function AdminProduitsPage() {
   const [showForm, setShowForm] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
+  const [editingProduct, setEditingProduct] = useState<Produit | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
 
@@ -133,6 +134,28 @@ export default function AdminProduitsPage() {
     }
   };
 
+  const startEdit = (produit: Produit) => {
+    setEditingProduct(produit);
+    setFormData({
+      name: produit.name,
+      description: produit.description,
+      price: produit.price.toString(),
+      category: produit.category,
+      in_stock: produit.in_stock,
+      featured: produit.featured,
+    });
+    setImagePreview(`http://127.0.0.1:8000/storage/${produit.image}`);
+    setSelectedImage(null);
+    setShowForm(true);
+    setError(null);
+  };
+
+  const cancelEdit = () => {
+    setEditingProduct(null);
+    setShowForm(false);
+    resetForm();
+  };
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -141,7 +164,7 @@ export default function AdminProduitsPage() {
       return;
     }
 
-    if (!selectedImage) {
+    if (!selectedImage && !editingProduct) {
       setError('Veuillez sélectionner une image');
       return;
     }
@@ -162,23 +185,33 @@ export default function AdminProduitsPage() {
       formDataToSend.append('category', formData.category.trim());
       formDataToSend.append('in_stock', formData.in_stock ? '1' : '0');
       formDataToSend.append('featured', formData.featured ? '1' : '0');
-      formDataToSend.append('image', selectedImage);
+      
+      if (selectedImage) {
+        formDataToSend.append('image', selectedImage);
+      }
 
-      console.log('Sending product:', {
-        name: formData.name,
-        price: formData.price,
-        category: formData.category,
-        image: selectedImage.name
-      });
+      const url = editingProduct 
+  ? `http://127.0.0.1:8000/api/admin/produits/${editingProduct.id}`
+  : 'http://127.0.0.1:8000/api/admin/produits';
 
-      const response = await fetch('http://127.0.0.1:8000/api/admin/produits', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json',
-        },
-        body: formDataToSend,
-      });
+// Toujours utiliser POST
+const method = 'POST';
+
+// Pour la mise à jour, ajouter _method
+if (editingProduct) {
+  formDataToSend.append('_method', 'PUT');
+}
+
+const response = await fetch(url, {
+  method: method, // Toujours POST
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/json',
+  },
+  body: formDataToSend,
+});
+
+     
 
       const contentType = response.headers.get('content-type');
       
@@ -198,16 +231,22 @@ export default function AdminProduitsPage() {
         throw new Error(data.message || `Erreur ${response.status}`);
       }
 
-      console.log('Product created:', data);
+      console.log('Product saved:', data);
 
-      setProduits(prev => [data.data, ...prev]);
+      if (editingProduct) {
+        setProduits(prev => prev.map(p => p.id === editingProduct.id ? data.data : p));
+      } else {
+        setProduits(prev => [data.data, ...prev]);
+      }
+      
       setShowForm(false);
+      setEditingProduct(null);
       resetForm();
       setError(null);
       
     } catch (err: any) {
-      console.error('Create product error:', err);
-      setError(err.message || 'Erreur lors de la création du produit');
+      console.error('Save product error:', err);
+      setError(err.message || `Erreur lors de ${editingProduct ? 'la modification' : 'la création'} du produit`);
     } finally {
       setSubmitting(false);
     }
@@ -310,6 +349,7 @@ export default function AdminProduitsPage() {
                 <button
                   onClick={() => {
                     setShowForm(!showForm);
+                    setEditingProduct(null);
                     if (showForm) resetForm();
                   }}
                   className="group relative bg-white/20 backdrop-blur-md text-white px-6 py-3 rounded-xl hover:bg-white/30 transition-all duration-300 border border-white/30 flex items-center gap-3 overflow-hidden font-semibold hover:scale-105"
@@ -343,7 +383,7 @@ export default function AdminProduitsPage() {
             </div>
           )}
 
-          {/* Formulaire d'ajout - SIMPLIFIÉ SANS ANIMATION COMPLEXE */}
+          {/* Formulaire d'ajout/modification */}
           {showForm && (
             <div 
               className="bg-white rounded-3xl shadow-2xl p-8 border-2 border-purple-200 relative overflow-hidden animate-in fade-in duration-500"
@@ -356,14 +396,21 @@ export default function AdminProduitsPage() {
                   <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
                     <Sparkles className="text-white" size={24} />
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900">Ajouter un nouveau produit</h2>
+                  <div>
+                    <h2 className="text-3xl font-bold text-gray-900">
+                      {editingProduct ? 'Modifier le produit' : 'Ajouter un nouveau produit'}
+                    </h2>
+                    {editingProduct && (
+                      <p className="text-gray-600 mt-1">Modification de "{editingProduct.name}"</p>
+                    )}
+                  </div>
                 </div>
 
                 <form onSubmit={handleCreate} className="space-y-6">
                   {/* Upload d'image */}
                   <div>
                     <label className="block text-sm font-bold text-gray-700 mb-3">
-                      Image du produit <span className="text-red-500">*</span>
+                      Image du produit {!editingProduct && <span className="text-red-500">*</span>}
                     </label>
                     <div className="group relative flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-2xl p-8 hover:border-purple-400 hover:bg-purple-50/50 transition-all duration-300 bg-white">
                       {imagePreview ? (
@@ -388,6 +435,11 @@ export default function AdminProduitsPage() {
                           </div>
                           <p className="text-gray-700 font-semibold mb-2">Cliquez pour sélectionner une image</p>
                           <p className="text-sm text-gray-500">JPEG, PNG, GIF, WebP - Max 2MB</p>
+                          {editingProduct && (
+                            <p className="text-sm text-purple-600 mt-2">
+                              Laissez vide pour conserver l'image actuelle
+                            </p>
+                          )}
                         </div>
                       )}
                       <input
@@ -491,29 +543,36 @@ export default function AdminProduitsPage() {
                     <div className="col-span-2 flex gap-4">
                       <button
                         type="submit"
-                        disabled={!selectedImage || submitting}
+                        disabled={(!selectedImage && !editingProduct) || submitting}
                         className="group relative flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white py-4 rounded-xl transition-all duration-300 shadow-lg hover:shadow-2xl font-semibold disabled:cursor-not-allowed flex items-center justify-center gap-3 overflow-hidden hover:-translate-y-0.5"
                       >
                         <span className="absolute inset-0 bg-gradient-to-r from-pink-600 to-purple-600 translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
                         {submitting ? (
                           <>
                             <Loader className="relative z-10 animate-spin" size={20} />
-                            <span className="relative z-10">Création en cours...</span>
+                            <span className="relative z-10">
+                              {editingProduct ? 'Modification...' : 'Création...'}
+                            </span>
                           </>
                         ) : (
                           <>
-                            <Plus className="relative z-10" size={20} />
-                            <span className="relative z-10">Créer le produit</span>
+                            {editingProduct ? (
+                              <>
+                                <Save className="relative z-10" size={20} />
+                                <span className="relative z-10">Modifier le produit</span>
+                              </>
+                            ) : (
+                              <>
+                                <Plus className="relative z-10" size={20} />
+                                <span className="relative z-10">Créer le produit</span>
+                              </>
+                            )}
                           </>
                         )}
                       </button>
                       <button
                         type="button"
-                        onClick={() => {
-                          setShowForm(false);
-                          resetForm();
-                          setError(null);
-                        }}
+                        onClick={cancelEdit}
                         className="px-8 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                       >
                         Annuler
@@ -620,12 +679,17 @@ export default function AdminProduitsPage() {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
-                            <button className="group p-2.5 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-300 text-blue-600 hover:scale-110 hover:shadow-md">
+                            <button 
+                              onClick={() => startEdit(produit)}
+                              className="group p-2.5 hover:bg-gradient-to-r hover:from-blue-50 hover:to-cyan-50 rounded-xl transition-all duration-300 text-blue-600 hover:scale-110 hover:shadow-md"
+                              title="Modifier"
+                            >
                               <Edit size={18} />
                             </button>
                             <button
                               onClick={() => handleDelete(produit.id)}
                               className="group p-2.5 hover:bg-gradient-to-r hover:from-red-50 hover:to-pink-50 rounded-xl transition-all duration-300 text-red-600 hover:scale-110 hover:shadow-md"
+                              title="Supprimer"
                             >
                               <Trash2 size={18} />
                             </button>
@@ -666,6 +730,7 @@ export default function AdminProduitsPage() {
             }
             75% { 
               transform: translateY(-15px) translateX(5px); 
+            }
           }
           
           @keyframes slideDown {

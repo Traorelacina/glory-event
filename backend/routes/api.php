@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ContactController;
 use App\Http\Controllers\Api\AdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PageViewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,10 @@ Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/services/featured', [ServiceController::class, 'featured']);
 Route::get('/services/category/{category}', [ServiceController::class, 'byCategory']);
 Route::get('/services/{slug}', [ServiceController::class, 'show']);
-
+// Dans routes/api.php
+Route::post('/track-view', [PageViewController::class, 'trackView']);
+Route::get('/statistics', [PageViewController::class, 'getStatistics'])->middleware('auth:sanctum');
+Route::get('/dashboard-stats', [PageViewController::class, 'getDashboardStats'])->middleware('auth:sanctum');
 Route::get('/produits', [ProduitController::class, 'index']);
 Route::get('/produits/featured', [ProduitController::class, 'featured']);
 Route::get('/produits/category/{category}', [ProduitController::class, 'byCategory']);

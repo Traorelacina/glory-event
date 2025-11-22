@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
@@ -12,8 +12,35 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminProduitsPage from './pages/AdminProduitsPage';
 import AdminCommandesPage from './pages/AdminCommandesPage';
 import AdminContactsPage from './pages/AdminContactsPage';
-
 import ProtectedRoute from './components/ProtectedRoute';
+import { statisticsService } from '../services/statisticsService'; // Chemin corrigé
+
+// Composant pour le tracking des pages
+function PageTracker() {
+  const location = useLocation();
+  
+  useEffect(() => {
+    const pageName = getPageNameFromPath(location.pathname);
+    if (pageName) {
+      statisticsService.trackView(pageName);
+    }
+  }, [location.pathname]);
+
+  const getPageNameFromPath = (path: string) => {
+    const routes: { [key: string]: string } = {
+      '/': 'home',
+      '/services': 'services',
+      '/boutique': 'boutique',
+      '/cart': 'cart',
+      '/gallery': 'gallery',
+      '/contact': 'contact',
+    };
+    
+    return routes[path] || null;
+  };
+
+  return null;
+}
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
@@ -29,6 +56,9 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/* AJOUTEZ CETTE LIGNE : PageTracker doit être utilisé */}
+      <PageTracker />
+      
       <Routes>
         {/* Pages publiques */}
         <Route
@@ -80,8 +110,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-       
-        
 
         {/* Redirection par défaut */}
         <Route path="*" element={<Navigate to="/" replace />} />
