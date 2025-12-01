@@ -93,14 +93,14 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-white font-playfair text-[#111827]">
       <div className="pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h1 className="font-serif text-5xl md:text-6xl font-bold text-[#111827] mb-6">
+            <h1 className="font-cormorant text-5xl md:text-6xl font-bold text-[#111827] mb-6">
               Contactez-nous
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="font-inter text-xl text-gray-600 max-w-3xl mx-auto">
               Partagez-nous votre projet et donnons vie ensemble à vos rêves
             </p>
             <div className="mt-8 flex justify-center gap-2">
@@ -114,7 +114,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
             {/* Informations de Contact */}
             <div>
               <div className="bg-gradient-to-br from-[#ad5945] to-[#d38074] rounded-3xl p-8 md:p-12 text-white mb-8 shadow-xl">
-                <h2 className="font-serif text-3xl font-bold mb-8">
+                <h2 className="font-cormorant text-3xl font-bold mb-8">
                   Informations de Contact
                 </h2>
 
@@ -124,8 +124,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                       <Phone className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Téléphone</h3>
-                      <p className="text-white/90">+33 1 23 45 67 89</p>
+                      <h3 className="font-playfair font-bold mb-1">Téléphone</h3>
+                      <p className="font-inter text-white/90">+33 1 23 45 67 89</p>
                     </div>
                   </div>
 
@@ -134,8 +134,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                       <Mail className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Email</h3>
-                      <p className="text-white/90">contact@eventsprestige.fr</p>
+                      <h3 className="font-playfair font-bold mb-1">Email</h3>
+                      <p className="font-inter text-white/90">contact@eventsprestige.fr</p>
                     </div>
                   </div>
 
@@ -144,8 +144,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                       <MapPin className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold mb-1">Adresse</h3>
-                      <p className="text-white/90">
+                      <h3 className="font-playfair font-bold mb-1">Adresse</h3>
+                      <p className="font-inter text-white/90">
                         123 Avenue des Champs-Élysées<br />
                         75008 Paris, France
                       </p>
@@ -159,10 +159,10 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
               </div>
 
               <div className="bg-white rounded-3xl p-8 shadow-lg border border-slate-100 hover:shadow-xl transition-shadow duration-300">
-                <h3 className="font-serif text-2xl font-bold text-gray-900 mb-4">
+                <h3 className="font-cormorant text-2xl font-bold text-gray-900 mb-4">
                   Horaires d'ouverture
                 </h3>
-                <div className="space-y-3 text-gray-600">
+                <div className="space-y-3 font-inter text-gray-600">
                   <div className="flex justify-between py-2 border-b border-gray-100">
                     <span>Lundi - Vendredi</span>
                     <span className="font-medium text-[#ad5945]">9h00 - 19h00</span>
@@ -188,10 +188,10 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                   </div>
-                  <h3 className="font-serif text-3xl font-bold text-gray-900 mb-4">
+                  <h3 className="font-cormorant text-3xl font-bold text-gray-900 mb-4">
                     Message envoyé !
                   </h3>
-                  <p className="text-gray-600 mb-6">
+                  <p className="font-inter text-gray-600 mb-6">
                     Nous vous répondrons dans les plus brefs délais.
                   </p>
                   <div className="flex justify-center gap-2">
@@ -202,7 +202,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                 </div>
               ) : (
                 <>
-                  <h2 className="font-serif text-3xl font-bold text-gray-900 mb-8">
+                  <h2 className="font-cormorant text-3xl font-bold text-gray-900 mb-8">
                     Demander un devis
                   </h2>
 
@@ -223,7 +223,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400 font-inter"
                         placeholder="Jean Dupont"
                         disabled={isSubmitting}
                       />
@@ -238,7 +238,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400 font-inter"
                         placeholder="jean.dupont@example.com"
                         disabled={isSubmitting}
                       />
@@ -252,7 +252,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400 font-inter"
                         placeholder="+33 1 23 45 67 89"
                         disabled={isSubmitting}
                       />
@@ -266,7 +266,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                         required
                         value={formData.subject}
                         onChange={(e) => setFormData({ ...formData, subject: e.target.value, service: e.target.value })}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#ad5945] focus:border-transparent outline-none transition-all hover:border-gray-400 font-inter"
                         disabled={isSubmitting}
                       >
                         <option value="">Sélectionnez un service</option>
@@ -296,7 +296,7 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white py-4 rounded-full font-medium text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-[#ad5945]/30"
+                      className="w-full bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white py-4 rounded-full font-inter font-medium text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-[#ad5945]/30"
                     >
                       {isSubmitting ? (
                         <>
@@ -324,8 +324,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-gray-900 mb-2">Réponse Rapide</h3>
-              <p className="text-gray-600">Nous vous répondons sous 24 heures</p>
+              <h3 className="font-cormorant text-xl font-bold text-gray-900 mb-2">Réponse Rapide</h3>
+              <p className="font-inter text-gray-600">Nous vous répondons sous 24 heures</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300">
@@ -334,8 +334,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-gray-900 mb-2">Expertise Garantie</h3>
-              <p className="text-gray-600">Des professionnels à votre écoute</p>
+              <h3 className="font-cormorant text-xl font-bold text-gray-900 mb-2">Expertise Garantie</h3>
+              <p className="font-inter text-gray-600">Des professionnels à votre écoute</p>
             </div>
 
             <div className="text-center p-6 bg-white rounded-2xl shadow-lg border border-slate-100 hover:shadow-xl transition-all duration-300">
@@ -344,8 +344,8 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
                 </svg>
               </div>
-              <h3 className="font-serif text-xl font-bold text-gray-900 mb-2">Accompagnement</h3>
-              <p className="text-gray-600">Suivi personnalisé de votre projet</p>
+              <h3 className="font-cormorant text-xl font-bold text-gray-900 mb-2">Accompagnement</h3>
+              <p className="font-inter text-gray-600">Suivi personnalisé de votre projet</p>
             </div>
           </div>
         </div>
@@ -353,10 +353,128 @@ export default function ContactPage({ selectedService, onNavigate }: ContactPage
 
       <Footer onNavigate={onNavigate} />
 
-      <style jsx>{`
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(-20px) translateX(10px); }
+          50% { transform: translateY(-10px) translateX(-10px); }
+          75% { transform: translateY(-15px) translateX(5px); }
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+          from { opacity: 0; transform: scale(0.8) rotateX(-10deg); }
+          to { opacity: 1; transform: scale(1) rotateX(0deg); }
+        }
+
+        @keyframes morphBlob {
+          0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
+        }
+
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
+        }
+
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(173, 89, 69, 0.3), inset 0 0 20px rgba(173, 89, 69, 0.1); }
+          50% { box-shadow: 0 0 40px rgba(211, 128, 116, 0.5), inset 0 0 20px rgba(173, 89, 69, 0.2); }
+        }
+
+        @keyframes textGlow {
+          0%, 100% { text-shadow: 0 0 10px rgba(173, 89, 69, 0.3); }
+          50% { text-shadow: 0 0 20px rgba(211, 128, 116, 0.6), 0 0 30px rgba(173, 89, 69, 0.4); }
+        }
+
+        @keyframes wiggle {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(1deg); }
+          75% { transform: rotate(-1deg); }
+        }
+
+        @keyframes blinkGlow {
+          0%, 100% { background-color: rgba(173, 89, 69, 0.2); box-shadow: 0 0 20px rgba(173, 89, 69, 0.3); }
+          50% { background-color: rgba(211, 128, 116, 0.3); box-shadow: 0 0 30px rgba(211, 128, 116, 0.5); }
+        }
+
+        .font-playfair {
+          font-family: 'Playfair Display', serif;
+          letter-spacing: -0.5px;
+        }
+
+        .font-dm-serif {
+          font-family: 'DM Serif Display', serif;
+          letter-spacing: -0.3px;
+        }
+
+        .font-raleway {
+          font-family: 'Raleway', sans-serif;
+          letter-spacing: 0.3px;
+        }
+
+        .font-lora {
+          font-family: 'Lora', serif;
+          letter-spacing: 0.2px;
+        }
+
+        .font-inter {
+          font-family: 'Raleway', sans-serif;
+          letter-spacing: 0.3px;
+        }
+
+        .font-cormorant {
+          font-family: 'Lora', serif;
+          letter-spacing: 0.2px;
+        }
+
+        .shimmer-effect {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .shimmer-effect::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+          animation: shimmer 2s infinite;
+        }
+
+        .glowing-badge {
+          animation: blinkGlow 3s ease-in-out infinite;
+        }
+
+        .text-glow {
+          animation: textGlow 3s ease-in-out infinite;
+        }
+
+        .magnetic-button {
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
       `}</style>
     </div>

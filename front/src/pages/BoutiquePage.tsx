@@ -76,14 +76,14 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
 
   return (
     <>
-      <div className="min-h-screen pt-32 pb-12 bg-gradient-to-b from-white via-slate-50 to-white">
+      <div className="min-h-screen pt-32 pb-12 bg-gradient-to-b from-white via-slate-50 to-white font-playfair text-[#111827]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* HEADER */}
           <div className="text-center mb-16">
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-[#111827] mb-6">
+            <h1 className="font-cormorant text-4xl md:text-5xl lg:text-6xl font-bold text-[#111827] mb-6">
               Boutique Parfums
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="font-inter text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
               Découvrez notre collection exclusive de fragrances d'exception
             </p>
 
@@ -100,7 +100,7 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-6 py-3 rounded-full font-medium transition-all transform hover:-translate-y-1 ${
+                  className={`px-6 py-3 rounded-full font-inter font-medium transition-all transform hover:-translate-y-1 ${
                     selectedCategory === cat
                       ? "bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white shadow-lg shadow-[#ad5945]/30"
                       : "bg-white text-gray-700 hover:bg-gray-50 shadow-md border border-gray-200"
@@ -192,16 +192,16 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
 
                     <div className="p-6">
                       <div className="mb-3">
-                        <span className="inline-block bg-gradient-to-r from-[#ad5945]/10 to-[#d38074]/10 text-[#ad5945] px-3 py-1.5 rounded-lg text-xs font-semibold uppercase tracking-wide border border-[#ad5945]/20">
+                        <span className="inline-block bg-gradient-to-r from-[#ad5945]/10 to-[#d38074]/10 text-[#ad5945] px-3 py-1.5 rounded-lg text-xs font-inter font-semibold uppercase tracking-wide border border-[#ad5945]/20">
                           {product.category}
                         </span>
                       </div>
                       
-                      <h3 className="font-serif text-xl font-bold text-gray-900 mb-2 line-clamp-1">
+                      <h3 className="font-playfair text-xl font-bold text-gray-900 mb-2 line-clamp-1">
                         {product.name}
                       </h3>
                       
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
+                      <p className="font-inter text-gray-600 text-sm mb-4 line-clamp-2 leading-relaxed">
                         {product.description}
                       </p>
                       
@@ -225,7 +225,7 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
                       {/* BOUTON DÉTAIL */}
                       <button
                         onClick={() => setSelectedProduct(product)}
-                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 hover:shadow-md border border-gray-200"
+                        className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-inter font-semibold py-3 rounded-xl transition-all flex items-center justify-center gap-2 hover:shadow-md border border-gray-200"
                       >
                         <Eye className="w-4 h-4" />
                         Voir les détails
@@ -239,22 +239,22 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
               <div className="bg-gradient-to-r from-[#ad5945] to-[#d38074] rounded-3xl p-12 text-white text-center relative overflow-hidden mb-16">
                 <div className="absolute inset-0 bg-black/10"></div>
                 <div className="relative z-10">
-                  <h3 className="font-serif text-3xl md:text-4xl font-bold mb-4">
+                  <h3 className="font-cormorant text-3xl md:text-4xl font-bold mb-4">
                     Des questions sur nos parfums ?
                   </h3>
-                  <p className="text-xl mb-8 text-white/90 max-w-2xl mx-auto">
+                  <p className="font-inter text-xl mb-8 text-white/90 max-w-2xl mx-auto">
                     Notre équipe d'experts est là pour vous conseiller et vous aider à trouver la fragrance parfaite
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4 justify-center">
                     <button
                       onClick={() => onNavigate('contact')}
-                      className="bg-white text-[#ad5945] px-8 py-4 rounded-full font-semibold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+                      className="bg-white text-[#ad5945] px-8 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
                     >
                       Nous contacter
                     </button>
                     <button
                       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-                      className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/30 transition-all duration-300 border border-white/30"
+                      className="bg-white/20 backdrop-blur-sm text-white px-8 py-4 rounded-full font-inter font-semibold text-lg hover:bg-white/30 transition-all duration-300 border border-white/30"
                     >
                       Voir le haut
                     </button>
@@ -278,10 +278,128 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
       {/* FOOTER */}
       <Footer onNavigate={onNavigate} />
 
-      <style jsx>{`
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+
+        @keyframes float {
+          0%, 100% { transform: translateY(0) translateX(0); }
+          25% { transform: translateY(-20px) translateX(10px); }
+          50% { transform: translateY(-10px) translateX(-10px); }
+          75% { transform: translateY(-15px) translateX(5px); }
+        }
+
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleUp {
+          from { opacity: 0; transform: scale(0.8) rotateX(-10deg); }
+          to { opacity: 1; transform: scale(1) rotateX(0deg); }
+        }
+
+        @keyframes morphBlob {
+          0%, 100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+          50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+        }
+
+        @keyframes shimmer {
+          0% { background-position: -1000px 0; }
+          100% { background-position: 1000px 0; }
+        }
+
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.5; }
+        }
+
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(173, 89, 69, 0.3), inset 0 0 20px rgba(173, 89, 69, 0.1); }
+          50% { box-shadow: 0 0 40px rgba(211, 128, 116, 0.5), inset 0 0 20px rgba(173, 89, 69, 0.2); }
+        }
+
+        @keyframes textGlow {
+          0%, 100% { text-shadow: 0 0 10px rgba(173, 89, 69, 0.3); }
+          50% { text-shadow: 0 0 20px rgba(211, 128, 116, 0.6), 0 0 30px rgba(173, 89, 69, 0.4); }
+        }
+
+        @keyframes wiggle {
+          0%, 100% { transform: rotate(0deg); }
+          25% { transform: rotate(1deg); }
+          75% { transform: rotate(-1deg); }
+        }
+
+        @keyframes blinkGlow {
+          0%, 100% { background-color: rgba(173, 89, 69, 0.2); box-shadow: 0 0 20px rgba(173, 89, 69, 0.3); }
+          50% { background-color: rgba(211, 128, 116, 0.3); box-shadow: 0 0 30px rgba(211, 128, 116, 0.5); }
+        }
+
+        .font-playfair {
+          font-family: 'Playfair Display', serif;
+          letter-spacing: -0.5px;
+        }
+
+        .font-dm-serif {
+          font-family: 'DM Serif Display', serif;
+          letter-spacing: -0.3px;
+        }
+
+        .font-raleway {
+          font-family: 'Raleway', sans-serif;
+          letter-spacing: 0.3px;
+        }
+
+        .font-lora {
+          font-family: 'Lora', serif;
+          letter-spacing: 0.2px;
+        }
+
+        .font-inter {
+          font-family: 'Raleway', sans-serif;
+          letter-spacing: 0.3px;
+        }
+
+        .font-cormorant {
+          font-family: 'Lora', serif;
+          letter-spacing: 0.2px;
+        }
+
+        .shimmer-effect {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .shimmer-effect::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+          animation: shimmer 2s infinite;
+        }
+
+        .glowing-badge {
+          animation: blinkGlow 3s ease-in-out infinite;
+        }
+
+        .text-glow {
+          animation: textGlow 3s ease-in-out infinite;
+        }
+
+        .magnetic-button {
+          transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
       `}</style>
     </>
