@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../store/AuthStore';
 import { Search, Loader, AlertCircle, Eye, Package, X, Check, Clock, Truck, XCircle, Sparkles, Star, ArrowRight, Users, TrendingUp } from 'lucide-react';
 
 interface Produit {
@@ -24,8 +24,8 @@ interface Commande {
 }
 
 // API URLs
-const API_URL = 'http://127.0.0.1:8000/api';
-const STORAGE_URL = 'http://127.0.0.1:8000/storage';
+const API_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api';
+const STORAGE_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/storage';
 
 export default function AdminCommandesPage() {
   const { token } = useAuthStore();

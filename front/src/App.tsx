@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import ServicesPage from './pages/ServicesPage';
@@ -12,8 +12,10 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminProduitsPage from './pages/AdminProduitsPage';
 import AdminCommandesPage from './pages/AdminCommandesPage';
 import AdminContactsPage from './pages/AdminContactsPage';
+import AdminPortfoliosPage from './pages/AdminPortfoliosPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { statisticsService } from '../services/statisticsService'; // Chemin corrigé
+import PortfolioCategoryPage from './pages/PortfolioCategoryPage'; // Ajout de l'import
+import { statisticsService } from '../services/statisticsService';
 
 // Composant pour le tracking des pages
 function PageTracker() {
@@ -24,6 +26,8 @@ function PageTracker() {
     if (pageName) {
       statisticsService.trackView(pageName);
     }
+    // Scroll vers le haut à chaque changement de page
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
   const getPageNameFromPath = (path: string) => {
@@ -34,6 +38,10 @@ function PageTracker() {
       '/cart': 'cart',
       '/gallery': 'gallery',
       '/contact': 'contact',
+      '/portfolio/mariage': 'portfolio-mariage',
+      '/portfolio/corporate': 'portfolio-corporate',
+      '/portfolio/reception': 'portfolio-reception',
+      '/portfolio/decoration': 'portfolio-decoration',
     };
     
     return routes[path] || null;
@@ -42,41 +50,72 @@ function PageTracker() {
   return null;
 }
 
-function App() {
-  const [currentPage, setCurrentPage] = useState('home');
-  const [selectedService, setSelectedService] = useState<string | undefined>();
+// Layout principal avec Header
+function MainLayout() {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const handleNavigate = (page: string, serviceId?: string) => {
-    setCurrentPage(page);
-    if (serviceId) {
-      setSelectedService(serviceId);
+  // Fonction de navigation que vous passerez aux composants
+  const handleNavigate = (page: string, category?: string) => {
+    if (category) {
+      // Navigation vers une catégorie spécifique de portfolio
+      navigate(`/portfolio/${category}`);
+    } else {
+      navigate(`/${page === 'home' ? '' : page}`);
     }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Déterminer la page actuelle depuis l'URL
+  const getCurrentPage = () => {
+    const path = location.pathname;
+    if (path === '/') return 'home';
+    if (path.startsWith('/portfolio/')) return 'portfolio';
+    return path.substring(1); // Enlève le '/' du début
   };
 
   return (
+    <>
+      <Header currentPage={getCurrentPage()} onNavigate={handleNavigate} />
+      <Routes>
+        <Route path="/" element={<HomePage onNavigate={handleNavigate} />} />
+        <Route path="/services" element={<ServicesPage onNavigate={handleNavigate} />} />
+        <Route path="/boutique" element={<BoutiquePage onNavigate={handleNavigate} />} />
+        <Route path="/cart" element={<CartPage onNavigate={handleNavigate} />} />
+        <Route path="/gallery" element={<GalleryPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        
+        {/* Routes pour les pages de portfolio par catégorie */}
+        <Route 
+          path="/portfolio/mariage" 
+          element={<PortfolioCategoryPage category="mariage" onNavigate={handleNavigate} />} 
+        />
+        <Route 
+          path="/portfolio/corporate" 
+          element={<PortfolioCategoryPage category="corporate" onNavigate={handleNavigate} />} 
+        />
+        <Route 
+          path="/portfolio/reception" 
+          element={<PortfolioCategoryPage category="reception" onNavigate={handleNavigate} />} 
+        />
+        <Route 
+          path="/portfolio/decoration" 
+          element={<PortfolioCategoryPage category="decoration" onNavigate={handleNavigate} />} 
+        />
+      </Routes>
+    </>
+  );
+}
+
+function App() {
+  return (
     <BrowserRouter>
-      {/* AJOUTEZ CETTE LIGNE : PageTracker doit être utilisé */}
       <PageTracker />
       
       <Routes>
-        {/* Pages publiques */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Header currentPage={currentPage} onNavigate={handleNavigate} />
-              {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
-              {currentPage === 'services' && <ServicesPage onNavigate={handleNavigate} />}
-              {currentPage === 'boutique' && <BoutiquePage onNavigate={handleNavigate} />}
-              {currentPage === 'cart' && <CartPage onNavigate={handleNavigate} />}
-              {currentPage === 'gallery' && <GalleryPage />}
-              {currentPage === 'contact' && <ContactPage selectedService={selectedService} />}
-            </>
-          }
-        />
+        {/* Pages publiques avec layout */}
+        <Route path="/*" element={<MainLayout />} />
 
-        {/* Pages admin */}
+        {/* Pages admin sans Header */}
         <Route path="/admin/login" element={<AdminLoginPage />} />
         <Route
           path="/admin/dashboard"
@@ -107,6 +146,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AdminContactsPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/portfolios"
+          element={
+            <ProtectedRoute>
+              <AdminPortfoliosPage />
             </ProtectedRoute>
           }
         />

@@ -8,7 +8,7 @@ import Footer from '../components/Footer';
 import { statisticsService } from '../../services/statisticsService';
 
 interface HomePageProps {
-  onNavigate: (page: string) => void;
+  onNavigate: (page: string, section?: string) => void;
 }
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -22,6 +22,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState<string | null>(null);
+  const [scrollToSection, setScrollToSection] = useState<string | null>(null);
+  const portfolioSectionRef = useRef<HTMLDivElement>(null);
 
   // Track mouse position for parallax effects
   useEffect(() => {
@@ -39,17 +41,17 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const heroSlides = [
     {
       image: 'https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      title: 'Créez des Moments Inoubliables',
-      subtitle: 'Transformez vos visions en moments magiques. De l\'organisation d\'événements premium à notre collection exclusive de parfums.',
+      title: 'Des Moments Inoubliables',
+      subtitle: 'Transformez vos visions en moments magiques.',
       cta1: 'Commencer votre projet',
       cta2: 'Voir nos réalisations'
     },
     {
-      image: 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      title: 'Mariages de Rêve',
-      subtitle: 'Des cérémonies inoubliables orchestrées avec élégance et raffinement. Chaque détail compte pour votre jour parfait.',
-      cta1: 'Planifier mon mariage',
-      cta2: 'Découvrir nos services'
+      image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1920',
+      title: "Des décorations d'exception",
+      subtitle: "Vos cérémonies sont orchestrées avec élégance et raffinement.",
+      cta1: 'Obtenir un devis',
+      cta2: 'Galerie photos'
     },
     {
       image: 'https://images.pexels.com/photos/3184312/pexels-photo-3184312.jpeg?auto=compress&cs=tinysrgb&w=1920',
@@ -65,13 +67,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       cta1: 'Réserver maintenant',
       cta2: 'Nos prestations'
     },
-    {
-      image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1920',
-      title: 'Décoration d\'Exception',
-      subtitle: 'Ambiances uniques adaptées à votre vision et votre style. Design et mise en scène sur mesure pour chaque occasion.',
-      cta1: 'Obtenir un devis',
-      cta2: 'Galerie photos'
-    }
   ];
 
   // Track page view
@@ -88,35 +83,39 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     return () => clearInterval(interval);
   }, []);
 
-  // Services principaux
+  // Services principaux avec leurs catégories
   const services = [
     {
       icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
       title: 'Mariages de Luxe',
       description: 'Des cérémonies inoubliables orchestrées avec élégance et raffinement',
       color: 'from-[#ad5945] to-[#d38074]',
-      img: 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=600'
+      img: 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=600',
+      category: 'mariage'
     },
     {
       icon: 'https://cdn-icons-png.flaticon.com/512/1067/1067566.png',
       title: 'Événements Corporate',
       description: "Solutions professionnelles pour vos séminaires et réceptions d'entreprise",
       color: 'from-[#ca715b] to-[#ad5945]',
-      img: 'https://images.pexels.com/photos/3184312/pexels-photo-3184312.jpeg?auto=compress&cs=tinysrgb&w=600'
+      img: 'https://images.pexels.com/photos/3184312/pexels-photo-3184312.jpeg?auto=compress&cs=tinysrgb&w=600',
+      category: 'corporate'
     },
     {
       icon: 'https://cdn-icons-png.flaticon.com/512/3290/3290425.png',
       title: 'Réceptions Privées',
       description: 'Créez des moments mémorables pour vos célébrations personnelles',
       color: 'from-[#d38074] to-[#ad5945]',
-      img: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600'
+      img: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600',
+      category: 'reception'
     },
     {
       icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
       title: 'Décoration sur Mesure',
       description: 'Ambiances uniques adaptées à votre vision et votre style',
       color: 'from-[#ad5945] to-[#ca715b]',
-      img: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600'
+      img: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600',
+      category: 'decoration'
     },
   ];
 
@@ -190,23 +189,30 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     },
   ];
 
-  const testimonials: Testimonial[] = [
-    {
-      id: '1',
-      name: 'Sophie Martin',
-      text: 'Une équipe exceptionnelle qui a transformé notre mariage en un conte de fées. Chaque détail était parfait.',
-    },
-    {
-      id: '2',
-      name: 'Jean Dupont',
-      text: 'Professionnalisme et créativité au rendez-vous. Notre événement corporate a été un véritable succès.',
-    },
-    {
-      id: '3',
-      name: 'Marie Laurent',
-      text: 'Des prestations haut de gamme et une écoute attentive. Je recommande sans hésitation!',
-    },
-  ];
+  // Fonction pour gérer la navigation
+  const handleNavigation = (page: string, section?: string) => {
+    if (page === 'home' && section === 'portfolio-section') {
+      // Si on veut revenir à la section portfolio
+      setScrollToSection('portfolio-section');
+      onNavigate('home');
+    } else {
+      onNavigate(page, section);
+    }
+  };
+
+  // Effet pour scroller vers la section
+  useEffect(() => {
+    if (scrollToSection === 'portfolio-section' && portfolioSectionRef.current) {
+      // Petit délai pour que la page soit rendue
+      setTimeout(() => {
+        portfolioSectionRef.current?.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+      setScrollToSection(null);
+    }
+  }, [scrollToSection]);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -599,9 +605,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             className="inline-block mb-6 overflow-hidden"
             style={{ animation: 'fadeInUp 0.8s ease-out' }}
           >
-            <span className="inline-block bg-white/20 backdrop-blur-md px-6 py-3 rounded-full font-raleway text-sm font-semibold uppercase tracking-widest border border-white/30 shimmer-effect glowing-badge">
-              Événementiel de Luxe
-            </span>
+            
           </div>
 
           <h1 
@@ -710,7 +714,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
+          {/* Desktop Grid */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-10">
             {features.map((feature, index) => (
               <div
                 key={index}
@@ -749,6 +754,42 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                 </p>
               </div>
             ))}
+          </div>
+
+          {/* Mobile Carousel */}
+          <div className="md:hidden">
+            <Swiper
+              modules={[Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1.2}
+              centeredSlides={true}
+              loop
+              autoplay={{
+                delay: 3000,
+                disableOnInteraction: false,
+              }}
+              className="pb-8"
+            >
+              {features.map((feature, index) => (
+                <SwiperSlide key={index}>
+                  <div className="text-center group p-6 rounded-3xl bg-white shadow-lg border border-gray-100">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#ad5945]/10 to-[#d38074]/10 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-md">
+                      <img 
+                        src={feature.icon} 
+                        alt={feature.title}
+                        className="w-10 h-10"
+                      />
+                    </div>
+                    <h3 className="font-playfair text-xl font-semibold text-gray-900 mb-3 tracking-tight">
+                      {feature.title}
+                    </h3>
+                    <p className="font-inter text-gray-600 leading-relaxed font-light text-sm">
+                      {feature.description}
+                    </p>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
         </div>
       </section>
@@ -796,7 +837,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               Notre Expertise
             </span>
             <h2 className="font-cormorant text-5xl md:text-6xl font-light text-white mb-8 tracking-tight text-glow">
-              Services Premium
+              Des services de qualité
               <span className="block font-playfair italic text-5xl md:text-6xl text-[#d38074] mt-2">
                 à Votre Disposition
               </span>
@@ -806,7 +847,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          {/* Desktop Grid */}
+          <div className="hidden md:grid md:grid-cols-2 gap-8">
             {detailedServices.map((service, index) => (
               <div
                 key={index}
@@ -855,6 +897,51 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             ))}
           </div>
 
+          {/* Mobile Carousel */}
+          <div className="md:hidden">
+            <Swiper
+              modules={[Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1.1}
+              centeredSlides={true}
+              loop
+              autoplay={{
+                delay: 3500,
+                disableOnInteraction: false,
+              }}
+              className="pb-8"
+            >
+              {detailedServices.map((service, index) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className="group relative bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/20 cursor-pointer overflow-hidden"
+                    onClick={() => onNavigate('services')}
+                  >
+                    <div className={`relative w-16 h-16 rounded-2xl bg-white flex items-center justify-center mb-4 shadow-lg`}>
+                      <img 
+                        src={service.icon} 
+                        alt={service.title}
+                        className="w-10 h-10"
+                      />
+                    </div>
+
+                    <h3 className="font-playfair text-xl font-semibold text-white mb-3 tracking-tight">
+                      {service.title}
+                    </h3>
+                    <p className="font-inter text-gray-300 leading-relaxed mb-4 font-light text-sm">
+                      {service.description}
+                    </p>
+
+                    <div className="flex items-center text-[#d38074] font-inter font-medium text-sm tracking-wide">
+                      <span className="mr-2">En savoir plus</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
           <div 
             id="services-cta"
             data-animate
@@ -887,7 +974,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       </section>
 
       {/* Section Portfolio avec effet de révélation */}
-      <section className="py-24 bg-white">
+      <section ref={portfolioSectionRef}
+        className="py-24 bg-white"
+        id="portfolio-section"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div 
             id="portfolio-header"
@@ -910,14 +1000,15 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Desktop Grid */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
               <div
                 key={index}
                 id={`portfolio-${index}`}
                 data-animate
                 className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
-                onClick={() => onNavigate('services')}
+                onClick={() => onNavigate('portfolio', service.category)}
                 onMouseEnter={() => setIsHovering(`portfolio-${index}`)}
                 onMouseLeave={() => setIsHovering(null)}
                 style={{
@@ -947,7 +1038,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                     </div>
                   </div>
 
-                  {/* Effet de bordure lumineuse */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
                     <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
@@ -966,7 +1056,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   </div>
                 </div>
 
-                {/* Particule décorative */}
                 <div 
                   className="absolute top-4 right-4 w-3 h-3 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{ animation: isHovering === `portfolio-${index}` ? 'pulse 2s ease-in-out infinite' : 'none' }}
@@ -974,87 +1063,54 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Section Témoignages avec carousel amélioré */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div 
-            id="testimonials-header"
-            data-animate
-            className="text-center mb-20"
-            style={{
-              opacity: isVisible['testimonials-header'] ? 1 : 0,
-              transform: isVisible['testimonials-header'] ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'all 0.8s ease-out',
-            }}
-          >
-            <span className="inline-block bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-3 rounded-full font-inter text-sm font-semibold uppercase tracking-widest mb-6 shimmer-effect glowing-badge">
-              Avis Clients
-            </span>
-            <h2 className="font-cormorant text-5xl md:text-6xl font-light mb-6 tracking-tight text-glow">
-              Témoignages
-              <span className="block font-playfair italic text-4xl md:text-5xl text-[#ad5945] mt-3">
-                de nos Clients
-              </span>
-            </h2>
-            <p className="font-inter text-xl text-gray-600 font-light">Leur satisfaction est notre plus belle récompense</p>
+          {/* Mobile Carousel */}
+          <div className="md:hidden">
+            <Swiper
+              modules={[Autoplay]}
+              spaceBetween={16}
+              slidesPerView={1.2}
+              centeredSlides={true}
+              loop
+              autoplay={{
+                delay: 4000,
+                disableOnInteraction: false,
+              }}
+              className="pb-8"
+            >
+              {services.map((service, index) => (
+                <SwiperSlide key={index}>
+                  <div
+                    className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer"
+                    onClick={() => onNavigate('portfolio', service.category)}
+                  > 
+                    <div className="relative overflow-hidden">
+                      <img
+                        src={service.img}
+                        alt={service.title}
+                        className="w-full h-48 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    </div>
+                    
+                    <div className="p-6 bg-white">
+                      <h3 className="font-playfair text-lg font-semibold mb-2 tracking-tight">
+                        {service.title}
+                      </h3>
+                      <p className="font-inter text-gray-600 text-sm font-light">{service.description}</p>
+                      
+                      <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm mt-3 tracking-wide">
+                        <span className="mr-2">Découvrir</span>
+                        <ArrowRight className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
-
-          <Swiper
-            modules={[Autoplay]}
-            spaceBetween={30}
-            slidesPerView={windowWidth < 768 ? 1 : 3}
-            loop
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-            className="pb-12"
-          >
-            {testimonials.map((testimonial) => (
-              <SwiperSlide key={testimonial.id}>
-                <div 
-                  className="bg-white rounded-3xl p-10 shadow-lg hover:shadow-2xl transition-all duration-500 h-full flex flex-col group hover:-translate-y-3 border border-gray-100 relative overflow-hidden transform hover:scale-105"
-                  onMouseEnter={() => setIsHovering(`testimonial-${testimonial.id}`)}
-                  onMouseLeave={() => setIsHovering(null)}
-                >
-                  {/* Effet de brillance au survol */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent opacity-0 group-hover:opacity-100 -translate-x-full group-hover:translate-x-full transition-all duration-1000"></div>
-
-                  <div className="flex items-center mb-6 relative z-10">
-                    <div className="w-14 h-14 bg-gradient-to-br from-[#ad5945] to-[#d38074] rounded-full flex items-center justify-center text-white font-playfair font-bold text-2xl shadow-lg group-hover:scale-125 group-hover:rotate-12 transition-transform relative overflow-hidden group-hover:shadow-xl group-hover:shadow-[#ad5945]/40">
-                      <span className="relative z-10">{testimonial.name.charAt(0)}</span>
-                      <div className="absolute inset-0 bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                    <div className="ml-5">
-                      <h4 className="font-playfair font-semibold text-[#111827] text-lg group-hover:text-[#ad5945] transition-colors">
-                        {testimonial.name}
-                      </h4>
-                      <p className="font-inter text-sm text-gray-500 font-light">Client vérifié</p>
-                    </div>
-                  </div>
-                  <p className="font-inter text-gray-600 italic leading-relaxed flex-1 text-lg font-light mb-6 relative z-10">
-                    "{testimonial.text}"
-                  </p>
-
-                  <div className="mt-auto pt-6 border-t border-gray-100 flex items-center gap-2 text-sm text-green-600 font-inter font-medium relative z-10 group-hover:text-green-700 transition-colors">
-                    <img 
-                      src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
-                      alt="Verified"
-                      className="w-5 h-5 group-hover:scale-125 transition-transform"
-                    />
-                    <span>Témoignage vérifié</span>
-                  </div>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
         </div>
       </section>
-
-       
 
       {/* Section Boutique avec animations dynamiques */}
       <section 
@@ -1114,24 +1170,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             Des fragrances exclusives pour sublimer vos événements et créer une ambiance unique
           </p>
           
-          <div className="flex flex-wrap justify-center gap-6 mb-12">
-            {['Fragrances Premium', 'Fabrication Artisanale', 'Livraison Rapide'].map((feature, index) => (
-              <div 
-                key={index}
-                className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-5 py-3 rounded-full font-inter font-light hover:bg-white/20 transition-all duration-300 hover:scale-110 cursor-default transform hover:-translate-y-1"
-                style={{
-                  animation: `slideUp 0.6s ease-out ${0.3 + index * 0.1}s both`
-                }}
-              >
-                <img 
-                  src="https://cdn-icons-png.flaticon.com/512/190/190411.png"
-                  alt="Check"
-                  className="w-5 h-5"
-                />
-                <span>{feature}</span>
-              </div>
-            ))}
-          </div>
+         
 
           <button
             onClick={() => onNavigate('boutique')}

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../store/AuthStore';
 import { Plus, Search, Trash2, Edit, Loader, AlertCircle, Package, Upload, X, Sparkles, Star, ArrowRight, Save } from 'lucide-react';
 
 interface Produit {
@@ -84,7 +84,7 @@ export default function AdminProduitsPage() {
     if (!token) return;
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/admin/produits', {
+      const response = await fetch('https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/produits', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Accept': 'application/json',
@@ -144,7 +144,7 @@ export default function AdminProduitsPage() {
       in_stock: produit.in_stock,
       featured: produit.featured,
     });
-    setImagePreview(`http://127.0.0.1:8000/storage/${produit.image}`);
+    setImagePreview(`https://separate-angie-freelancelcaina-c0adf242.koyeb.app/storage/${produit.image}`);
     setSelectedImage(null);
     setShowForm(true);
     setError(null);
@@ -191,8 +191,8 @@ export default function AdminProduitsPage() {
       }
 
       const url = editingProduct 
-  ? `http://127.0.0.1:8000/api/admin/produits/${editingProduct.id}`
-  : 'http://127.0.0.1:8000/api/admin/produits';
+  ? `https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/produits/${editingProduct.id}`
+  : 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/produits';
 
 // Toujours utiliser POST
 const method = 'POST';

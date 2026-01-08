@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, ShoppingCart } from 'lucide-react';
 import { useCartStore } from '../store/cartStore';
 import logo from '../images/logo_event.jpg';
@@ -12,6 +13,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const totalItems = useCartStore(state => state.getTotalItems());
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,12 +24,17 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
   }, []);
 
   const navItems = [
-    { label: 'Accueil', page: 'home' },
-    { label: 'Services', page: 'services' },
-    { label: 'Galerie', page: 'gallery' },
-    { label: 'Boutique', page: 'boutique' },
-    { label: 'Contact', page: 'contact' },
+    { label: 'Accueil', page: 'home', path: '/' },
+    { label: 'Services', page: 'services', path: '/services' },
+    { label: 'Galerie', page: 'gallery', path: '/gallery' },
+    { label: 'Boutique', page: 'boutique', path: '/boutique' },
+    { label: 'Contact', page: 'contact', path: '/contact' },
   ];
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsMobileMenuOpen(false);
+  };
 
   return (
     <>
@@ -35,14 +42,14 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled 
-            ? 'bg-white/95 backdrop-blur-md shadow-lg py-4' 
-            : 'bg-white/90 backdrop-blur-sm py-6'
+            ? 'bg-gradient-to-r from-[#fef8f6] to-[#fff5f2] backdrop-blur-md shadow-lg py-4 border-b border-[#ad5945]/10' 
+            : 'bg-gradient-to-r from-[#fef8f6]/95 to-[#fff5f2]/95 backdrop-blur-sm py-6'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => onNavigate('home')}
+          <div className="flex items-center justify-between relative">
+            <Link
+              to="/"
               className="flex items-center space-x-3 group"
             >
               <div className="relative w-12 h-12 transform transition-transform group-hover:scale-110">
@@ -60,17 +67,14 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                   }}
                 />
               </div>
-              <span className="font-serif text-xl font-bold text-[#111827]">
-               Glory Events 
-              </span>
-            </button>
+            </Link>
 
-            {/* Navigation desktop */}
-            <nav className="hidden md:flex items-center space-x-8">
+            {/* Navigation desktop - plus proche du logo */}
+            <nav className="hidden md:flex items-center space-x-8 ml-16">
               {navItems.map((item) => (
-                <button
+                <Link
                   key={item.page}
-                  onClick={() => onNavigate(item.page)}
+                  to={item.path}
                   className={`transition-all duration-300 font-medium relative group ${
                     currentPage === item.page
                       ? 'text-[#ad5945] font-semibold'
@@ -82,12 +86,15 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-[#ad5945] to-[#d38074] transform transition-all duration-300"></span>
                   )}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-[#ad5945] to-[#d38074] transition-all duration-300 group-hover:w-full"></span>
-                </button>
+                </Link>
               ))}
-              
+            </nav>
+
+            {/* Boutons à droite */}
+            <div className="hidden md:flex items-center space-x-4">
               {/* Bouton panier */}
-              <button
-                onClick={() => onNavigate('cart')}
+              <Link
+                to="/cart"
                 className="relative p-2 rounded-lg transition-all duration-300 text-[#111827] hover:bg-gray-100 hover:scale-110 group"
               >
                 <ShoppingCart className="w-5 h-5 group-hover:text-[#ad5945] transition-colors" />
@@ -96,16 +103,16 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                     {totalItems}
                   </span>
                 )}
-              </button>
+              </Link>
               
               {/* Bouton devis */}
-              <button
-                onClick={() => onNavigate('contact')}
+              <Link
+                to="/contact"
                 className="bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-2 rounded-full font-medium hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-[#ad5945]/30"
               >
                 Demander un devis
-              </button>
-            </nav>
+              </Link>
+            </div>
 
             {/* Bouton menu mobile */}
             <button
@@ -121,12 +128,10 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
             <div className="md:hidden mt-4">
               <nav className="bg-white/95 backdrop-blur-md rounded-lg shadow-2xl border border-gray-200 py-2">
                 {navItems.map((item) => (
-                  <button
-                    key={item.page} 
-                    onClick={() => {
-                      onNavigate(item.page);
-                      setIsMobileMenuOpen(false);
-                    }}
+                  <Link
+                    key={item.page}
+                    to={item.path}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className={`block w-full text-left px-4 py-3 transition-all duration-200 group ${
                       currentPage === item.page
                         ? 'text-[#ad5945] bg-gradient-to-r from-[#ad5945]/10 to-[#d38074]/10 font-semibold border-r-2 border-[#ad5945]'
@@ -139,15 +144,13 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                       }`}></span>
                       {item.label}
                     </span>
-                  </button>
+                  </Link>
                 ))}
                 
                 {/* Panier mobile */}
-                <button
-                  onClick={() => {
-                    onNavigate('cart');
-                    setIsMobileMenuOpen(false);
-                  }}
+                <Link
+                  to="/cart"
+                  onClick={() => setIsMobileMenuOpen(false)}
                   className="flex items-center justify-between w-full px-4 py-3 text-[#111827] hover:bg-gray-50 transition-all duration-200 hover:pl-6 hover:text-[#ad5945] group"
                 >
                   <span className="flex items-center gap-3">
@@ -159,19 +162,17 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
                       {totalItems}
                     </span>
                   )}
-                </button>
+                </Link>
                 
                 {/* Devis mobile */}
                 <div className="px-4 py-3 border-t border-gray-200">
-                  <button
-                    onClick={() => {
-                      onNavigate('contact');
-                      setIsMobileMenuOpen(false);
-                    }}
-                    className="w-full bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-3 rounded-full font-medium hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 text-center shadow-lg"
+                  <Link
+                    to="/contact"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block w-full bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-3 rounded-full font-medium hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 text-center shadow-lg"
                   >
                     Demander un devis
-                  </button>
+                  </Link>
                 </div>
               </nav>
             </div>

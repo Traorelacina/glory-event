@@ -19,6 +19,7 @@ export default function AdminNavbar() {
     { path: '/admin/produits', label: 'Produits', icon: Box },
     { path: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
     { path: '/admin/contacts', label: 'Contacts', icon: Mail },
+    { path: '/admin/portfolios', label: 'Portfolios', icon: Image },
   ];
 
   const isActive = (path: string) => location.pathname === path;

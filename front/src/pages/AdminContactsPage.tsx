@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import AdminLayout from '../components/AdminLayout';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../store/AuthStore';
 import { Search, Loader, AlertCircle, Trash2, Mail, Phone, MessageSquare, Calendar, User, Eye, EyeOff, Sparkles, Star, X, ArrowRight } from 'lucide-react';
 
 interface Contact {
@@ -53,7 +53,7 @@ export default function AdminContactsPage() {
     if (!token) return;
     try {
       setLoading(true);
-      const response = await fetch('http://127.0.0.1:8000/api/admin/contacts', {
+      const response = await fetch('https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/contacts', {
         headers: {
           'Authorization': `Bearer ${token}`,
         },
@@ -76,7 +76,7 @@ export default function AdminContactsPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/admin/contacts/${id}`, {
+      const response = await fetch(`https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/contacts/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -96,7 +96,7 @@ export default function AdminContactsPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/admin/contacts/${id}/read`, {
+      const response = await fetch(`https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/contacts/${id}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -123,7 +123,7 @@ export default function AdminContactsPage() {
     if (!token) return;
 
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/admin/contacts/${id}/read`, {
+      const response = await fetch(`https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api/admin/contacts/${id}/read`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,

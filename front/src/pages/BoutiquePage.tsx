@@ -9,8 +9,8 @@ interface BoutiquePageProps {
 }
 
 // API URL
-const API_URL = 'http://127.0.0.1:8000/api';
-const STORAGE_URL = 'http://127.0.0.1:8000/storage';
+const API_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api';
+const STORAGE_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/storage';
 
 export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
   const { addItem, getTotalItems } = useCartStore();
