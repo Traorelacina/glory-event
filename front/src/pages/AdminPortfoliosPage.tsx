@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Star, Calendar, Image as ImageIcon, X } from 'lucide-react';
 import AdminNavbar from '../components/AdminNavbar';
-import { useAuthStore } from '../../store/authStore';
+import { useAuthStore } from '../../store/AuthStore';
 import axios from 'axios';
 
 interface PortfolioImage {

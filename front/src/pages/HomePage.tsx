@@ -180,7 +180,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     {
       icon: 'https://img.icons8.com/?size=100&id=tt6pu1n8E0QU&format=png&color=000000',
       title: 'Excellence Garantie',
-      description: 'Des prestations haut de gamme pour des résultats exceptionnels'
+      description: 'Des prestations de qualité réalisées dans le respect des délais'
     },
     {
       icon: 'https://img.icons8.com/?size=100&id=104233&format=png&color=000000',
