@@ -1,7 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Footer from '../components/Footer';
-import { ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowRight, ChevronDown, Sparkles } from 'lucide-react';
 import { portfolioApi } from '../../services/api';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 interface GalleryPageProps {
   onNavigate: (page: string) => void;
@@ -117,6 +122,14 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
     setExpandedPortfolio(expandedPortfolio === portfolioId ? null : portfolioId);
   };
 
+  const getGalleryImages = (portfolio: Portfolio) => {
+    const allImages = [
+      portfolio.image,
+      ...(portfolio.images?.map(img => `http://localhost:8000/${img.image_path}`) || [])
+    ];
+    return allImages.filter(Boolean);
+  };
+
   return (
     <div className="min-h-screen font-playfair text-[#111827] overflow-x-hidden">
       <style jsx global>{`
@@ -207,6 +220,46 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
         .text-glow {
           animation: textGlow 3s ease-in-out infinite;
         }
+
+        .gallery-expand {
+          animation: fadeInUp 0.5s ease-out;
+        }
+
+        .gallery-image-wrapper {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .gallery-image-wrapper::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+          transform: translateX(-100%);
+          transition: transform 0.6s ease;
+          z-index: 1;
+        }
+
+        .gallery-image-wrapper:hover::before {
+          transform: translateX(100%);
+        }
+
+        .chevron-rotate {
+          transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .chevron-rotate.rotated {
+          transform: rotate(180deg);
+        }
+
+        .swiper-pagination-bullet {
+          background: #ad5945;
+          opacity: 0.5;
+        }
+
+        .swiper-pagination-bullet-active {
+          opacity: 1;
+        }
       `}</style>
 
       <div className="pt-32 pb-20 relative">
@@ -275,136 +328,158 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
           ) : (
             <>
               <div className="space-y-16">
-                {filteredPortfolios.map((portfolio, index) => (
-                  <div
-                    key={portfolio.id}
-                    id={`event-${portfolio.id}`}
-                    data-animate
-                    className="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-slate-100 hover:border-[#ad5945]/20 group"
-                    style={{
-                      opacity: isVisible[`event-${portfolio.id}`] ? 1 : 0,
-                      transform: isVisible[`event-${portfolio.id}`] ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.95)',
-                      transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                    }}
-                  >
-                    <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? 'md:grid-flow-dense' : ''}`}>
-                      <div className={`p-8 md:p-12 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
-                        <span className="inline-block px-4 py-2 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white rounded-full text-sm font-inter font-semibold mb-4 w-fit shadow-md shimmer-effect group-hover:scale-110 transition-transform duration-300">
-                          {categoryLabels[portfolio.category] || 'Autres'}
-                        </span>
-                        
-                        <h2 className="font-playfair text-3xl md:text-4xl font-bold text-[#111827] mb-4 group-hover:text-[#ad5945] transition-colors duration-300">
-                          {portfolio.title}
-                        </h2>
-                        
-                        <p className="font-inter text-gray-600 text-lg mb-6 font-light">
-                          {new Date(portfolio.date).toLocaleDateString('fr-FR', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                          })}
-                        </p>
-                        
-                        <p className="font-inter text-gray-600 leading-relaxed font-light mb-6">
-                          {portfolio.description || 'Un événement mémorable orchestré avec passion et professionnalisme. Chaque détail a été pensé pour créer une expérience unique et inoubliable.'}
-                        </p>
-                        
-                        {portfolio.images && portfolio.images.length > 0 && (
-                          <button
-                            onClick={() => toggleGallery(portfolio.id)}
-                            className="mt-6 px-8 py-3 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white rounded-full font-inter font-semibold hover:shadow-lg transform hover:-translate-y-2 hover:scale-110 transition-all duration-300 w-fit overflow-hidden relative group/btn inline-flex items-center gap-2"
-                            onMouseEnter={(e) => {
-                              const rect = e.currentTarget.getBoundingClientRect();
-                              const x = e.clientX - rect.left - rect.width / 2;
-                              const y = e.clientY - rect.top - rect.height / 2;
-                              e.currentTarget.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) translateY(-8px) scale(1.1)`;
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = '';
-                            }}
-                          >
-                            <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover/btn:translate-x-0 transition-transform duration-300"></span>
-                            <span className="relative z-10">
-                              {expandedPortfolio === portfolio.id ? 'Masquer les photos' : 'Voir plus de photos'}
-                            </span>
-                            {expandedPortfolio === portfolio.id ? (
-                              <ChevronUp className="relative z-10 w-4 h-4" />
-                            ) : (
-                              <ChevronDown className="relative z-10 w-4 h-4" />
-                            )}
-                          </button>
-                        )}
-                      </div>
+                {filteredPortfolios.map((portfolio, index) => {
+                  const isExpanded = expandedPortfolio === portfolio.id;
+                  const galleryImages = getGalleryImages(portfolio);
 
-                      <div className={`p-4 ${index % 2 === 1 ? 'md:col-start-1' : ''}`}>
-                        <div
-                          className="relative overflow-hidden rounded-xl group/img cursor-pointer transform transition-all duration-500 h-80 hover:scale-105 hover:shadow-2xl hover:shadow-[#ad5945]/30"
-                          onMouseEnter={() => setIsHovering(`image-${portfolio.id}-main`)}
-                          onMouseLeave={() => setIsHovering(null)}
-                        >
-                          <img
-                            src={`http://localhost:8000/${portfolio.image}`}
-                            alt={portfolio.title}
-                            className="w-full h-full object-cover transform group-hover/img:scale-125 transition-transform duration-700"
-                            onError={(e) => {
-                              e.currentTarget.src = 'https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=800';
-                            }}
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-all duration-300 transform group-hover/img:scale-100 scale-75">
-                            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover/img:scale-125 group-hover/img:rotate-12 transition-all duration-500" style={{ animation: isHovering === `image-${portfolio.id}-main` ? 'pulse 1.5s ease-in-out infinite' : 'none' }}>
-                              <svg className="w-8 h-8 text-[#ad5945]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                              </svg>
-                            </div>
-                          </div>
+                  return (
+                    <div
+                      key={portfolio.id}
+                      id={`event-${portfolio.id}`}
+                      data-animate
+                      className="bg-white rounded-3xl shadow-lg overflow-hidden transform hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border border-slate-100 hover:border-[#ad5945]/20 group"
+                      style={{
+                        opacity: isVisible[`event-${portfolio.id}`] ? 1 : 0,
+                        transform: isVisible[`event-${portfolio.id}`] ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.95)',
+                        transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                      }}
+                    >
+                      <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? 'md:grid-flow-dense' : ''}`}>
+                        <div className={`p-8 md:p-12 flex flex-col justify-center ${index % 2 === 1 ? 'md:col-start-2' : ''}`}>
+                          <span className="inline-block px-4 py-2 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white rounded-full text-sm font-inter font-semibold mb-4 w-fit shadow-md shimmer-effect group-hover:scale-110 transition-transform duration-300">
+                            {categoryLabels[portfolio.category] || 'Autres'}
+                          </span>
                           
-                          <div className="absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500">
-                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
-                            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
-                          </div>
+                          <h2 className="font-playfair text-3xl md:text-4xl font-bold text-[#111827] mb-4 group-hover:text-[#ad5945] transition-colors duration-300">
+                            {portfolio.title}
+                          </h2>
+                          
+                          <p className="font-inter text-gray-600 text-lg mb-6 font-light">
+                            {new Date(portfolio.date).toLocaleDateString('fr-FR', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric',
+                            })}
+                          </p>
+                          
+                          <p className="font-inter text-gray-600 leading-relaxed font-light mb-6">
+                            {portfolio.description || 'Un événement mémorable orchestré avec passion et professionnalisme. Chaque détail a été pensé pour créer une expérience unique et inoubliable.'}
+                          </p>
+                          
+                          {portfolio.images && portfolio.images.length > 0 && (
+                            <button
+                              onClick={() => toggleGallery(portfolio.id)}
+                              className="mt-6 px-8 py-3 bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white rounded-full font-inter font-semibold hover:shadow-lg transform hover:-translate-y-2 hover:scale-110 transition-all duration-300 w-fit overflow-hidden relative group/btn inline-flex items-center gap-2"
+                              onMouseEnter={(e) => {
+                                const rect = e.currentTarget.getBoundingClientRect();
+                                const x = e.clientX - rect.left - rect.width / 2;
+                                const y = e.clientY - rect.top - rect.height / 2;
+                                e.currentTarget.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) translateY(-8px) scale(1.1)`;
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = '';
+                              }}
+                            >
+                              <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover/btn:translate-x-0 transition-transform duration-300"></span>
+                              <span className="relative z-10">
+                                {isExpanded ? 'Masquer les photos' : 'Voir plus de photos'}
+                              </span>
+                              <ChevronDown className={`chevron-rotate relative z-10 w-4 h-4 ${isExpanded ? 'rotated' : ''}`} />
+                            </button>
+                          )}
                         </div>
 
-                        {expandedPortfolio === portfolio.id && portfolio.images && portfolio.images.length > 0 && (
-                          <div className="mt-4 grid grid-cols-2 gap-2 animate-fadeInUp">
-                            {portfolio.images
-                              .sort((a, b) => a.order - b.order)
-                              .map((image, idx) => (
-                                <div
-                                  key={image.id}
-                                  className="relative overflow-hidden rounded-xl group/img cursor-pointer transform transition-all duration-500 h-48 hover:scale-105 hover:shadow-2xl hover:shadow-[#ad5945]/30"
-                                  onMouseEnter={() => setIsHovering(`image-${portfolio.id}-${idx}`)}
-                                  onMouseLeave={() => setIsHovering(null)}
-                                >
+                        <div className={`p-4 ${index % 2 === 1 ? 'md:col-start-1' : ''}`}>
+                          <div
+                            className="relative overflow-hidden rounded-xl group/img cursor-pointer transform transition-all duration-500 h-80 hover:scale-105 hover:shadow-2xl hover:shadow-[#ad5945]/30"
+                            onMouseEnter={() => setIsHovering(`image-${portfolio.id}-main`)}
+                            onMouseLeave={() => setIsHovering(null)}
+                          >
+                            <img
+                              src={`http://localhost:8000/${portfolio.image}`}
+                              alt={portfolio.title}
+                              className="w-full h-full object-cover transform group-hover/img:scale-125 transition-transform duration-700"
+                              onError={(e) => {
+                                e.currentTarget.src = 'https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=800';
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
+                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-all duration-300 transform group-hover/img:scale-100 scale-75">
+                              <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover/img:scale-125 group-hover/img:rotate-12 transition-all duration-500" style={{ animation: isHovering === `image-${portfolio.id}-main` ? 'pulse 1.5s ease-in-out infinite' : 'none' }}>
+                                <svg className="w-8 h-8 text-[#ad5945]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                              </div>
+                            </div>
+                            
+                            <div className="absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500">
+                              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
+                              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {isExpanded && galleryImages.length > 0 && (
+                        <div className="gallery-expand p-8 bg-gradient-to-b from-slate-50 to-white border-t border-slate-200">
+                          <h3 className="font-playfair text-2xl font-bold text-slate-900 mb-8">Galerie Photos</h3>
+                          <Swiper
+                            modules={[Navigation, Pagination, Autoplay]}
+                            navigation={{
+                              nextEl: `.swiper-button-next-${portfolio.id}`,
+                              prevEl: `.swiper-button-prev-${portfolio.id}`,
+                            }}
+                            pagination={{
+                              clickable: true,
+                              dynamicBullets: true,
+                              el: `.swiper-pagination-${portfolio.id}`,
+                            }}
+                            autoplay={{ delay: 3000 }}
+                            spaceBetween={20}
+                            slidesPerView={1}
+                            breakpoints={{
+                              640: { slidesPerView: 2 },
+                              1024: { slidesPerView: 4 },
+                            }}
+                            className="swiper-custom"
+                          >
+                            {galleryImages.map((image, idx) => (
+                              <SwiperSlide key={idx}>
+                                <div className="gallery-image-wrapper relative aspect-square rounded-xl overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-[#ad5945]/30 transition-all duration-500 transform hover:-translate-y-2">
                                   <img
-                                    src={`http://localhost:8000/${image.image_path}`}
-                                    alt={`${portfolio.title} ${idx + 2}`}
-                                    className="w-full h-full object-cover transform group-hover/img:scale-125 transition-transform duration-700"
-                                    onError={(e) => {
-                                      e.currentTarget.src = 'https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=800';
-                                    }}
+                                    src={image}
+                                    alt={`${portfolio.title} ${idx + 1}`}
+                                    className="w-full h-full object-cover transform group-hover:scale-125 transition-transform duration-700"
                                   />
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover/img:opacity-100 transition-opacity duration-300"></div>
-                                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/img:opacity-100 transition-all duration-300 transform group-hover/img:scale-100 scale-75">
-                                    <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg transform group-hover/img:scale-125 group-hover/img:rotate-12 transition-all duration-500" style={{ animation: isHovering === `image-${portfolio.id}-${idx}` ? 'pulse 1.5s ease-in-out infinite' : 'none' }}>
-                                      <svg className="w-6 h-6 text-[#ad5945]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                      </svg>
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-500 group-hover:rotate-12">
+                                      <Sparkles className="w-8 h-8 text-[#ad5945]" style={{ animation: 'pulse 1.5s ease-in-out infinite' }} />
                                     </div>
                                   </div>
-                                  
-                                  <div className="absolute inset-0 opacity-0 group-hover/img:opacity-100 transition-opacity duration-500">
-                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
-                                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
-                                  </div>
                                 </div>
-                              ))}
+                              </SwiperSlide>
+                            ))}
+                          </Swiper>
+
+                          <div className="flex justify-center gap-4 mt-8">
+                            <button
+                              className={`swiper-button-prev-${portfolio.id} w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-125`}
+                            >
+                              <ArrowRight className="w-5 h-5 rotate-180" />
+                            </button>
+                            <div className={`swiper-pagination-${portfolio.id} flex justify-center gap-2`}></div>
+                            <button
+                              className={`swiper-button-next-${portfolio.id} w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-125`}
+                            >
+                              <ArrowRight className="w-5 h-5" />
+                            </button>
                           </div>
-                        )}
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
               {filteredPortfolios.length === 0 && (

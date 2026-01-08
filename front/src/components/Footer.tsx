@@ -18,11 +18,11 @@ export default function Footer({ onNavigate }: FooterProps) {
   ];
 
   const services = [
-    'Mariages de Luxe',
+    'Weldind Planning',
+    'Décoration sur Mesure',
+    'Service de Restauration',
     'Événements Corporate',
     'Réceptions Privées',
-    'Service de Restauration',
-    'Décoration sur Mesure',
   ];
 
   const socialLinks = [

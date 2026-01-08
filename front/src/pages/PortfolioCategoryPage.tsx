@@ -7,6 +7,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import Footer from '../components/Footer';
 
+
 interface PortfolioImage {
   id: number;
   image_path: string;
@@ -408,23 +409,7 @@ export default function PortfolioCategoryPage({ category, onNavigate }: Portfoli
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-6xl mx-auto text-white">
-            <button
-  onClick={() => onNavigate('home', 'portfolio-section')}
-  className="mb-8 inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white px-6 py-3 rounded-full hover:bg-white/20 transition-all duration-300 border border-white/20 magnetic-button"
-  style={{ animation: 'fadeInUp 0.8s ease-out' }}
-  onMouseEnter={(e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    e.currentTarget.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
-  }}
-  onMouseLeave={(e) => {
-    e.currentTarget.style.transform = '';
-  }}
->
-  <ArrowLeft className="w-5 h-5" />
-  <span className="font-inter font-medium">Retour</span>
-</button>
+            
           
           <h1 
             className="font-playfair text-4xl md:text-6xl font-bold mb-6 leading-tight text-glow"

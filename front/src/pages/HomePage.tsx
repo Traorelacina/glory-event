@@ -1,11 +1,11 @@
 import { ArrowRight } from 'lucide-react';
-import { Testimonial } from '../types';
 import { useState, useEffect, useRef } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import Footer from '../components/Footer';
 import { statisticsService } from '../../services/statisticsService';
+import decorationImage from '../../images/event1.jpg';
 
 interface HomePageProps {
   onNavigate: (page: string, section?: string) => void;
@@ -47,7 +47,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       cta2: 'Voir nos réalisations'
     },
     {
-      image: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=1920',
+      image: decorationImage,
       title: "Des décorations d'exception",
       subtitle: "Vos cérémonies sont orchestrées avec élégance et raffinement.",
       cta1: 'Obtenir un devis',
@@ -87,7 +87,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const services = [
     {
       icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
-      title: 'Mariages de Luxe',
+      title: 'Weldind Planning',
       description: 'Des cérémonies inoubliables orchestrées avec élégance et raffinement',
       color: 'from-[#ad5945] to-[#d38074]',
       img: 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=600',
@@ -129,13 +129,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       slug: 'mariage'
     },
     {
-      icon: 'https://img.icons8.com/?size=100&id=103937&format=png&color=000000',
-      title: 'Réunion Professionnelle',
-      description: 'Séminaires et conférences de haut niveau',
-      color: 'from-[#ca715b] to-[#d38074]',
-      slug: 'reunion-professionnelle'
-    },
-    {
       icon: 'https://img.icons8.com/?size=100&id=A8fp9eO99uvg&format=png&color=000000',
       title: 'Décoration',
       description: 'Design et mise en scène sur mesure',
@@ -149,13 +142,22 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       color: 'from-[#d38074] to-[#ad5945]',
       slug: 'restauration'
     },
-    {
+     {
       icon: 'https://cdn-icons-png.flaticon.com/512/3290/3290471.png',
       title: 'Événementiel',
       description: 'Organisation complète de tous types d\'événements',
       color: 'from-[#ca715b] to-[#ad5945]',
       slug: 'evenementiel'
     },
+    {
+      icon: 'https://img.icons8.com/?size=100&id=103937&format=png&color=000000',
+      title: 'Réunion Professionnelle',
+      description: 'Séminaires et conférences de haut niveau',
+      color: 'from-[#ca715b] to-[#d38074]',
+      slug: 'reunion-professionnelle'
+    },
+    
+   
     {
       icon: 'https://img.icons8.com/?size=100&id=108783&format=png&color=000000',
       title: 'Réceptions Privées',
@@ -627,7 +629,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             style={{ animation: 'fadeInUp 1s ease-out 0.6s both' }}
           >
             <button
-              onClick={() => onNavigate('services')}
+              onClick={() => onNavigate('contact')}
               className="group relative bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-10 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-2xl hover:shadow-[#ad5945]/50 transform hover:-translate-y-2 hover:scale-110 transition-all duration-300 overflow-hidden magnetic-button"
               onMouseEnter={(e) => {
                 const rect = e.currentTarget.getBoundingClientRect();
@@ -643,7 +645,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
               <span className="relative z-10">{heroSlides[currentSlide].cta1}</span>
             </button>
             <button
-              onClick={() => onNavigate('services')}
+              onClick={() => onNavigate('gallery')}
               className="group px-10 py-4 rounded-full font-inter font-semibold text-lg border-2 border-white text-white hover:bg-white hover:text-[#ad5945] transition-all duration-300 transform hover:-translate-y-2 hover:scale-110"
             >
               {heroSlides[currentSlide].cta2}
