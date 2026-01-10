@@ -8,6 +8,7 @@ import "swiper/css/pagination"
 import { Navigation, Pagination } from "swiper/modules"
 import type { Service } from "../types"
 import Footer from "../components/Footer"
+import decorationImage from '../../images/event1.jpg';
 
 interface ServicesPageProps {
   onNavigate: (page: string, serviceId?: string) => void
@@ -53,8 +54,7 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
       title: "Décoration sur Mesure",
       description:
         "L'art de créer des ambiances qui racontent votre histoire. Notre équipe de décorateurs talentueux conçoit des univers visuels époustouflants, du concept initial jusqu'à la réalisation finale, pour tous types d'événements.",
-      image:
-        "https://scontent.fabj5-2.fna.fbcdn.net/v/t51.82787-15/561846531_17984930459906860_3449748711829899152_n.jpg?stp=dst-jpegr_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE-97ASt1R-tFyGboBYyqlhyjwfjU_pK1bKPB-NT-krVp5qtP4UMyKfIREn082A8ERfuTeW_dRomWFJnLgjZTbg&_nc_ohc=ROK8SXoyv38Q7kNvwFyQDBH&_nc_oc=AdlWggG2iid5xhJ82zFWXhcuxSfKLShSmbRKMW1a6WxZ4Nl_5NUKpX0-swCzx4KkPNY&_nc_zt=23&se=-1&_nc_ht=scontent.fabj5-2.fna&_nc_gid=IL9NZczTjXZ78SY9I-D4WA&oh=00_Afjlm7Bt_GSumAERoroCO9KPyWrHIOGBFThIiFy2kx_bVQ&oe=692773C0",
+      image:  decorationImage,
       gallery: [
         "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565690055_802299149263495_5241726712948988641_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHqmn6Mg1k5KHHjQA3xnpryVCwmStiPL3lULCZK2I8veVW_UcozuXcd_j2_KJ_1_z_33kZc4KKGvI5t6CyYmHQX&_nc_ohc=dmYopNbPV0MQ7kNvwHt2Pai&_nc_oc=AdmEGr5BTojp671ASzZQUqvqOB45regpAP5vWGwHHFgxFGvDLw5t31shp72bIiF3hZ8&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=-FQu5vq5kSGjfhsXBn0w0g&oh=00_AfiYmYBe75WP0TvYDyVPzVQI5AudFtqhNoxq-00r20U-rg&oe=69277332",
         "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/473570381_586580980835314_5699410999367893011_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEjZmKOT3Upn1xVzeiBs4mjz6uQ9o2-FkDPq5D2jb4WQGa0IVuvL3nzZEUylTQC-aey7udEcgW_A3oy1Fjh5Ji4&_nc_ohc=vhTwHd2Gx88Q7kNvwG3_agQ&_nc_oc=AdkShAoSR1MPPHJ6EYUlC4YTUa3Vx7vK99pcl8aPV56Oq349vlM3yCF3wVcJATWOU5g&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=VWVgF6SPGPnuBquHCcmX0w&oh=00_Afgig4tc1o3hWXcMFssaQve1kd6Ti1GVTdEO51dVQ5tKBg&oe=69276631",
