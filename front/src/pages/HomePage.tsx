@@ -144,7 +144,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       slug: 'evenementiel'
     },
     {
-      icon: 'https://img.icons8.com/?size=100&id=103937&format=png&color=000000',
+      icon: 'https://img.icons8.com/color/96/000000/tableware.png',
       title: 'Location d’ustensiles',
       description: 'Séminaires et conférences de haut niveau',
       color: 'from-[#ca715b] to-[#d38074]',
@@ -153,7 +153,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     
    
     {
-      icon: 'https://img.icons8.com/?size=100&id=108783&format=png&color=000000',
+      icon: 'https://img.icons8.com/?size=100&id=ODNJWlRzHZXD&format=png&color=000000',
       title: 'Location de tables et chaises',
       description: 'Anniversaires, baptêmes et célébrations familiales',
       color: 'from-[#d38074] to-[#ca715b]',
@@ -1154,7 +1154,9 @@ professionnelle, nous mettons à votre disposition notre expertise
               className="w-5 h-5"
               style={{ animation: 'rotate 3s linear infinite' }}
             />
-            <span className="font-inter text-sm font-semibold uppercase tracking-widest">Collection Exclusive</span>
+            <span className="font-inter text-sm font-semibold uppercase tracking-widest">
+                    Parfums d'Exception
+            </span>
           </div>
 
           <h2 className="font-cormorant text-5xl md:text-6xl font-light mb-8 tracking-tight text-glow" style={{ animation: 'slideDown 0.8s ease-out 0.1s both' }}>

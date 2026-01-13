@@ -84,7 +84,7 @@ export default function BoutiquePage({ onNavigate }: BoutiquePageProps) {
               Boutique Parfums
             </h1>
             <p className="font-inter text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-              Découvrez notre collection exclusive de fragrances d'exception
+              Découvrez notre collection exclusive
             </p>
 
             {/* Points décoratifs */}
