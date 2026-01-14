@@ -1,6 +1,6 @@
 // src/services/statisticsService.ts
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api';
+const API_BASE_URL = 'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api';
 
 export const statisticsService = {
   async trackView(pageName: string) {

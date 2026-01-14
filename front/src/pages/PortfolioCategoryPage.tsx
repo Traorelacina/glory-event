@@ -128,7 +128,7 @@ export default function PortfolioCategoryPage({ category, onNavigate }: Portfoli
     const fetchPortfolios = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:8000/api/portfolio/category/${info.apiCategory}`);
+        const response = await fetch(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/portfolio/category/${info.apiCategory}`);
         const data = await response.json();
         if (data.success) {
           setPortfolios(data.data || []);
@@ -154,7 +154,7 @@ export default function PortfolioCategoryPage({ category, onNavigate }: Portfoli
   const getGalleryImages = (portfolio: Portfolio) => {
     const allImages = [
       portfolio.image,
-      ...(portfolio.images?.map(img => `http://localhost:8000/${img.image_path}`) || [])
+      ...(portfolio.images?.map(img => `https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${img.image_path}`) || [])
     ];
     return allImages.filter(Boolean);
   };

@@ -7,8 +7,8 @@ interface CartPageProps {
 }
 
 // API URL
-const API_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api';
-const STORAGE_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/storage';
+const API_URL = 'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api';
+const STORAGE_URL = 'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/storage';
 
 export default function CartPage({ onNavigate }: CartPageProps) {
   const { items, updateQuantity, removeItem, getTotalPrice, clearCart } = useCartStore();

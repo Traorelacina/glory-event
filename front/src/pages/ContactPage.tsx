@@ -8,7 +8,7 @@ interface ContactPageProps {
 }
 
 // API URL
-const API_URL = 'https://separate-angie-freelancelcaina-c0adf242.koyeb.app/api';
+const API_URL = 'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api';
 
 export default function ContactPage({ selectedService, onNavigate }: ContactPageProps) {
   const [formData, setFormData] = useState({

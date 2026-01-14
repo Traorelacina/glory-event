@@ -65,7 +65,7 @@ export default function AdminPortfoliosPage() {
 
   const fetchPortfolios = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/portfolio');
+      const response = await axios.get('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/portfolio');
       setPortfolios(response.data.data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des portfolios:', error);
@@ -105,14 +105,14 @@ export default function AdminPortfoliosPage() {
       }
 
       if (editingPortfolio) {
-        await axios.put(`http://localhost:8000/api/admin/portfolio/${editingPortfolio.id}`, data, {
+        await axios.put(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`, data, {
           headers: { 
             'Authorization': `Bearer ${token}`,
           },
         });
         showNotification('success', 'Portfolio mis à jour avec succès!');
       } else {
-        await axios.post('http://localhost:8000/api/admin/portfolio', data, {
+        await axios.post('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio', data, {
           headers: { 
             'Authorization': `Bearer ${token}`,
           },
@@ -144,7 +144,7 @@ export default function AdminPortfoliosPage() {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce portfolio ?')) return;
 
     try {
-      await axios.delete(`http://localhost:8000/api/admin/portfolio/${id}`, {
+      await axios.delete(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${id}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -328,7 +328,7 @@ export default function AdminPortfoliosPage() {
             >
               <div className="relative h-48">
                 <img
-                  src={`http://localhost:8000/${portfolio.image}`}
+                  src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
                   alt={portfolio.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
@@ -499,7 +499,7 @@ export default function AdminPortfoliosPage() {
                     <p className="text-sm text-gray-500 mb-2">Image actuelle :</p>
                     <div className="flex items-center gap-2">
                       <img 
-                        src={`http://localhost:8000/${editingPortfolio.image}`} 
+                        src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${editingPortfolio.image}`} 
                         alt="Current portfolio" 
                         className="w-32 h-32 object-cover rounded-lg"
                       />
@@ -562,7 +562,7 @@ export default function AdminPortfoliosPage() {
                         .map((image) => (
                           <div key={image.id} className="relative">
                             <img
-                              src={`http://localhost:8000/${image.image_path}`}
+                              src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${image.image_path}`}
                               alt={`Image supplémentaire`}
                               className="w-24 h-24 object-cover rounded-lg"
                             />

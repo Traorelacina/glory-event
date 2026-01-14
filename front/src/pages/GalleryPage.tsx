@@ -126,7 +126,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
   const getGalleryImages = (portfolio: Portfolio) => {
     const allImages = [
       portfolio.image,
-      ...(portfolio.images?.map(img => `http://localhost:8000/${img.image_path}`) || [])
+      ...(portfolio.images?.map(img => `https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${img.image_path}`) || [])
     ];
     return allImages.filter(Boolean);
   };
@@ -397,7 +397,7 @@ export default function GalleryPage({ onNavigate }: GalleryPageProps) {
                             onMouseLeave={() => setIsHovering(null)}
                           >
                             <img
-                              src={`http://localhost:8000/${portfolio.image}`}
+                              src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
                               alt={portfolio.title}
                               className="w-full h-full object-cover transform group-hover/img:scale-125 transition-transform duration-700"
                               onError={(e) => {
