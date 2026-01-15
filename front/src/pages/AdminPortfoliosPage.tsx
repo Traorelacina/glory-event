@@ -19,7 +19,7 @@ interface Portfolio {
   featured: boolean;
   date: string;
   created_at: string;
-  images: PortfolioImage[];
+  images: PortfolioImage[]; // Images supplémentaires
 }
 
 const categoryLabels: { [key: string]: string } = {
@@ -46,13 +46,14 @@ export default function AdminPortfoliosPage() {
     date: new Date().toISOString().split('T')[0],
     image: null as File | null,
     additionalImages: [] as File[],
-    deletedImages: [] as number[],
+    deletedImages: [] as number[], // IDs des images à supprimer
   });
 
   useEffect(() => {
     fetchPortfolios();
   }, []);
 
+  // Afficher la notification pendant 3 secondes
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => {
@@ -68,34 +69,11 @@ export default function AdminPortfoliosPage() {
       setPortfolios(response.data.data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des portfolios:', error);
-      showNotification('error', 'Erreur lors du chargement des portfolios');
     }
   };
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
-  };
-
-  const formatDateForInput = (dateString: string): string => {
-    try {
-      if (!dateString) return new Date().toISOString().split('T')[0];
-      
-      // Si la date est déjà au format YYYY-MM-DD, la retourner
-      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-        return dateString;
-      }
-      
-      // Sinon, la parser et formater
-      const date = new Date(dateString);
-      if (isNaN(date.getTime())) {
-        return new Date().toISOString().split('T')[0];
-      }
-      
-      return date.toISOString().split('T')[0];
-    } catch (error) {
-      console.error('Erreur lors du formatage de la date:', error);
-      return new Date().toISOString().split('T')[0];
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -108,7 +86,7 @@ export default function AdminPortfoliosPage() {
       data.append('description', formData.description);
       data.append('category', formData.category);
       data.append('featured', formData.featured ? '1' : '0');
-      data.append('date', formData.date); // Date déjà au format YYYY-MM-DD
+      data.append('date', formData.date);
       
       if (formData.image) {
         data.append('image', formData.image);
@@ -122,32 +100,23 @@ export default function AdminPortfoliosPage() {
       // Ajouter les IDs des images à supprimer (pour la mise à jour)
       if (editingPortfolio) {
         formData.deletedImages.forEach((id, index) => {
-          if (id !== -1) { // -1 est pour l'image principale
-            data.append(`deleted_images[${index}]`, id.toString());
-          }
+          data.append(`deleted_images[${index}]`, id.toString());
         });
       }
 
-      const config = {
-        headers: { 
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      };
-
       if (editingPortfolio) {
-        await axios.put(
-          `https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`,
-          data,
-          config
-        );
+        await axios.put(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`, data, {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         showNotification('success', 'Portfolio mis à jour avec succès!');
       } else {
-        await axios.post(
-          'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio',
-          data,
-          config
-        );
+        await axios.post('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio', data, {
+          headers: { 
+            'Authorization': `Bearer ${token}`,
+          },
+        });
         showNotification('success', 'Portfolio créé avec succès!');
       }
 
@@ -163,8 +132,6 @@ export default function AdminPortfoliosPage() {
         showNotification('error', `Erreurs: ${errors}`);
       } else if (error.response?.data?.message) {
         showNotification('error', `Erreur: ${error.response.data.message}`);
-      } else if (error.message?.includes('Network Error')) {
-        showNotification('error', 'Erreur réseau. Vérifiez votre connexion.');
       } else {
         showNotification('error', 'Erreur lors de la sauvegarde du portfolio');
       }
@@ -204,7 +171,7 @@ export default function AdminPortfoliosPage() {
         description: portfolio.description || '',
         category: portfolio.category,
         featured: portfolio.featured,
-        date: formatDateForInput(portfolio.date), // Formatage correct de la date
+        date: portfolio.date,
         image: null,
         additionalImages: [],
         deletedImages: [],
@@ -264,10 +231,6 @@ export default function AdminPortfoliosPage() {
     }));
   };
 
-  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, date: e.target.value });
-  };
-
   const filteredPortfolios = selectedCategory === 'all'
     ? portfolios
     : portfolios.filter(p => p.category === selectedCategory);
@@ -288,6 +251,7 @@ export default function AdminPortfoliosPage() {
         </div>
       )}
 
+      {/* Ajoutez ce CSS dans votre fichier global ou en inline */}
       <style>{`
         @keyframes slide-in {
           from {
@@ -368,7 +332,7 @@ export default function AdminPortfoliosPage() {
                   alt={portfolio.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Image+non+disponible';
+                    e.currentTarget.src = '/placeholder-image.jpg';
                   }}
                 />
                 {portfolio.featured && (
@@ -410,13 +374,7 @@ export default function AdminPortfoliosPage() {
                 </div>
 
                 <div className="flex gap-2">
-                  <button
-                    onClick={() => openModal(portfolio)}
-                    className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors font-medium"
-                  >
-                    <Edit className="w-4 h-4" />
-                    Modifier
-                  </button>
+                  
                   
                   <button
                     onClick={() => handleDelete(portfolio.id)}
@@ -510,7 +468,7 @@ export default function AdminPortfoliosPage() {
                     type="date"
                     required
                     value={formData.date}
-                    onChange={handleDateChange}
+                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
@@ -530,7 +488,7 @@ export default function AdminPortfoliosPage() {
                   })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
-                {editingPortfolio && editingPortfolio.image && (
+                {editingPortfolio && editingPortfolio.image && !formData.deletedImages.includes(-1) && (
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 mb-2">Image actuelle :</p>
                     <div className="flex items-center gap-2">
@@ -539,6 +497,13 @@ export default function AdminPortfoliosPage() {
                         alt="Current portfolio" 
                         className="w-32 h-32 object-cover rounded-lg"
                       />
+                      <button
+                        type="button"
+                        onClick={() => removeExistingImage(-1)}
+                        className="p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 )}
