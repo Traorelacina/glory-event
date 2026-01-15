@@ -19,7 +19,7 @@ interface Portfolio {
   featured: boolean;
   date: string;
   created_at: string;
-  images: PortfolioImage[]; // Images supplémentaires
+  images: PortfolioImage[];
 }
 
 const categoryLabels: { [key: string]: string } = {
@@ -46,14 +46,13 @@ export default function AdminPortfoliosPage() {
     date: new Date().toISOString().split('T')[0],
     image: null as File | null,
     additionalImages: [] as File[],
-    deletedImages: [] as number[], // IDs des images à supprimer
+    deletedImages: [] as number[],
   });
 
   useEffect(() => {
     fetchPortfolios();
   }, []);
 
-  // Afficher la notification pendant 3 secondes
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => {
@@ -69,11 +68,34 @@ export default function AdminPortfoliosPage() {
       setPortfolios(response.data.data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des portfolios:', error);
+      showNotification('error', 'Erreur lors du chargement des portfolios');
     }
   };
 
   const showNotification = (type: 'success' | 'error', message: string) => {
     setNotification({ type, message });
+  };
+
+  const formatDateForInput = (dateString: string): string => {
+    try {
+      if (!dateString) return new Date().toISOString().split('T')[0];
+      
+      // Si la date est déjà au format YYYY-MM-DD, la retourner
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        return dateString;
+      }
+      
+      // Sinon, la parser et formater
+      const date = new Date(dateString);
+      if (isNaN(date.getTime())) {
+        return new Date().toISOString().split('T')[0];
+      }
+      
+      return date.toISOString().split('T')[0];
+    } catch (error) {
+      console.error('Erreur lors du formatage de la date:', error);
+      return new Date().toISOString().split('T')[0];
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -86,7 +108,7 @@ export default function AdminPortfoliosPage() {
       data.append('description', formData.description);
       data.append('category', formData.category);
       data.append('featured', formData.featured ? '1' : '0');
-      data.append('date', formData.date);
+      data.append('date', formData.date); // Date déjà au format YYYY-MM-DD
       
       if (formData.image) {
         data.append('image', formData.image);
@@ -100,23 +122,32 @@ export default function AdminPortfoliosPage() {
       // Ajouter les IDs des images à supprimer (pour la mise à jour)
       if (editingPortfolio) {
         formData.deletedImages.forEach((id, index) => {
-          data.append(`deleted_images[${index}]`, id.toString());
+          if (id !== -1) { // -1 est pour l'image principale
+            data.append(`deleted_images[${index}]`, id.toString());
+          }
         });
       }
 
+      const config = {
+        headers: { 
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+      };
+
       if (editingPortfolio) {
-        await axios.put(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`, data, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        await axios.put(
+          `https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`,
+          data,
+          config
+        );
         showNotification('success', 'Portfolio mis à jour avec succès!');
       } else {
-        await axios.post('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio', data, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
+        await axios.post(
+          'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio',
+          data,
+          config
+        );
         showNotification('success', 'Portfolio créé avec succès!');
       }
 
@@ -132,6 +163,8 @@ export default function AdminPortfoliosPage() {
         showNotification('error', `Erreurs: ${errors}`);
       } else if (error.response?.data?.message) {
         showNotification('error', `Erreur: ${error.response.data.message}`);
+      } else if (error.message?.includes('Network Error')) {
+        showNotification('error', 'Erreur réseau. Vérifiez votre connexion.');
       } else {
         showNotification('error', 'Erreur lors de la sauvegarde du portfolio');
       }
@@ -164,38 +197,33 @@ export default function AdminPortfoliosPage() {
   };
 
   const openModal = (portfolio?: Portfolio) => {
-  if (portfolio) {
-    setEditingPortfolio(portfolio);
-    
-    // Formater la date au format YYYY-MM-DD
-    const portfolioDate = portfolio.date ? new Date(portfolio.date) : new Date();
-    const formattedDate = portfolioDate.toISOString().split('T')[0];
-    
-    setFormData({
-      title: portfolio.title,
-      description: portfolio.description || '',
-      category: portfolio.category,
-      featured: portfolio.featured,
-      date: formattedDate, // Utiliser la date formatée
-      image: null,
-      additionalImages: [],
-      deletedImages: [],
-    });
-  } else {
-    setEditingPortfolio(null);
-    setFormData({
-      title: '',
-      description: '',
-      category: 'mariage',
-      featured: false,
-      date: new Date().toISOString().split('T')[0],
-      image: null,
-      additionalImages: [],
-      deletedImages: [],
-    });
-  }
-  setIsModalOpen(true);
-};
+    if (portfolio) {
+      setEditingPortfolio(portfolio);
+      setFormData({
+        title: portfolio.title,
+        description: portfolio.description || '',
+        category: portfolio.category,
+        featured: portfolio.featured,
+        date: formatDateForInput(portfolio.date), // Formatage correct de la date
+        image: null,
+        additionalImages: [],
+        deletedImages: [],
+      });
+    } else {
+      setEditingPortfolio(null);
+      setFormData({
+        title: '',
+        description: '',
+        category: 'mariage',
+        featured: false,
+        date: new Date().toISOString().split('T')[0],
+        image: null,
+        additionalImages: [],
+        deletedImages: [],
+      });
+    }
+    setIsModalOpen(true);
+  };
 
   const closeModal = () => {
     setIsModalOpen(false);
@@ -236,6 +264,10 @@ export default function AdminPortfoliosPage() {
     }));
   };
 
+  const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, date: e.target.value });
+  };
+
   const filteredPortfolios = selectedCategory === 'all'
     ? portfolios
     : portfolios.filter(p => p.category === selectedCategory);
@@ -256,7 +288,6 @@ export default function AdminPortfoliosPage() {
         </div>
       )}
 
-      {/* Ajoutez ce CSS dans votre fichier global ou en inline */}
       <style>{`
         @keyframes slide-in {
           from {
@@ -337,7 +368,7 @@ export default function AdminPortfoliosPage() {
                   alt={portfolio.title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.src = '/placeholder-image.jpg';
+                    e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Image+non+disponible';
                   }}
                 />
                 {portfolio.featured && (
@@ -479,7 +510,7 @@ export default function AdminPortfoliosPage() {
                     type="date"
                     required
                     value={formData.date}
-                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                    onChange={handleDateChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                   />
                 </div>
@@ -499,7 +530,7 @@ export default function AdminPortfoliosPage() {
                   })}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
-                {editingPortfolio && editingPortfolio.image && !formData.deletedImages.includes(-1) && (
+                {editingPortfolio && editingPortfolio.image && (
                   <div className="mt-2">
                     <p className="text-sm text-gray-500 mb-2">Image actuelle :</p>
                     <div className="flex items-center gap-2">
@@ -508,13 +539,6 @@ export default function AdminPortfoliosPage() {
                         alt="Current portfolio" 
                         className="w-32 h-32 object-cover rounded-lg"
                       />
-                      <button
-                        type="button"
-                        onClick={() => removeExistingImage(-1)}
-                        className="p-1 bg-red-100 text-red-600 rounded-full hover:bg-red-200"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
                     </div>
                   </div>
                 )}
