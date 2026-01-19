@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Star, Calendar, Image as ImageIcon, X } from 'lucide-react';
 import AdminNavbar from '../components/AdminNavbar';
 import { useAuthStore } from '../../store/AuthStore';
-import axios from 'axios';
 
 interface PortfolioImage {
   id: number;
@@ -19,7 +18,7 @@ interface Portfolio {
   featured: boolean;
   date: string;
   created_at: string;
-  images: PortfolioImage[]; // Images supplémentaires
+  images: PortfolioImage[];
 }
 
 const categoryLabels: { [key: string]: string } = {
@@ -46,14 +45,13 @@ export default function AdminPortfoliosPage() {
     date: new Date().toISOString().split('T')[0],
     image: null as File | null,
     additionalImages: [] as File[],
-    deletedImages: [] as number[], // IDs des images à supprimer
+    deletedImages: [] as number[],
   });
 
   useEffect(() => {
     fetchPortfolios();
   }, []);
 
-  // Afficher la notification pendant 3 secondes
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => {
@@ -65,8 +63,18 @@ export default function AdminPortfoliosPage() {
 
   const fetchPortfolios = async () => {
     try {
-      const response = await axios.get('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/portfolio');
-      setPortfolios(response.data.data || []);
+      const response = await fetch('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/portfolio', {
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Erreur ${response.status}`);
+      }
+
+      const data = await response.json();
+      setPortfolios(data.data || []);
     } catch (error) {
       console.error('Erreur lors du chargement des portfolios:', error);
     }
@@ -78,6 +86,17 @@ export default function AdminPortfoliosPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!token) {
+      showNotification('error', 'Token d\'authentification manquant');
+      return;
+    }
+
+    if (!formData.image && !editingPortfolio) {
+      showNotification('error', 'Veuillez sélectionner une image');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -92,49 +111,73 @@ export default function AdminPortfoliosPage() {
         data.append('image', formData.image);
       }
 
-      // Ajouter les images supplémentaires
       formData.additionalImages.forEach((file, index) => {
         data.append(`additional_images[${index}]`, file);
       });
 
-      // Ajouter les IDs des images à supprimer (pour la mise à jour)
       if (editingPortfolio) {
         formData.deletedImages.forEach((id, index) => {
           data.append(`deleted_images[${index}]`, id.toString());
         });
       }
 
+      // 🔥 MÉTHODE QUI FONCTIONNE (comme AdminProduitsPage)
+      const url = editingPortfolio 
+        ? `https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`
+        : 'https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio';
+
+      // Toujours utiliser POST
+      const method = 'POST';
+
+      // Pour la mise à jour, ajouter _method
       if (editingPortfolio) {
-        await axios.put(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${editingPortfolio.id}`, data, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        showNotification('success', 'Portfolio mis à jour avec succès!');
-      } else {
-        await axios.post('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio', data, {
-          headers: { 
-            'Authorization': `Bearer ${token}`,
-          },
-        });
-        showNotification('success', 'Portfolio créé avec succès!');
+        data.append('_method', 'PUT');
       }
 
-      await fetchPortfolios();
+      const response = await fetch(url, {
+        method: method,
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
+        body: data,
+      });
+
+      const contentType = response.headers.get('content-type');
+      
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        console.error('Non-JSON response:', text.substring(0, 300));
+        throw new Error('Le serveur a retourné une réponse invalide');
+      }
+
+      const responseData = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          showNotification('error', 'Session expirée. Veuillez vous reconnecter.');
+          return;
+        }
+        
+        if (responseData.errors) {
+          const errors = Object.values(responseData.errors).flat().join(', ');
+          throw new Error(errors);
+        }
+        throw new Error(responseData.message || `Erreur ${response.status}`);
+      }
+
+      showNotification('success', editingPortfolio ? 'Portfolio mis à jour avec succès!' : 'Portfolio créé avec succès!');
+      
+      if (editingPortfolio) {
+        setPortfolios(prev => prev.map(p => p.id === editingPortfolio.id ? responseData.data : p));
+      } else {
+        setPortfolios(prev => [responseData.data, ...prev]);
+      }
+      
       closeModal();
     } catch (error: any) {
       console.error('Erreur complète:', error);
-      
-      if (error.response?.status === 401) {
-        showNotification('error', 'Session expirée. Veuillez vous reconnecter.');
-      } else if (error.response?.data?.errors) {
-        const errors = Object.values(error.response.data.errors).flat().join(', ');
-        showNotification('error', `Erreurs: ${errors}`);
-      } else if (error.response?.data?.message) {
-        showNotification('error', `Erreur: ${error.response.data.message}`);
-      } else {
-        showNotification('error', 'Erreur lors de la sauvegarde du portfolio');
-      }
+      showNotification('error', error.message || 'Erreur lors de la sauvegarde du portfolio');
     } finally {
       setLoading(false);
     }
@@ -142,24 +185,31 @@ export default function AdminPortfoliosPage() {
 
   const handleDelete = async (id: number) => {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce portfolio ?')) return;
+    if (!token) return;
 
     try {
-      await axios.delete(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${id}`, {
+      const response = await fetch(`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/admin/portfolio/${id}`, {
+        method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          'Authorization': `Bearer ${token}`,
+          'Accept': 'application/json',
+        },
       });
-      await fetchPortfolios();
+
+      if (!response.ok) {
+        const data = await response.json();
+        if (response.status === 401) {
+          showNotification('error', 'Session expirée. Veuillez vous reconnecter.');
+          return;
+        }
+        throw new Error(data.message || `Erreur ${response.status}`);
+      }
+
+      setPortfolios(portfolios.filter((p) => p.id !== id));
       showNotification('success', 'Portfolio supprimé avec succès!');
     } catch (error: any) {
       console.error('Erreur lors de la suppression:', error);
-      if (error.response?.status === 401) {
-        showNotification('error', 'Session expirée. Veuillez vous reconnecter.');
-      } else if (error.response?.data?.message) {
-        showNotification('error', `Erreur: ${error.response.data.message}`);
-      } else {
-        showNotification('error', 'Erreur lors de la suppression du portfolio');
-      }
+      showNotification('error', error.message || 'Erreur lors de la suppression du portfolio');
     }
   };
 
@@ -251,7 +301,6 @@ export default function AdminPortfoliosPage() {
         </div>
       )}
 
-      {/* Ajoutez ce CSS dans votre fichier global ou en inline */}
       <style>{`
         @keyframes slide-in {
           from {
@@ -345,7 +394,6 @@ export default function AdminPortfoliosPage() {
                   {categoryLabels[portfolio.category]}
                 </div>
                 
-                {/* Badge pour images supplémentaires */}
                 {portfolio.images && portfolio.images.length > 0 && (
                   <div className="absolute bottom-3 right-3 bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
                     +{portfolio.images.length} photos
@@ -374,7 +422,13 @@ export default function AdminPortfoliosPage() {
                 </div>
 
                 <div className="flex gap-2">
-                  
+                  <button
+                    onClick={() => openModal(portfolio)}
+                    className="flex-1 flex items-center justify-center gap-2 bg-blue-50 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+                  >
+                    <Edit className="w-4 h-4" />
+                    Modifier
+                  </button>
                   
                   <button
                     onClick={() => handleDelete(portfolio.id)}
@@ -521,7 +575,6 @@ export default function AdminPortfoliosPage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                 />
                 
-                {/* Aperçu des nouvelles images */}
                 {formData.additionalImages.length > 0 && (
                   <div className="mt-4">
                     <p className="text-sm text-gray-500 mb-2">Nouvelles images :</p>
@@ -546,7 +599,6 @@ export default function AdminPortfoliosPage() {
                   </div>
                 )}
 
-                {/* Images existantes (pour l'édition) */}
                 {editingPortfolio && editingPortfolio.images && editingPortfolio.images.length > 0 && (
                   <div className="mt-4">
                     <p className="text-sm text-gray-500 mb-2">Images existantes :</p>
