@@ -1,11 +1,5 @@
-
 import { useState, useEffect, useRef } from "react"
-import { ArrowRight, ChevronDown, Sparkles } from "lucide-react"
-import { Swiper, SwiperSlide } from "swiper/react"
-import "swiper/css"
-import "swiper/css/navigation"
-import "swiper/css/pagination"
-import { Navigation, Pagination } from "swiper/modules"
+import { ArrowRight, Sparkles } from "lucide-react"
 import type { Service } from "../types"
 import Footer from "../components/Footer"
 import decorationImage from '../../images/event1.jpg';
@@ -15,7 +9,6 @@ interface ServicesPageProps {
 }
 
 export default function ServicesPage({ onNavigate }: ServicesPageProps) {
-  const [selectedService, setSelectedService] = useState<string | null>(null)
   const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({})
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
   const [isHovering, setIsHovering] = useState<string | null>(null)
@@ -38,85 +31,43 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
     {
       id: "wedding-planner",
       title: "Wedding Planner",
-      description:
-        "Transformez le plus beau jour de votre vie en un moment magique et inoubliable. Nos wedding planners orchestrent chaque détail avec passion et professionnalisme pour créer une célébration à votre image, de la conception à la réalisation.",
+      description: "Transformez le plus beau jour de votre vie en un moment magique et inoubliable. Nos wedding planners orchestrent chaque détail avec passion et professionnalisme pour créer une célébration à votre image, de la conception à la réalisation.",
       image: "https://images.pexels.com/photos/265722/pexels-photo-265722.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      gallery: [
-        "https://scontent.fabj5-2.fna.fbcdn.net/v/t39.30808-6/558455144_792108313615912_2798952595938159567_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEbj8oFgGOihZjy6ekWUxbGRAQhTiXs1TtEBCFOJezVO_XZbiEp0cqORgrCI-OE7UrLQAH4wazyFLT3wy3QC_lO&_nc_ohc=KbNKsWH1yWUQ7kNvwEzthiM&_nc_oc=AdmVGo1D7ea42Y_Pp31Y_f4ubQcSAJR2HH5l00MM0JQzkg2joV0tjfooRYUYIqfiodY&_nc_zt=23&_nc_ht=scontent.fabj5-2.fna&_nc_gid=F4hu4LqHkKWTZ2CDMdKL7Q&oh=00_AfgeHu5iErGY3ohtcjdfnNAprrYj1d5qAo2qdhY6wCXu5A&oe=69277DA8",
-        "https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1729797/pexels-photo-1729797.jpeg?auto=compress&cs=tinysrgb&w=800",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/747/747376.png",
     },
     {
       id: "decoration",
       title: "Décoration sur Mesure",
-      description:
-        "L'art de créer des ambiances qui racontent votre histoire. Notre équipe de décorateurs talentueux conçoit des univers visuels époustouflants, du concept initial jusqu'à la réalisation finale, pour tous types d'événements.",
+      description: "L'art de créer des ambiances qui racontent votre histoire. Notre équipe de décorateurs talentueux conçoit des univers visuels époustouflants, du concept initial jusqu'à la réalisation finale, pour tous types d'événements.",
       image:  decorationImage,
-      gallery: [
-        "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/565690055_802299149263495_5241726712948988641_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHqmn6Mg1k5KHHjQA3xnpryVCwmStiPL3lULCZK2I8veVW_UcozuXcd_j2_KJ_1_z_33kZc4KKGvI5t6CyYmHQX&_nc_ohc=dmYopNbPV0MQ7kNvwHt2Pai&_nc_oc=AdmEGr5BTojp671ASzZQUqvqOB45regpAP5vWGwHHFgxFGvDLw5t31shp72bIiF3hZ8&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=-FQu5vq5kSGjfhsXBn0w0g&oh=00_AfiYmYBe75WP0TvYDyVPzVQI5AudFtqhNoxq-00r20U-rg&oe=69277332",
-        "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/473570381_586580980835314_5699410999367893011_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeEjZmKOT3Upn1xVzeiBs4mjz6uQ9o2-FkDPq5D2jb4WQGa0IVuvL3nzZEUylTQC-aey7udEcgW_A3oy1Fjh5Ji4&_nc_ohc=vhTwHd2Gx88Q7kNvwG3_agQ&_nc_oc=AdkShAoSR1MPPHJ6EYUlC4YTUa3Vx7vK99pcl8aPV56Oq349vlM3yCF3wVcJATWOU5g&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=VWVgF6SPGPnuBquHCcmX0w&oh=00_Afgig4tc1o3hWXcMFssaQve1kd6Ti1GVTdEO51dVQ5tKBg&oe=69276631",
-        "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://scontent.fabj5-2.fna.fbcdn.net/v/t51.82787-15/561846531_17984930459906860_3449748711829899152_n.jpg?stp=dst-jpegr_tt6&_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeE-97ASt1R-tFyGboBYyqlhyjwfjU_pK1bKPB-NT-krVp5qtP4UMyKfIREn082A8ERfuTeW_dRomWFJnLgjZTbg&_nc_ohc=ROK8SXoyv38Q7kNvwFyQDBH&_nc_oc=AdlWggG2iid5xhJ82zFWXhcuxSfKLShSmbRKMW1a6WxZ4Nl_5NUKpX0-swCzx4KkPNY&_nc_zt=23&se=-1&_nc_ht=scontent.fabj5-2.fna&_nc_gid=IL9NZczTjXZ78SY9I-D4WA&oh=00_Afjlm7Bt_GSumAERoroCO9KPyWrHIOGBFThIiFy2kx_bVQ&oe=692773C0",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/3144/3144456.png",
     },
     {
       id: "restauration",
       title: "Cuisine et Restauration",
-      description:
-        "Une expérience culinaire raffinée pour sublimer vos événements. Notre chef et son équipe créent des menus sur mesure, alliant créativité et excellence gustative pour émerveiller vos convives avec des saveurs inoubliables.",
+      description: "Une expérience culinaire raffinée pour sublimer vos événements. Notre chef et son équipe créent des menus sur mesure, alliant créativité et excellence gustative pour émerveiller vos convives avec des saveurs inoubliables.",
       image: "https://images.pexels.com/photos/1267320/pexels-photo-1267320.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      gallery: [
-        "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474460810_591402047019874_5302692506335260921_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHjUScCOWc-49kvUS4YFTugaz_HfWGNDFBrP8d9YY0MUBWTi9DzSUguUFL5RYCxP9j6VrRDncdeQbx-fZXPbzHq&_nc_ohc=ROHekJBwXAkQ7kNvwETIGAw&_nc_oc=AdmAoC5ngph4vQlYOX-PJddYZu1hxS4_5FrXZ5Y-GOFycj958n9ZU36FhWb1KLer7Fw&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=qknFJdk8c_vTX6EXeDEDdg&oh=00_AfjicdhciVBfKrJL6oS5agAyvaY-99POGa-IH_FkOz3EZA&oe=69275D30",
-        "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474700308_591402277019851_1044336786120214148_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGGvr4Aqe3p-kx9PqYBGuwIC5kFvK_EemoLmQW8r8R6aqA_Gqhqc-FKrZ6zVAh8Ha2uGbTYkdXKCgnFOjRtTOI0&_nc_ohc=sEXBHGZXUcEQ7kNvwGFWNGm&_nc_oc=AdlThcvQXYPS4uyHaHKcEXaA3f9ng6MrkZgC-89SLfP_yGv5vEsUjU-cjnLsNuQTnRA&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=iKeXmEWTokcnikAnjoHJNA&oh=00_AfjeGkPMvaS5HyY_QTpS9B_2fofXuIna6hOz3EZA&oe=69277FD0",
-        "https://scontent.fabj5-1.fna.fbcdn.net/v/t39.30808-6/474662104_591402373686508_7233185737982302691_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeFn2lHgMka55V2VkEJqupT_yBdKITuZ0_fIF0ohO5nT90k2a66y5LLWh8na-S27mNNLEx9VTMHw5ZT4y8YRYFcY&_nc_ohc=F_gz9pi7-RwQ7kNvwHaRE8T&_nc_oc=AdkShAoSR1MPPHJ6EYUlC4YTUa3Vx7vK99pcl8aPV56Oq349vlM3yCF3wVcJATWOU5g&_nc_zt=23&_nc_ht=scontent.fabj5-1.fna&_nc_gid=nTEwLIgbW4K8j2330I3QWg&oh=00_Afh40eSo5UB5tKBg&oe=69277E00",
-        "https://scontent.fabj5-2.fna.fbcdn.net/v/t39.30808-6/474640101_591402350353177_1889578150718329059_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeESxdi2q7ufYOSuKLcaUdsxOTaRw00UMJ05NpHDTRQwnaqBBrnrjln5swIZ4kr4bK8B1WfqMZ09J0Xa_oqN8yEL&_nc_ohc=ZtOHetO3DNgQ7kNvwEK6o20&_nc_oc=AdnHnzFQMHb5GUTYpcBc6cFM6rUW9ZySMUyyupWEPH74HVymBjNWpdZVglrOoc7oTJg&_nc_zt=23&_nc_ht=scontent.fabj5-2.fna&_nc_gid=0KvTibFgpSiKYIMherggjA&oh=00_AfjpNuPpT-KZugehulPqZ26geRPGGZmVMDvW5-Qn7HjitQ&oe=692759D2",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/2738/2738730.png",
     },
     {
       id: "evenementiel",
       title: "Événementiel",
-      description:
-        "Donnez vie à vos événements professionnels et privés avec notre expertise complète. Séminaires, lancements de produits, galas, conférences : nous créons des expériences qui marquent les esprits et renforcent votre message.",
+      description: "Donnez vie à vos événements professionnels et privés avec notre expertise complète. Séminaires, lancements de produits, galas ou conférences, nous créons des expériences qui marquent les esprits et renforcent votre message.",
       image: "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      gallery: [
-        "https://images.pexels.com/photos/1181396/pexels-photo-1181396.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2833037/pexels-photo-2833037.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1181622/pexels-photo-1181622.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/1067/1067566.png",
     },
     {
       id: "location-ustensiles",
       title: "Location d'Ustensiles",
-      description:
-        "Un service complet de location d'ustensiles et d'équipements pour vos événements. De la vaisselle fine aux équipements de cuisine professionnels, nous vous proposons tout le nécessaire pour réussir votre réception.",
+      description: "Un service complet de location d'ustensiles et d'équipements pour vos événements. De la vaisselle fine aux équipements de cuisine professionnels, nous vous proposons tout le nécessaire pour réussir votre réception.",
       image: "https://images.pexels.com/photos/6267/menu-restaurant-vintage-table.jpg?auto=compress&cs=tinysrgb&w=1920",
-      gallery: [
-        "https://images.pexels.com/photos/262978/pexels-photo-262978.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1268558/pexels-photo-1268558.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/3992933/pexels-photo-3992933.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/6267/menu-restaurant-vintage-table.jpg?auto=compress&cs=tinysrgb&w=800",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/3502/3502601.png",
     },
     {
       id: "location-mobilier",
       title: "Location de Tables et Chaises",
-      description:
-        "Un large choix de mobilier élégant pour aménager vos espaces événementiels. Tables rondes, rectangulaires, chaises design ou classiques : nous adaptons le mobilier à votre thématique et au nombre de vos invités.",
+      description: "Un large choix de mobilier élégant pour aménager vos espaces événementiels. Tables rondes, rectangulaires, chaises design ou classiques, nous adaptons le mobilier à votre thématique et au nombre de vos invités.",
       image: "https://images.pexels.com/photos/169190/pexels-photo-169190.jpeg?auto=compress&cs=tinysrgb&w=1920",
-      gallery: [
-        "https://images.pexels.com/photos/169190/pexels-photo-169190.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2306281/pexels-photo-2306281.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/1395964/pexels-photo-1395964.jpeg?auto=compress&cs=tinysrgb&w=800",
-        "https://images.pexels.com/photos/2306277/pexels-photo-2306277.jpeg?auto=compress&cs=tinysrgb&w=800",
-      ],
       icon: "https://cdn-icons-png.flaticon.com/512/2917/2917242.png",
     },
   ]
@@ -357,10 +308,6 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           animation: glow 2s ease-in-out infinite;
         }
 
-        .gallery-expand {
-          animation: fadeInUp 0.5s ease-out;
-        }
-
         .button-hover {
           position: relative;
           overflow: hidden;
@@ -419,31 +366,9 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           opacity: 1;
         }
 
-        .chevron-rotate {
-          transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        }
-
-        .chevron-rotate.rotated {
-          transform: rotate(180deg);
-        }
-
         .gallery-image-wrapper {
           position: relative;
           overflow: hidden;
-        }
-
-        .gallery-image-wrapper::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
-          transform: translateX(-100%);
-          transition: transform 0.6s ease;
-          z-index: 1;
-        }
-
-        .gallery-image-wrapper:hover::before {
-          transform: translateX(100%);
         }
 
         .floating-shapes {
@@ -534,150 +459,78 @@ export default function ServicesPage({ onNavigate }: ServicesPageProps) {
           </div>
 
           <div className="space-y-16 relative z-10">
-            {services.map((service, index) => {
-              const isExpanded = selectedService === service.id
-
-              return (
-                <div
-                  key={service.id}
-                  id={`service-${service.id}`}
-                  data-animate
-                  className="service-card"
-                  style={{
-                    opacity: isVisible[`service-${service.id}`] ? 1 : 0,
-                    transform: isVisible[`service-${service.id}`] ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.95)',
-                    transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
-                  }}
-                >
-                  <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group">
-                    <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
-                      <div 
-                        className={`relative h-72 md:h-96 service-image ${index % 2 === 1 ? "md:col-start-2" : ""} overflow-hidden`}
-                        onMouseEnter={() => setIsHovering(`image-${service.id}`)}
-                        onMouseLeave={() => setIsHovering(null)}
-                      >
-                        <img
-                          src={service.image || "/placeholder.svg"}
-                          alt={service.title}
-                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
-                          style={{
-                            transform: isHovering === `image-${service.id}` ? `scale(1.15) rotate(2deg)` : 'scale(1) rotate(0deg)'
-                          }}
-                        />
-                        <div className="absolute inset-0 image-overlay bg-gradient-to-t from-black/40 to-transparent"></div>
-                      </div>
-
-                      <div className="p-8 md:p-12 flex flex-col justify-center">
-                        <div className="w-16 h-16 icon-box rounded-2xl flex items-center justify-center mb-6 border border-slate-200 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
-                          <img 
-                            src={service.icon || "/placeholder.svg"} 
-                            alt={service.title} 
-                            className="w-8 h-8 group-hover:scale-110 transition-transform duration-300"
-                            style={{ animation: 'wiggle 3s ease-in-out infinite' }}
-                          />
-                        </div>
-
-                        <h2 className="font-dm-serif text-3xl md:text-4xl font-normal text-slate-900 mb-4 leading-tight tracking-tight group-hover:text-[#ad5945] transition-colors duration-300">
-                          {service.title}
-                        </h2>
-
-                        <p className="font-lora text-slate-600 text-base md:text-lg leading-relaxed mb-6 font-light line-clamp-3 italic">
-                          {service.description}
-                        </p>
-
-                        <div className="flex flex-wrap gap-3 pt-2">
-                          <button
-                            onClick={() => setSelectedService(isExpanded ? null : service.id)}
-                            className={`button-hover magnetic-button font-raleway relative px-6 py-2 rounded-full font-semibold transition-all duration-300 border flex items-center gap-2 text-sm hover:scale-110 ${
-                              isExpanded
-                                ? "bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white border-[#ad5945] shadow-lg"
-                                : "bg-white text-slate-700 hover:bg-slate-50 hover:border-[#ad5945]/30 border-slate-200"
-                            }`}
-                          >
-                            {isExpanded ? "Masquer galerie" : "Voir galerie"}
-                            <ChevronDown className={`chevron-rotate w-4 h-4 ${isExpanded ? "rotated" : ""}`} />
-                          </button>
-                          <button
-                            onClick={() => onNavigate("contact")}
-                            className="button-hover magnetic-button font-raleway relative px-6 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-[#ad5945] to-[#d38074] hover:shadow-lg hover:shadow-[#ad5945]/50 transition-all duration-300 flex items-center gap-2 group text-sm transform hover:-translate-y-2 hover:scale-110 overflow-hidden"
-                            onMouseEnter={(e) => {
-                              const rect = e.currentTarget.getBoundingClientRect();
-                              const x = e.clientX - rect.left - rect.width / 2;
-                              const y = e.clientY - rect.top - rect.height / 2;
-                              e.currentTarget.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) translateY(-8px) scale(1.1)`;
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.transform = '';
-                            }}
-                          >
-                            <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-                            <span className="relative z-10">Demander un devis</span>
-                            <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                          </button>
-                        </div>
-                      </div>
+            {services.map((service, index) => (
+              <div
+                key={service.id}
+                id={`service-${service.id}`}
+                data-animate
+                className="service-card"
+                style={{
+                  opacity: isVisible[`service-${service.id}`] ? 1 : 0,
+                  transform: isVisible[`service-${service.id}`] ? 'translateY(0) scale(1)' : 'translateY(40px) scale(0.95)',
+                  transition: 'all 0.8s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}
+              >
+                <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-500 border border-slate-100 group">
+                  <div className={`grid md:grid-cols-2 gap-0 ${index % 2 === 1 ? "md:grid-flow-dense" : ""}`}>
+                    <div 
+                      className={`relative h-72 md:h-96 service-image ${index % 2 === 1 ? "md:col-start-2" : ""} overflow-hidden`}
+                      onMouseEnter={() => setIsHovering(`image-${service.id}`)}
+                      onMouseLeave={() => setIsHovering(null)}
+                    >
+                      <img
+                        src={service.image || "/placeholder.svg"}
+                        alt={service.title}
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                        style={{
+                          transform: isHovering === `image-${service.id}` ? `scale(1.15) rotate(2deg)` : 'scale(1) rotate(0deg)'
+                        }}
+                      />
+                      <div className="absolute inset-0 image-overlay bg-gradient-to-t from-black/40 to-transparent"></div>
                     </div>
 
-                    {isExpanded && (
-                      <div className="gallery-expand p-8 bg-gradient-to-b from-slate-50 to-white border-t border-slate-200">
-                        <h3 className="font-dm-serif text-2xl font-normal text-slate-900 mb-8">Galerie Événements</h3>
-                        <Swiper
-                          modules={[Navigation, Pagination]}
-                          navigation={{
-                            nextEl: `.swiper-button-next-${service.id}`,
-                            prevEl: `.swiper-button-prev-${service.id}`,
-                          }}
-                          pagination={{
-                            clickable: true,
-                            dynamicBullets: true,
-                            el: `.swiper-pagination-${service.id}`,
-                          }}
-                          spaceBetween={20}
-                          slidesPerView={1}
-                          breakpoints={{
-                            640: { slidesPerView: 2 },
-                            1024: { slidesPerView: 4 },
-                          }}
-                          className="swiper-custom"
-                        >
-                          {service.gallery.map((image, idx) => (
-                            <SwiperSlide key={idx}>
-                              <div className="gallery-image-wrapper relative aspect-square rounded-xl overflow-hidden group cursor-pointer hover:shadow-2xl hover:shadow-[#ad5945]/30 transition-all duration-500 transform hover:-translate-y-2">
-                                <img
-                                  src={image || "/placeholder.svg"}
-                                  alt={`${service.title} ${idx + 1}`}
-                                  className="w-full h-full object-cover transform group-hover:scale-125 transition-transform duration-700"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                  <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-xl transform scale-0 group-hover:scale-100 transition-transform duration-500 group-hover:rotate-12">
-                                    <Sparkles className="w-8 h-8 text-[#ad5945]" style={{ animation: 'pulse 1.5s ease-in-out infinite' }} />
-                                  </div>
-                                </div>
-                              </div>
-                            </SwiperSlide>
-                          ))}
-                        </Swiper>
-
-                        <div className="flex justify-center gap-4 mt-8">
-                          <button
-                            className={`swiper-button-prev-${service.id} w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-125`}
-                          >
-                            <ArrowRight className="w-5 h-5 rotate-180" />
-                          </button>
-                          <div className={`swiper-pagination-${service.id} flex justify-center gap-2`}></div>
-                          <button
-                            className={`swiper-button-next-${service.id} w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#ad5945] hover:to-[#d38074] hover:border-0 hover:text-white transition-all duration-300 shadow-md hover:shadow-lg hover:scale-125`}
-                          >
-                            <ArrowRight className="w-5 h-5" />
-                          </button>
-                        </div>
+                    <div className="p-8 md:p-12 flex flex-col justify-center">
+                      <div className="w-16 h-16 icon-box rounded-2xl flex items-center justify-center mb-6 border border-slate-200 group-hover:scale-125 group-hover:rotate-12 transition-all duration-500">
+                        <img 
+                          src={service.icon || "/placeholder.svg"} 
+                          alt={service.title} 
+                          className="w-8 h-8 group-hover:scale-110 transition-transform duration-300"
+                          style={{ animation: 'wiggle 3s ease-in-out infinite' }}
+                        />
                       </div>
-                    )}
+
+                      <h2 className="font-dm-serif text-3xl md:text-4xl font-normal text-slate-900 mb-4 leading-tight tracking-tight group-hover:text-[#ad5945] transition-colors duration-300">
+                        {service.title}
+                      </h2>
+
+                      <p className="font-lora text-slate-600 text-base md:text-lg leading-relaxed mb-6 font-light italic">
+                        {service.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-3 pt-2">
+                        <button
+                          onClick={() => onNavigate("contact")}
+                          className="button-hover magnetic-button font-raleway relative px-6 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-[#ad5945] to-[#d38074] hover:shadow-lg hover:shadow-[#ad5945]/50 transition-all duration-300 flex items-center gap-2 group text-sm transform hover:-translate-y-2 hover:scale-110 overflow-hidden"
+                          onMouseEnter={(e) => {
+                            const rect = e.currentTarget.getBoundingClientRect();
+                            const x = e.clientX - rect.left - rect.width / 2;
+                            const y = e.clientY - rect.top - rect.height / 2;
+                            e.currentTarget.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) translateY(-8px) scale(1.1)`;
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = '';
+                          }}
+                        >
+                          <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
+                          <span className="relative z-10">Demander un devis</span>
+                          <ArrowRight className="relative z-10 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )
-            })}
+              </div>
+            ))}
           </div>
 
           {/* CTA Section finale */}
