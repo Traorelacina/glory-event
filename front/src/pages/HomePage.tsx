@@ -26,6 +26,40 @@ export default function HomePage({ onNavigate }: HomePageProps) {
   const [scrollToSection, setScrollToSection] = useState<string | null>(null);
   const portfolioSectionRef = useRef<HTMLDivElement>(null);
 
+  // État pour les portfolios réels
+  const [portfolios, setPortfolios] = useState<any[]>([]);
+  const [loadingPortfolios, setLoadingPortfolios] = useState(true);
+
+  // Charger les portfolios depuis l'API
+  useEffect(() => {
+    const fetchPortfolios = async () => {
+      try {
+        const response = await fetch('https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/api/portfolio', {
+          headers: {
+            'Accept': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erreur ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Trier par date de création décroissante (les plus récents en premier)
+        const sortedPortfolios = (data.data || []).sort((a: any, b: any) => 
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+        setPortfolios(sortedPortfolios);
+      } catch (error) {
+        console.error('Erreur lors du chargement des portfolios:', error);
+      } finally {
+        setLoadingPortfolios(false);
+      }
+    };
+
+    fetchPortfolios();
+  }, []);
+
   // Track mouse position for parallax effects
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -77,42 +111,6 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     return () => clearInterval(interval);
   }, []);
 
-  // Services principaux avec leurs catégories
-  const services = [
-    {
-      icon: 'https://cdn-icons-png.flaticon.com/512/747/747376.png',
-      title: 'Weldind Planning',
-      description: 'Des cérémonies inoubliables orchestrées avec élégance et raffinement',
-      color: 'from-[#ad5945] to-[#d38074]',
-      img: 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=600',
-      category: 'mariage'
-    },
-    {
-      icon: 'https://cdn-icons-png.flaticon.com/512/1067/1067566.png',
-      title: 'Événements Corporate',
-      description: "Solutions professionnelles pour vos séminaires et réceptions d'entreprise",
-      color: 'from-[#ca715b] to-[#ad5945]',
-      img: 'https://images.pexels.com/photos/3184312/pexels-photo-3184312.jpeg?auto=compress&cs=tinysrgb&w=600',
-      category: 'corporate'
-    },
-    {
-      icon: 'https://cdn-icons-png.flaticon.com/512/3290/3290425.png',
-      title: 'Réceptions Privées',
-      description: 'Créez des moments mémorables pour vos célébrations personnelles',
-      color: 'from-[#d38074] to-[#ad5945]',
-      img: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=600',
-      category: 'reception'
-    },
-    {
-      icon: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png',
-      title: 'Décoration sur Mesure',
-      description: 'Ambiances uniques adaptées à votre vision et votre style',
-      color: 'from-[#ad5945] to-[#ca715b]',
-      img: 'https://images.pexels.com/photos/164595/pexels-photo-164595.jpeg?auto=compress&cs=tinysrgb&w=600',
-      category: 'decoration'
-    },
-  ];
-
   // Services détaillés
   const detailedServices = [
     {
@@ -145,7 +143,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
     },
     {
       icon: 'https://img.icons8.com/color/96/000000/tableware.png',
-      title: 'Location d’ustensiles',
+      title: 'Location d'ustensiles',
       description: 'Séminaires et conférences de haut niveau',
       color: 'from-[#ca715b] to-[#d38074]',
       slug: 'reunion-professionnelle'
@@ -743,8 +741,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                   />
                 </div>
                 <h3 className="font-playfair text-2xl font-semibold text-gray-900 mb-4 tracking-tight group-hover:text-[#ad5945] transition-colors duration-300 whitespace-pre-line">
-  {feature.title}
-</h3>
+                  {feature.title}
+                </h3>
                 
                 <p className="font-inter text-gray-600 leading-relaxed font-light">
                   {feature.description}
@@ -778,8 +776,8 @@ export default function HomePage({ onNavigate }: HomePageProps) {
                       />
                     </div>
                     <h3 className="font-playfair text-xl font-semibold text-gray-900 mb-3 tracking-tight whitespace-pre-line">
-  {feature.title}
-</h3>
+                      {feature.title}
+                    </h3>
                     
                     <p className="font-inter text-gray-600 leading-relaxed font-light text-sm">
                       {feature.description}
@@ -886,8 +884,6 @@ professionnelle, nous mettons à votre disposition notre expertise
                   {service.description}
                 </p>
 
-          
-
                 <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${service.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
               </div>
             ))}
@@ -970,10 +966,9 @@ professionnelle, nous mettons à votre disposition notre expertise
       </section>
 
       {/* Section Portfolio avec effet de révélation */}
-            <section ref={portfolioSectionRef}
+      <section ref={portfolioSectionRef}
         className="py-24 bg-white"
         id="portfolio-section"
-          // 👈 Cache la section
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div 
@@ -993,119 +988,170 @@ professionnelle, nous mettons à votre disposition notre expertise
               </span>
             </h2>
             <p className="font-inter text-xl text-gray-600 max-w-2xl mx-auto font-light">
-              Des prestations sur mesure pour faire de votre événement un moment d'exception
+              Découvrez nos derniers projets et laissez-vous inspirer par nos créations
             </p>
           </div>
 
-          {/* Desktop Grid */}
-          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {services.map((service, index) => (
-              <div
-                key={index}
-                id={`portfolio-${index}`}
-                data-animate
-                className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
-                onClick={() => onNavigate('portfolio', service.category)}
-                onMouseEnter={() => setIsHovering(`portfolio-${index}`)}
-                onMouseLeave={() => setIsHovering(null)}
-                style={{
-                  opacity: isVisible[`portfolio-${index}`] ? 1 : 0,
-                  transform: isVisible[`portfolio-${index}`] ? 'translateY(0) scale(1)' : 'translateY(30px) scale(0.95)',
-                  transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
-                }}
-              > 
-                <div className="relative overflow-hidden">
-                  <img
-                    src={service.img}
-                    alt={service.title}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-                    style={{
-                      filter: isHovering === `portfolio-${index}` ? 'brightness(1.1)' : 'brightness(1)'
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                  
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-75">
-                    <div className={`w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-2xl ${isHovering === `portfolio-${index}` ? 'animate-pulse' : ''}`}>
-                      <img 
-                        src={service.icon} 
-                        alt={service.title}
-                        className="w-12 h-12"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
-                  </div>
-                </div>
-                
-                <div className="p-8 bg-white relative z-10">
-                  <h3 className="font-playfair text-xl font-semibold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ad5945] group-hover:to-[#d38074] transition-all tracking-tight">
-                    {service.title}
-                  </h3>
-                  <p className="font-inter text-gray-700 text-sm mb-4 font-light">{service.description}</p>
-                  
-                  <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-2 tracking-wide">
-                    <span className="mr-2">Découvrir</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </div>
-                </div>
-
-                <div 
-                  className="absolute top-4 right-4 w-3 h-3 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ animation: isHovering === `portfolio-${index}` ? 'pulse 2s ease-in-out infinite' : 'none' }}
-                ></div>
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile Carousel */}
-          <div className="md:hidden">
-            <Swiper
-              modules={[Autoplay]}
-              spaceBetween={16}
-              slidesPerView={1.2}
-              centeredSlides={true}
-              loop
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-              className="pb-8"
-            >
-              {services.map((service, index) => (
-                <SwiperSlide key={index}>
+          {loadingPortfolios ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#ad5945]"></div>
+            </div>
+          ) : portfolios.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500 text-lg">Aucun portfolio disponible pour le moment</p>
+            </div>
+          ) : (
+            <>
+              {/* Desktop Grid - 3 colonnes */}
+              <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {portfolios.slice(0, 6).map((portfolio, index) => (
                   <div
-                    className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer"
-                    onClick={() => onNavigate('portfolio', service.category)}
+                    key={portfolio.id}
+                    id={`portfolio-${index}`}
+                    data-animate
+                    className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
+                    onClick={() => onNavigate('portfolio')}
+                    onMouseEnter={() => setIsHovering(`portfolio-${index}`)}
+                    onMouseLeave={() => setIsHovering(null)}
+                    style={{
+                      opacity: isVisible[`portfolio-${index}`] ? 1 : 0,
+                      transform: isVisible[`portfolio-${index}`] ? 'translateY(0) scale(1)' : 'translateY(30px) scale(0.95)',
+                      transition: `all 0.6s cubic-bezier(0.4, 0, 0.2, 1) ${index * 0.15}s`,
+                    }}
                   > 
                     <div className="relative overflow-hidden">
                       <img
-                        src={service.img}
-                        alt={service.title}
-                        className="w-full h-48 object-cover"
+                        src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
+                        alt={portfolio.title}
+                        className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
+                        style={{
+                          filter: isHovering === `portfolio-${index}` ? 'brightness(1.1)' : 'brightness(1)'
+                        }}
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=600';
+                        }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      {portfolio.featured && (
+                        <div className="absolute top-3 right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
+                          <span className="text-white">★</span>
+                          À la une
+                        </div>
+                      )}
+
+                      {portfolio.images && portfolio.images.length > 0 && (
+                        <div className="absolute top-3 left-3 bg-blue-500/90 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs font-semibold">
+                          +{portfolio.images.length} photos
+                        </div>
+                      )}
+
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#ad5945] to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#d38074] to-transparent"></div>
+                      </div>
                     </div>
                     
-                    <div className="p-6 bg-white">
-                      <h3 className="font-playfair text-lg font-semibold mb-2 tracking-tight">
-                        {service.title}
+                    <div className="p-8 bg-white relative z-10">
+                      <h3 className="font-playfair text-xl font-semibold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ad5945] group-hover:to-[#d38074] transition-all tracking-tight">
+                        {portfolio.title}
                       </h3>
-                      <p className="font-inter text-gray-600 text-sm font-light">{service.description}</p>
+                      <p className="font-inter text-gray-700 text-sm mb-4 font-light line-clamp-2">
+                        {portfolio.description}
+                      </p>
                       
-                      <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm mt-3 tracking-wide">
+                      <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-2 tracking-wide">
                         <span className="mr-2">Découvrir</span>
                         <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
+
+                    <div 
+                      className="absolute top-4 right-4 w-3 h-3 bg-white/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                      style={{ animation: isHovering === `portfolio-${index}` ? 'pulse 2s ease-in-out infinite' : 'none' }}
+                    ></div>
                   </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
+                ))}
+              </div>
+
+              {/* Mobile Carousel */}
+              <div className="md:hidden">
+                <Swiper
+                  modules={[Autoplay]}
+                  spaceBetween={16}
+                  slidesPerView={1.2}
+                  centeredSlides={true}
+                  loop={portfolios.length > 1}
+                  autoplay={{
+                    delay: 4000,
+                    disableOnInteraction: false,
+                  }}
+                  className="pb-8"
+                >
+                  {portfolios.map((portfolio) => (
+                    <SwiperSlide key={portfolio.id}>
+                      <div
+                        className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer"
+                        onClick={() => onNavigate('portfolio')}
+                      > 
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
+                            alt={portfolio.title}
+                            className="w-full h-48 object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = 'https://images.pexels.com/photos/169198/pexels-photo-169198.jpeg?auto=compress&cs=tinysrgb&w=600';
+                            }}
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                          
+                          {portfolio.featured && (
+                            <div className="absolute top-2 right-2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                              ★ À la une
+                            </div>
+                          )}
+
+                          {portfolio.images && portfolio.images.length > 0 && (
+                            <div className="absolute top-2 left-2 bg-blue-500/90 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-semibold">
+                              +{portfolio.images.length}
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="p-6 bg-white">
+                          <h3 className="font-playfair text-lg font-semibold mb-2 tracking-tight">
+                            {portfolio.title}
+                          </h3>
+                          <p className="font-inter text-gray-600 text-sm font-light line-clamp-2 mb-3">
+                            {portfolio.description}
+                          </p>
+                          
+                          <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm tracking-wide">
+                            <span className="mr-2">Découvrir</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              </div>
+
+              {/* Bouton Voir Plus si plus de 6 portfolios */}
+              {portfolios.length > 6 && (
+                <div className="text-center mt-12">
+                  <button
+                    onClick={() => onNavigate('portfolio')}
+                    className="group relative bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-10 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-2xl hover:shadow-[#ad5945]/50 transform hover:-translate-y-2 hover:scale-110 transition-all duration-300 inline-flex items-center gap-3 overflow-hidden"
+                  >
+                    <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
+                    <span className="relative z-10 tracking-wide">Voir tous nos portfolios</span>
+                    <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 
@@ -1155,7 +1201,7 @@ professionnelle, nous mettons à votre disposition notre expertise
               style={{ animation: 'rotate 3s linear infinite' }}
             />
             <span className="font-inter text-sm font-semibold uppercase tracking-widest">
-                    Parfums d'Exception
+              Parfums d'Exception
             </span>
           </div>
 
@@ -1165,9 +1211,6 @@ professionnelle, nous mettons à votre disposition notre expertise
               collection
             </span>
           </h2>
-          
-          
-         
 
           <button
             onClick={() => onNavigate('boutique')}
