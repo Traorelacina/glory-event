@@ -1103,7 +1103,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                         id={`portfolio-${index}`}
                         data-animate
                         className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
-                        onClick={() => onNavigate('gallery')} {/* Redirection vers galerie */}
+                        onClick={() => onNavigate('gallery')}
                         onMouseEnter={() => setIsHovering(`portfolio-${index}`)}
                         onMouseLeave={() => setIsHovering(null)}
                         style={{
@@ -1216,7 +1216,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                     <SwiperSlide key={portfolio.id}>
                       <div 
                         className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer"
-                        onClick={() => onNavigate('gallery')} {/* Redirection vers galerie */}
+                        onClick={() => onNavigate('gallery')}
                       >
                         <div className="relative overflow-hidden h-48">
                           <img
@@ -1262,7 +1262,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                 </Swiper>
               </div>
 
-             
+              {/* CTA pour voir tous les portfolios - CORRIGÉ : redirection vers galerie */}
               <div className="text-center mt-12">
                 <button
                   onClick={() => onNavigate('gallery')}
