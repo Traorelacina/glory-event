@@ -1069,8 +1069,8 @@ professionnelle, nous mettons à votre disposition notre expertise
             </div>
           ) : (
             <>
-              {/* Desktop Carousel */}
-              <div className="hidden md:block relative">
+              {/* Desktop Carousel - CORRIGÉ : visible sur desktop */}
+              <div className="hidden md:block relative px-12">
                 <Swiper
                   modules={[Navigation, Autoplay]}
                   spaceBetween={30}
@@ -1103,7 +1103,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                         id={`portfolio-${index}`}
                         data-animate
                         className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500"
-                        onClick={() => onNavigate('portfolio', portfolio.category)}
+                        onClick={() => onNavigate('gallery')} {/* Redirection vers galerie */}
                         onMouseEnter={() => setIsHovering(`portfolio-${index}`)}
                         onMouseLeave={() => setIsHovering(null)}
                         style={{
@@ -1170,7 +1170,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                               })}
                             </div>
                             <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-2 tracking-wide">
-                              <span className="mr-2">Découvrir</span>
+                              <span className="mr-2">Voir plus</span>
                               <ArrowRight className="w-4 h-4" />
                             </div>
                           </div>
@@ -1186,12 +1186,12 @@ professionnelle, nous mettons à votre disposition notre expertise
                 </Swiper>
 
                 {/* Navigation buttons for desktop */}
-                <button className="portfolio-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <button className="portfolio-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200">
                   <svg className="w-6 h-6 text-[#ad5945]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                   </svg>
                 </button>
-                <button className="portfolio-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors">
+                <button className="portfolio-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors border border-gray-200">
                   <svg className="w-6 h-6 text-[#ad5945]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                   </svg>
@@ -1214,7 +1214,10 @@ professionnelle, nous mettons à votre disposition notre expertise
                 >
                   {portfolios.map((portfolio) => (
                     <SwiperSlide key={portfolio.id}>
-                      <div className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer">
+                      <div 
+                        className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer"
+                        onClick={() => onNavigate('gallery')} {/* Redirection vers galerie */}
+                      >
                         <div className="relative overflow-hidden h-48">
                           <img
                             src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
@@ -1248,7 +1251,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                               })}
                             </div>
                             <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm tracking-wide">
-                              <span className="mr-2">Découvrir</span>
+                              <span className="mr-2">Voir plus</span>
                               <ArrowRight className="w-4 h-4" />
                             </div>
                           </div>
@@ -1259,13 +1262,13 @@ professionnelle, nous mettons à votre disposition notre expertise
                 </Swiper>
               </div>
 
-              {/* CTA pour voir tous les portfolios */}
+              {/* CTA pour voir tous les portfolios - CORRIGÉ : redirection vers galerie */}
               <div className="text-center mt-12">
                 <button
-                  onClick={() => onNavigate('portfolio')}
+                  onClick={() => onNavigate('gallery')}
                   className="group relative bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-8 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-2xl hover:shadow-[#ad5945]/50 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 inline-flex items-center gap-3"
                 >
-                  <span>Voir toutes nos réalisations</span>
+                  <span>Voir la galerie complète</span>
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
