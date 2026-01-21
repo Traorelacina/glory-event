@@ -1039,10 +1039,10 @@ professionnelle, nous mettons à votre disposition notre expertise
         transition: 'all 0.8s ease-out',
       }}
     >
-      <span className="inline-block bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-3 rounded-full font-inter text-sm font-semibold uppercase tracking-widest mb-6 shimmer-effect glowing-badge">
+      <span className="inline-block bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-6 py-3 rounded-full font-inter text-sm font-semibold uppercase tracking-widest mb-6">
         Nos Réalisations
       </span>
-      <h2 className="font-dm-serif text-5xl md:text-6xl font-normal text-gray-900 mb-8 tracking-tight text-glow">
+      <h2 className="font-playfair text-5xl md:text-6xl font-bold text-gray-900 mb-8">
         Portfolio
         <span className="block font-playfair italic text-5xl md:text-6xl text-[#ad5945] mt-2">
           d'Exception
@@ -1079,7 +1079,7 @@ professionnelle, nous mettons à votre disposition notre expertise
               key={portfolio.id}
               id={`portfolio-${index}`}
               data-animate
-              className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-3 hover:shadow-2xl transition-all duration-500 bg-white border border-gray-100 hover:border-[#ad5945]/20"
+              className="group relative rounded-3xl overflow-hidden shadow-lg cursor-pointer transform hover:-translate-y-2 hover:shadow-xl transition-all duration-300 bg-white border border-gray-100 hover:border-[#ad5945]/20"
               onClick={() => onNavigate('gallery')}
               style={{
                 opacity: isVisible[`portfolio-${index}`] ? 1 : 0,
@@ -1092,25 +1092,29 @@ professionnelle, nous mettons à votre disposition notre expertise
                 <img
                   src={`https://wispy-tabina-lacinafreelance-e4d8a9bf.koyeb.app/${portfolio.image}`}
                   alt={portfolio.title}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   onError={(e) => {
                     e.currentTarget.src = 'https://images.pexels.com/photos/1488467/pexels-photo-1488467.jpeg?auto=compress&cs=tinysrgb&w=600';
                   }}
                 />
                 
                 {/* Overlay et effets */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 
-                {/* Badge de catégorie */}
+                {/* Badge de catégorie - Version simplifiée */}
                 <div className="absolute top-4 left-4 z-20">
-                  <span className="bg-white/90 backdrop-blur-sm text-[#ad5945] px-4 py-2 rounded-full text-sm font-semibold shadow-md">
-                    {categoryLabels[portfolio.category] || portfolio.category}
+                  <span className="bg-white/95 text-[#ad5945] px-3 py-1.5 rounded-full text-sm font-semibold shadow-sm">
+                    {portfolio.category === 'mariage' ? 'Mariage' : 
+                     portfolio.category === 'corporate' ? 'Corporate' : 
+                     portfolio.category === 'anniversaire' ? 'Anniversaire' : 
+                     portfolio.category === 'evenement_professionnel' ? 'Événement Pro' : 
+                     portfolio.category}
                   </span>
                 </div>
                 
                 {/* Badge "À la une" si featured */}
                 {portfolio.featured && (
-                  <div className="absolute top-4 right-4 z-20 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-md">
+                  <div className="absolute top-4 right-4 z-20 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 shadow-sm">
                     <svg className="w-3 h-3 fill-current" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
@@ -1119,16 +1123,16 @@ professionnelle, nous mettons à votre disposition notre expertise
                 )}
                 
                 {/* Icône "Voir plus" au hover */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 transform group-hover:scale-100 scale-75">
-                  <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center shadow-2xl">
-                    <ArrowRight className="w-8 h-8 text-[#ad5945]" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform scale-75 group-hover:scale-100">
+                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
+                    <ArrowRight className="w-6 h-6 text-[#ad5945]" />
                   </div>
                 </div>
               </div>
               
               {/* Contenu texte */}
-              <div className="p-8 bg-white">
-                <h3 className="font-playfair text-xl font-semibold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-[#ad5945] group-hover:to-[#d38074] transition-all tracking-tight">
+              <div className="p-6 bg-white">
+                <h3 className="font-playfair text-lg font-semibold mb-2 group-hover:text-[#ad5945] transition-colors duration-300">
                   {portfolio.title}
                 </h3>
                 <p className="font-inter text-gray-700 text-sm mb-4 font-light line-clamp-2">
@@ -1136,7 +1140,7 @@ professionnelle, nous mettons à votre disposition notre expertise
                 </p>
                 
                 {/* Date et "Voir plus" */}
-                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                   <div className="text-gray-500 text-xs font-inter">
                     {new Date(portfolio.date).toLocaleDateString('fr-FR', {
                       day: 'numeric',
@@ -1144,9 +1148,9 @@ professionnelle, nous mettons à votre disposition notre expertise
                       year: 'numeric'
                     })}
                   </div>
-                  <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-0 group-hover:translate-x-2 tracking-wide">
-                    <span className="mr-2">Voir plus</span>
-                    <ArrowRight className="w-4 h-4" />
+                  <div className="flex items-center text-[#ad5945] font-inter font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300">
+                    <span className="mr-2">Voir</span>
+                    <ArrowRight className="w-3 h-3" />
                   </div>
                 </div>
               </div>
@@ -1159,20 +1163,10 @@ professionnelle, nous mettons à votre disposition notre expertise
           <div className="text-center mt-12">
             <button
               onClick={() => onNavigate('gallery')}
-              className="group relative bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-8 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-2xl hover:shadow-[#ad5945]/50 transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 inline-flex items-center gap-3"
-              onMouseEnter={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                e.currentTarget.style.transform = `translate(${x * 0.1}px, ${y * 0.1}px) translateY(-4px) scale(1.05)`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = '';
-              }}
+              className="group bg-gradient-to-r from-[#ad5945] to-[#d38074] text-white px-8 py-4 rounded-full font-inter font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 hover:scale-105 transition-all duration-300 inline-flex items-center gap-3"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[#d38074] to-[#ca715b] translate-x-full group-hover:translate-x-0 transition-transform duration-300"></span>
-              <span className="relative z-10">Voir la galerie complète</span>
-              <ArrowRight className="relative z-10 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <span>Voir la galerie complète</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         )}
