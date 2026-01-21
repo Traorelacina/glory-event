@@ -1026,7 +1026,7 @@ professionnelle, nous mettons à votre disposition notre expertise
         </div>
       </section>
 
-      // REMPLACEZ VOTRE SECTION PORTFOLIO PAR CE CODE CORRIGÉ
+   
 
 <section ref={portfolioSectionRef} className="py-24 bg-white" id="portfolio-section">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
